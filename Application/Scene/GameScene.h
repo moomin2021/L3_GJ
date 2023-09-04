@@ -1,10 +1,13 @@
 #pragma once
 #include "BaseScene.h"
+#include "Key.h"
 
 class GameScene : public BaseScene
 {
 #pragma region メンバ変数
 private:
+	// インスタンス
+	Key* key_ = nullptr;// キーボード入力
 #pragma endregion
 
 #pragma region メンバ関数
