@@ -117,6 +117,7 @@
     <ClCompile Include="Engine\Util\Math\Vector3.cpp" />
     <ClCompile Include="Engine\Base\WinAPI.cpp" />
     <ClCompile Include="Engine\Util\ImGuiManager.cpp" />
+    <ClCompile Include="Application\Scene\GameScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\3d\Mesh.cpp" />
     <ClCompile Include="Engine\3d\Material.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Engine\Collision\SphereCollider.h" />
     <ClInclude Include="Engine\Collision\PointCollider.h" />
     <ClInclude Include="Application\Scene\Scene3.h" />
+    <ClInclude Include="Application\Scene\GameScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Bloom.hlsli" />

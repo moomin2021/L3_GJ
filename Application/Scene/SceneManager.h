@@ -10,6 +10,7 @@ enum SCENE {
 	SCENE1,
 	SCENE2,
 	SCENE3,
+	GAME,
 };
 
 enum PostEffectType {

@@ -210,6 +210,9 @@
     <ClCompile Include="Application\Scene\Scene3.cpp">
       <Filter>Engine\ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Scene\GameScene.cpp">
+      <Filter>Engine\ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Base\WinAPI.h">
@@ -363,6 +366,9 @@
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Application\Scene\Scene3.h">
+      <Filter>Engine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Scene\GameScene.h">
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
