@@ -51,6 +51,9 @@ void Scene1::Initialize()
 	player_ = std::make_unique<TestPlayer>();
 	player_->Initialize();
 
+	int a = 0;
+	a++;
+
 	// エネミー
 	enemy_ = std::make_unique<TestEnemy>();
 	enemy_->Initialize();
