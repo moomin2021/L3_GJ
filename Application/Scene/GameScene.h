@@ -2,12 +2,20 @@
 #include "BaseScene.h"
 #include "Key.h"
 
+#include "Camera.h"
+#include "Sprite.h"
+
+#include <memory>
+
 class GameScene : public BaseScene
 {
 #pragma region メンバ変数
 private:
 	// インスタンス
 	Key* key_ = nullptr;// キーボード入力
+
+	// カメラ
+	std::unique_ptr<Camera> camera_ = nullptr;
 #pragma endregion
 
 #pragma region メンバ関数

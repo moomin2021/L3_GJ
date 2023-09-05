@@ -10,6 +10,11 @@ void GameScene::Initialize()
 #pragma region インスタンス
 	key_ = Key::GetInstance();// キーボード入力
 #pragma endregion
+
+#pragma region カメラ
+	camera_ = std::make_unique<Camera>();	// 生成
+	Sprite::SetCamera(camera_.get());		// スプライトにカメラを設定
+#pragma endregion
 }
 
 void GameScene::Update()
@@ -34,5 +39,6 @@ void GameScene::OnCollision()
 
 void GameScene::ObjUpdate()
 {
-
+	// カメラ更新
+	camera_->Update();
 }
