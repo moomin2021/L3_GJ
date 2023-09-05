@@ -1,5 +1,6 @@
 #pragma once
 #include "CollisionShapeType.h"
+#include "Sprite.h"
 
 #include <stdint.h>
 
@@ -14,6 +15,9 @@ protected:
 
 	// 衝突判定属性
 	uint16_t attribute_ = 0;
+
+	// 任意で紐付けるスプライト
+	Sprite* sprite_ = nullptr;
 
 	// 衝突フラグ
 	bool isHit_ = false;
@@ -37,6 +41,9 @@ public:
 
 	// 衝突判定属性を設定
 	inline void SetAttribute(uint16_t attribute) { attribute_ = attribute; }
+
+	// スプライトを設定
+	inline void SetSprite(Sprite* sprite) { sprite_ = sprite; }
 
 	// 衝突フラグを設定
 	inline void SetIsHit(bool flag) { isHit_ = flag; }

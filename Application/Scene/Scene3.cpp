@@ -43,7 +43,7 @@ void Scene3::Initialize()
 void Scene3::Update()
 {
 	// コライダーの座標を設定
-	pCol_->SetPosition(mouse_->MousePos());
+	pCol_->SetOffset(mouse_->MousePos());
 
 	// 衝突判定
 	OnCollision();
@@ -51,7 +51,7 @@ void Scene3::Update()
 	// オブジェクト更新
 	ObjUpdate();
 
-	Vector2 pos = pCol_->GetPosition();
+	Vector2 pos = pCol_->GetOffset();
 
 	ImGui::Begin("Debug");
 	ImGui::Text("mouse = {%f, %f}", pos.x, pos.y);
