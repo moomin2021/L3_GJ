@@ -4,6 +4,7 @@
 #include "Texture.h"// -> Texture
 #include "Key.h"// -> キーボード入力
 #include "Mouse.h"// -> マウスキーボード入力
+#include "Pad.h"
 #include "Object3D.h"// -> オブジェクト3Dクラス
 #include "Sound.h"
 #include "ImGuiManager.h"
@@ -39,6 +40,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		// マウス入力更新処理
 		Mouse::GetInstance()->Update();
+
+		// パッド入力更新
+		Pad::GetInstance()->Update();
 
 		// ImGui描画受付開始
 		//ImGuiManager::GetInstance()->Begin();
