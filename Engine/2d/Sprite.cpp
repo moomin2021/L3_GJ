@@ -8,39 +8,9 @@
 
 using namespace DirectX;
 
-Sprite::Sprite() :
-#pragma region 初期化リスト
-	// スプライトデータ
-	position_{ 0.0f, 0.0f },			// 座標
-	rotation_(0.0f),					// 回転
-	size_{ 100.0f, 100.0f },			// サイズ
-	color_{ 1.0f, 1.0f, 1.0f, 1.0f },	// 色(RGBA)
-	anchorPoint_{0.0f, 0.0f},			// アンカーポイント(XY)
-	isFlipX_(false),					// 左右反転
-	isFlipY_(false),					// 上下反転
+Camera* Sprite::sCamera_ = nullptr;
 
-	// スプライトデータを変更したかどうか
-	hasChanget_(true),
-
-	// 行列
-	matWorld_{},		// ワールド行列
-	matProjection_{},	// 射影変換行列
-
-	// 定数バッファ
-	constBuff_(nullptr),// 定数バッファ
-	constMap_(nullptr),	// マッピング処理用
-
-	// 頂点データ
-	vertex_(4),
-	vertexBuff_(nullptr),	// 頂点バッファ
-	vertexMap_(nullptr),	// マッピング処理用
-	vertexView_{},			// 頂点バッファビュー
-
-	// インデックスデータ
-	index_(6),
-	indexBuff_(nullptr),// インデックスバッファ
-	indexView_{}		// インデックスバッファビュー
-#pragma endregion
+Sprite::Sprite()
 {
 	// デバイス取得
 	ID3D12Device* device = DX12Cmd::GetInstance()->GetDevice();
@@ -52,12 +22,14 @@ Sprite::Sprite() :
 	HRESULT result;
 
 	// 頂点データ
+	vertex_.resize(4);
 	vertex_[0] = { { 0.0f, 0.0f}, {0.0f, 1.0f} };// 左下
 	vertex_[1] = { { 0.0f, 0.0f}, {0.0f, 0.0f} };// 左上
 	vertex_[2] = { { 0.0f, 0.0f}, {1.0f, 1.0f} };// 右下
 	vertex_[3] = { { 0.0f, 0.0f}, {1.0f, 0.0f} };// 右上
 
 	// インデックスデータ
+	index_.resize(6);
 	index_[0] = 0;
 	index_[1] = 1;
 	index_[2] = 2;
@@ -199,19 +171,53 @@ Sprite::Sprite() :
 	result = constBuff_->Map(0, nullptr, (void**)&constMap_);
 	assert(SUCCEEDED(result));
 #pragma endregion
+}
 
-	// 射影変換行列初期化
-	XMMATRIX mat = XMMatrixOrthographicOffCenterLH(
-		0.0f,
-		static_cast<float>(winAPI->GetWidth()),
-		static_cast<float>(winAPI->GetHeight()),
-		0.0f, 0.0f, 1.0f);
+void Sprite::MatUpdate() {
+#pragma region ワールド行列計算
+	// 行列初期化
+	matWorld_ = Matrix4Identity();
 
-	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
-			matProjection_.m[i][j] = mat.r[i].m128_f32[j];
-		}
+	// Z軸回転
+	matWorld_ *= Matrix4RotateZ(Util::Degree2Radian(rotation_));
+
+	// 平行移動
+	matWorld_ *= Matrix4Translate({ position_.x, position_.y, 0.0f });
+#pragma endregion
+
+#pragma region 定数バッファの転送
+	// 行列計算
+	constMap_->mat = matWorld_ * sCamera_->GetMatOrthoGraphicPro();
+
+	// 色(RGBA)
+	constMap_->color = color_;
+#pragma endregion
+
+#pragma region 頂点座標変更(画像のサイズを変更)
+	// 頂点データ
+	float left = (0.0f - anchorPoint_.x);
+	float right = (1.0f - anchorPoint_.x);
+	float top = (0.0f - anchorPoint_.y);
+	float bottom = (1.0f - anchorPoint_.y);
+
+	// 左右反転
+	if (isFlipX_) left = -left, right = -right;
+
+	// 上下反転
+	if (isFlipY_) top = -top, bottom = -bottom;
+
+	vertex_[0] = { { left * size_.x, bottom * size_.y }, {0.0f, 1.0f} };// 左下
+	vertex_[1] = { { left * size_.x, top * size_.y }, {0.0f, 0.0f} };// 左上
+	vertex_[2] = { { right * size_.x, bottom * size_.y }, {1.0f, 1.0f} };// 右下
+	vertex_[3] = { { right * size_.x, top * size_.y }, {1.0f, 0.0f} };// 右上
+
+	// 全頂点に対して
+	for (size_t i = 0; i < vertex_.size(); i++)
+	{
+		// 座標をコピー
+		vertexMap_[i] = vertex_[i];
 	}
+#pragma endregion
 }
 
 void Sprite::Draw(int textureHandle) {
@@ -223,9 +229,6 @@ void Sprite::Draw(int textureHandle) {
 
 	// SRVヒープのハンドルを取得
 	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = tex->GetSRVHeap()->GetGPUDescriptorHandleForHeapStart();
-
-	// スプライトデータの更新処理
-	UpdateData();
 
 	// ハンドルを指定された分まで進める
 	srvGpuHandle.ptr += textureHandle;
@@ -244,58 +247,4 @@ void Sprite::Draw(int textureHandle) {
 
 	// 描画コマンド
 	cmdList->DrawIndexedInstanced(static_cast<UINT>(index_.size()), 1, 0, 0, 0);
-}
-
-void Sprite::UpdateData()
-{
-	// スプライトデータの変更がされていなかったら処理を飛ばす
-	if (hasChanget_ == false) return;
-
-#pragma region ワールド行列計算
-	// 行列初期化
-	matWorld_ = Matrix4Identity();
-
-	// Z軸回転
-	matWorld_ *= Matrix4RotateZ(Util::Degree2Radian(rotation_));
-
-	// 平行移動
-	matWorld_ *= Matrix4Translate({position_.x, position_.y, 0.0f});
-#pragma endregion
-
-#pragma region 定数バッファの転送
-	// 行列計算
-	constMap_->mat = matWorld_ * matProjection_;
-
-	// 色(RGBA)
-	constMap_->color = color_;
-#pragma endregion
-
-#pragma region 頂点座標変更(画像のサイズを変更)
-	// 頂点データ
-	float left		= (0.0f - anchorPoint_.x);
-	float right		= (1.0f - anchorPoint_.x);
-	float top		= (0.0f - anchorPoint_.y);
-	float bottom	= (1.0f - anchorPoint_.y);
-
-	// 左右反転
-	if (isFlipX_) left = -left, right = -right;
-
-	// 上下反転
-	if (isFlipY_) top = -top, bottom = -bottom;
-
-	vertex_[0] = { { left	* size_.x, bottom	* size_.y }, {0.0f, 1.0f} };// 左下
-	vertex_[1] = { { left	* size_.x, top		* size_.y }, {0.0f, 0.0f} };// 左上
-	vertex_[2] = { { right	* size_.x, bottom	* size_.y }, {1.0f, 1.0f} };// 右下
-	vertex_[3] = { { right	* size_.x, top		* size_.y }, {1.0f, 0.0f} };// 右上
-
-	// 全頂点に対して
-	for (size_t i = 0; i < vertex_.size(); i++)
-	{
-		// 座標をコピー
-		vertexMap_[i] = vertex_[i];
-	}
-#pragma endregion
-
-	// 変更したのでフラグを[OFF]にする
-	hasChanget_ = false;
 }

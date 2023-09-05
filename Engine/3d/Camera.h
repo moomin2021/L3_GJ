@@ -6,13 +6,14 @@ class Camera {
 #pragma region メンバ変数
 private:
 	// カメラデータ
-	Vector3 eye_;	// カメラの位置
-	Vector3 target_;	// カメラの注視点
-	Vector3 up_;		// カメラの上方向ベクトル
+	Vector3 eye_ = { 0.0f, 0.0f, 0.0f };// カメラの位置
+	Vector3 target_ = { 0.0f, 0.0f, 0.0f };// カメラの注視点
+	Vector3 up_ = { 0.0f, 1.0f, 0.0f };// カメラの上方向ベクトル
 
 	// 行列
-	Matrix4 matView_;		// ビュー変換行列
-	Matrix4 matProjection_;	// 透視投影行列
+	Matrix4 matView_ = {};// ビュー変換行列
+	Matrix4 matPerspectivePro_ = {};// 透視投影行列
+	Matrix4 matOrthoGraphicPro_ = {};// 平行投影行列
 #pragma endregion
 
 #pragma region メンバ関数
@@ -27,7 +28,13 @@ public:
 	/// </summary>
 	void Update();
 
+private:
+	// ビュー行列更新処理
+	void UpdateMatView();
+#pragma endregion
+
 #pragma region セッター関数
+public:
 	/// <summary>
 	/// カメラの位置を設定
 	/// </summary>
@@ -48,6 +55,7 @@ public:
 #pragma endregion
 
 #pragma region ゲッター関数
+public:
 	/// <summary>
 	/// カメラの位置を取得
 	/// </summary>
@@ -76,8 +84,9 @@ public:
 	/// 透視投影行列を取得
 	/// </summary>
 	/// <returns> 透視投影行列 </returns>
-	inline const Matrix4& GetMatProjection() { return matProjection_; }
-#pragma endregion
+	inline const Matrix4& GetMatProjection() { return matPerspectivePro_; }
 
+	// 平行投影行列を取得
+	inline const Matrix4& GetMatOrthoGraphicPro() { return matOrthoGraphicPro_; }
 #pragma endregion
 };
