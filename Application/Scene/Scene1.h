@@ -12,6 +12,7 @@
 #include "TestPlayer.h"
 #include "TestEnemy.h"
 #include"Player.h"
+#include"Piece.h"
 
 #include <memory>
 
@@ -40,6 +41,9 @@ private:
 
 	// エネミー
 	std::unique_ptr<TestEnemy> enemy_ = nullptr;
+
+	//ピース配列
+	std::vector < std::unique_ptr<Piece>> pieces;
 
 	// --メンバ関数-- //
 public:

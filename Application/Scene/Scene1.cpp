@@ -76,6 +76,20 @@ void Scene1::Update()
 
 	player->Update();
 
+	//ピースの更新とボタンで生成
+	for (size_t i = 0; i < pieces.size(); i++) {
+		pieces[i]->Update();
+	}
+
+	ImGui::Text("piece size %d", pieces.size());
+
+	if (ImGui::Button("add piece")) {
+		std::unique_ptr<Piece> newPiece = std::make_unique<Piece>();
+		newPiece->Initialize();
+		pieces.push_back(std::move(newPiece));
+	}
+
+
 	// エネミー更新
 	enemy_->Update();
 
@@ -108,6 +122,10 @@ void Scene1::Draw()
 
 	player->Draw();
 
+
+	for (size_t i = 0; i < pieces.size(); i++) {
+		pieces[i]->Draw();
+	}
 }
 
 void Scene1::ObjUpdate()

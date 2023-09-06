@@ -61,7 +61,6 @@ void Block::Update()
 		theta = 360.0f - theta;
 	}
 
-
 	vecB.x =blockSize.x * parent->tileOffset.x;
 	vecB.y =blockSize.y * parent->tileOffset.y;
 
