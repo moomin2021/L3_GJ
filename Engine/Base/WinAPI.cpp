@@ -109,7 +109,7 @@ void WinAPI::CreateWindowObj()
 	hwnd_ = CreateWindow(
 		winClass_.lpszClassName,// ------> クラス名
 		L"DirectXGame",// -------> タイトルバーの文字
-		WS_OVERLAPPEDWINDOW,// --> 標準的なウィンドウスタイル
+		WS_POPUP,// --> 標準的なウィンドウスタイル
 		CW_USEDEFAULT,// --------> 表示X座標(OSに任せる)
 		CW_USEDEFAULT,// --------> 表示Y座標(OSに任せる)
 		winRect_.right - winRect_.left,// -> ウィンドウ横幅
