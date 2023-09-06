@@ -1,6 +1,7 @@
 #pragma once
 #include"Texture.h"
 #include"Sprite.h"
+#include<memory>
 
 struct ParentData {
 	Vector2 parentPos;
@@ -26,12 +27,15 @@ public://静的メンバ関数
 	/// <param name="blockSize">ブロックの大きさ</param>
 	static void StaticInitialize(uint16_t cannonTex, uint16_t blockTex, const Vector2& blockSize);
 
+	static Vector2 GetBlockSize() { return blockSize; }
+
 public://メンバ関数
 	void Initialize(const BlockData& blockData,const ParentData& parent);
 
 	void SetParent(const ParentData& parent);
 
 	virtual void Draw();
+
 
 private://静的メンバ変数
 	static uint16_t cannonTexture;
@@ -42,7 +46,7 @@ private://メンバ変数
 
 	//TODO:コライダーの定義
 
-	Sprite sprite;
+	std::unique_ptr<Sprite> sprite = nullptr;
 	BlockData blockData = BlockData::None;
 	ParentData parent;
 

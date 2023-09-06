@@ -213,10 +213,10 @@
     <ClCompile Include="Application\Scene\GameScene.cpp">
       <Filter>Engine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Block.cpp">
+    <ClCompile Include="Application\Block.cpp">
       <Filter>Engine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="Application\Player.cpp">
       <Filter>Engine\ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Input\Pad.cpp">
@@ -383,10 +383,10 @@
     <ClInclude Include="Application\Scene\GameScene.h">
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Block.h">
+    <ClInclude Include="Application\Block.h">
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="Application\Player.h">
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Input\Pad.h">

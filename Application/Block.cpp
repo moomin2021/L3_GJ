@@ -16,7 +16,8 @@ void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, const Vector
 void Block::Initialize(const BlockData& blockData, const ParentData& parent)
 {
 	this->blockData = blockData;
-	sprite.SetSize(blockSize);
+	sprite = std::make_unique<Sprite>();
+	sprite->SetSize(blockSize);
 	this->parent = parent;
 }
 
@@ -32,6 +33,6 @@ void Block::Draw()
 	if (blockData == BlockData::None) {
 		tex = cannonTexture;
 	}
-	sprite.Draw(tex);
+	sprite->Draw(tex);
 
 }

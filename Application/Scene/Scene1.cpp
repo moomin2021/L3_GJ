@@ -28,6 +28,7 @@ void Scene1::Initialize()
 
 	// カメラセット
 	Object3D::SetCamera(camera_.get());
+	Sprite::SetCamera(camera_.get());
 	ParticleEmitter::SetCamera(camera_.get());
 
 	// ライトグループ生成
@@ -47,12 +48,16 @@ void Scene1::Initialize()
 	Sound::SetVolume(bgmKey_, 0.001f);
 	Sound::Play(bgmKey_);
 
+
+	//ブロッククラス静的初期化
+	Block::StaticInitialize(0, 0, { 32,32 });
+
 	// プレイヤー
 	player_ = std::make_unique<TestPlayer>();
 	player_->Initialize();
 
-	int a = 0;
-	a++;
+	player = std::make_unique<Player>();
+	player->Initialize(0);
 
 	// エネミー
 	enemy_ = std::make_unique<TestEnemy>();
@@ -63,6 +68,8 @@ void Scene1::Update()
 {
 	// プレイヤー更新
 	player_->Update();
+
+	player->Update();
 
 	// エネミー更新
 	enemy_->Update();
@@ -87,8 +94,15 @@ void Scene1::Draw()
 	// プレイヤー描画
 	player_->Draw();
 
+
+
 	// エネミー描画
 	enemy_->Draw();
+
+	PipelineManager::PreDraw("Sprite");
+
+	player->Draw();
+
 }
 
 void Scene1::ObjUpdate()
