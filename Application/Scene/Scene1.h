@@ -11,6 +11,7 @@
 #include "SphereCollider.h"
 #include "TestPlayer.h"
 #include "TestEnemy.h"
+#include"Player.h"
 
 #include <memory>
 
@@ -35,6 +36,7 @@ private:
 
 	// プレイヤー
 	std::unique_ptr<TestPlayer> player_ = nullptr;
+	std::unique_ptr<Player> player = nullptr;
 
 	// エネミー
 	std::unique_ptr<TestEnemy> enemy_ = nullptr;
