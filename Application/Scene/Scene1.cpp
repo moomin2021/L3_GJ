@@ -49,16 +49,20 @@ void Scene1::Initialize()
 	Sound::SetVolume(bgmKey_, 0.001f);
 	Sound::Play(bgmKey_);
 
+	uint16_t blockTex = Texture::GetInstance()->LoadTexture("Resources/piece.png");
+	uint16_t cannonTex = Texture::GetInstance()->LoadTexture("Resources/piece_cannon.png");
+	uint16_t playerTex = Texture::GetInstance()->LoadTexture("Resources/player.png");
+
 
 	//ブロッククラス静的初期化
-	Block::StaticInitialize(0, 0, { 32,32 });
+	Block::StaticInitialize(blockTex, cannonTex, { 32,32 });
 
 	// プレイヤー
 	player_ = std::make_unique<TestPlayer>();
 	player_->Initialize();
 
 	player = std::make_unique<Player>();
-	player->Initialize(0,{96,(float)WinAPI::GetInstance()->GetHeight()/2});
+	player->Initialize(playerTex,{96,(float)WinAPI::GetInstance()->GetHeight()/2});
 
 	// エネミー
 	enemy_ = std::make_unique<TestEnemy>();

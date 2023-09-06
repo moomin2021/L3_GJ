@@ -9,7 +9,7 @@ class Player
 public:
 
 	//初期化
-	void Initialize(uint16_t playerTexture,const Vector2& pos);
+	void Initialize(uint16_t playerTexture, const Vector2& pos);
 
 	//更新
 	void Update();
@@ -28,6 +28,8 @@ private:
 	//デバッグ用関数
 	void AddBlock();
 
+	//ブロック配列の更新
+	void UpdateBlocks();
 
 private:
 
@@ -35,6 +37,9 @@ private:
 
 	//本体のスプライト
 	std::unique_ptr<Sprite> sprite;
+
+	//座標
+	Vector2 position{0,0};
 
 	//テクスチャ
 	uint16_t texIndex = 0;
@@ -51,9 +56,12 @@ private:
 	const float easeTimeMax = 15;
 	float rotEaseTime = easeTimeMax;
 
+	//デバッグ用
+	int debugBlockOffsetX = 0;
+	int debugBlockOffsetY = 0;
 
 	//ブロック配列
-	std::vector<Block> blocks;
+	std::vector < std::unique_ptr< Block> > blocks;
 
 };
 

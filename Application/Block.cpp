@@ -13,18 +13,16 @@ void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, const Vector
 	Block::blockSize = blockSize;
 }
 
-void Block::Initialize(const BlockData& blockData, const ParentData& parent)
+void Block::Initialize(const BlockData& blockData, ParentData* parent)
 {
 	this->blockData = blockData;
 	sprite = std::make_unique<Sprite>();
 	sprite->SetSize(blockSize);
+	sprite->SetAnchorPoint({ 0.5f,0.5f });
 	this->parent = parent;
 }
 
-void Block::SetParent(const ParentData& parent)
-{
-	this->parent = parent;
-}
+
 
 void Block::Draw()
 {
@@ -35,4 +33,19 @@ void Block::Draw()
 	}
 	sprite->Draw(tex);
 
+}
+
+void Block::Update()
+{
+	//e‚ÌÀ•W‚ÉˆË‘¶‚µ‚ÄÀ•WˆÚ“®
+	if (!parent) {
+		return;
+	}
+
+	Vector2 pos = *parent->parentPos;
+	pos.x += blockSize.x * parent->tileOffset.x;
+	pos.y += blockSize.y * parent->tileOffset.y;
+
+	sprite->SetPosition(pos);
+	sprite->MatUpdate();
 }

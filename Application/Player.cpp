@@ -28,18 +28,22 @@ void Player::Update()
 	//回転
 	Rotate();
 
+	//ブロックを増やすデバッグ関数
+	AddBlock();
+
 	sprite->MatUpdate();
+	UpdateBlocks();
 
 }
 
 void Player::Draw()
 {
 	//自機描画
-	sprite->Draw();
+	sprite->Draw(texIndex);
 
 	//ブロックたちの描画
 	for (size_t i = 0; i < blocks.size(); i++) {
-		blocks[i].Draw();
+		blocks[i]->Draw();
 	}
 
 }
@@ -51,16 +55,16 @@ void Player::Move()
 	spd = pad->GetLStick() * baseSpd;
 	spd.y = -spd.y;
 
-	Vector2 pos = sprite->GetPosition();
+	position = sprite->GetPosition();
 
-	pos += spd;
+	position += spd;
 
-	sprite->SetPosition(pos);
+	sprite->SetPosition(position);
 }
 
 void Player::Rotate()
 {
-	
+
 
 
 	float timerate = rotEaseTime / easeTimeMax;
@@ -92,10 +96,32 @@ void Player::Rotate()
 
 void Player::AddBlock()
 {
+
 	ImGui::Begin("add block");
 
+	ImGui::SliderInt("offsetX", &debugBlockOffsetX, -5, 5);
+	ImGui::SliderInt("offsetY", &debugBlockOffsetY, -5, 5);
 
+	if (ImGui::Button("add")) {
+		//設定されているブロックのオフセットを使ってブロック生成、自機と紐つける
+		std::unique_ptr<Block> newBlock = std::make_unique<Block>();
+		ParentData* parent = new ParentData();
+		parent->parentPos = &position;
+		parent->tileOffset = { (float)debugBlockOffsetX, (float)debugBlockOffsetY };
+		newBlock->Initialize(BlockData::None, parent);
+
+		//自機のブロック配列に格納
+		blocks.push_back(std::move(newBlock));
+	}
 
 	ImGui::End();
 
+}
+
+void Player::UpdateBlocks()
+{
+	for (size_t i = 0; i < blocks.size(); i++) {
+		blocks[i]->Update();
+
+	}
 }
