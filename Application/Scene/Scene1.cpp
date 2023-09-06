@@ -6,6 +6,7 @@
 #include "CollisionManager.h"
 #include "CollisionAttribute.h"
 #include "ImGuiManager.h"
+#include"WinAPI.h"
 
 #include <imgui_impl_win32.h>
 #include <imgui_impl_DX12.h>
@@ -48,16 +49,20 @@ void Scene1::Initialize()
 	Sound::SetVolume(bgmKey_, 0.001f);
 	Sound::Play(bgmKey_);
 
+	uint16_t blockTex = Texture::GetInstance()->LoadTexture("Resources/piece.png");
+	uint16_t cannonTex = Texture::GetInstance()->LoadTexture("Resources/piece_cannon.png");
+	uint16_t playerTex = Texture::GetInstance()->LoadTexture("Resources/player.png");
+
 
 	//ブロッククラス静的初期化
-	Block::StaticInitialize(0, 0, { 32,32 });
+	Block::StaticInitialize(blockTex, cannonTex, { 32,32 });
 
 	// プレイヤー
 	player_ = std::make_unique<TestPlayer>();
 	player_->Initialize();
 
 	player = std::make_unique<Player>();
-	player->Initialize(0);
+	player->Initialize(playerTex,{96,(float)WinAPI::GetInstance()->GetHeight()/2});
 
 	// エネミー
 	enemy_ = std::make_unique<TestEnemy>();
@@ -70,6 +75,20 @@ void Scene1::Update()
 	player_->Update();
 
 	player->Update();
+
+	//ピースの更新とボタンで生成
+	for (size_t i = 0; i < pieces.size(); i++) {
+		pieces[i]->Update();
+	}
+
+	ImGui::Text("piece size %d", pieces.size());
+
+	if (ImGui::Button("add piece")) {
+		std::unique_ptr<Piece> newPiece = std::make_unique<Piece>();
+		newPiece->Initialize();
+		pieces.push_back(std::move(newPiece));
+	}
+
 
 	// エネミー更新
 	enemy_->Update();
@@ -103,6 +122,10 @@ void Scene1::Draw()
 
 	player->Draw();
 
+
+	for (size_t i = 0; i < pieces.size(); i++) {
+		pieces[i]->Draw();
+	}
 }
 
 void Scene1::ObjUpdate()

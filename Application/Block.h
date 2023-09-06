@@ -4,8 +4,9 @@
 #include<memory>
 
 struct ParentData {
-	Vector2 parentPos;
-	Vector2 tileOffset;
+	Vector2* parentPos = nullptr;
+	float* parentRot = nullptr;
+	Vector2 tileOffset{0,0};
 };
 
 enum class BlockData {
@@ -30,11 +31,19 @@ public://静的メンバ関数
 	static Vector2 GetBlockSize() { return blockSize; }
 
 public://メンバ関数
-	void Initialize(const BlockData& blockData,const ParentData& parent);
 
-	void SetParent(const ParentData& parent);
+	/// <summary>
+	/// ブロックの初期化
+	/// </summary>
+	/// <param name="blockData">なんのブロックか</param>
+	/// <param name="parent">親のデータ(座標&回転+タイルの距離)</param>
+	void Initialize(const BlockData& blockData, ParentData* parent);
+
+	void SetParent(ParentData* parent) { this->parent = parent; }
 
 	virtual void Draw();
+
+	void Update();
 
 
 private://静的メンバ変数
@@ -48,7 +57,7 @@ private://メンバ変数
 
 	std::unique_ptr<Sprite> sprite = nullptr;
 	BlockData blockData = BlockData::None;
-	ParentData parent;
+	ParentData* parent = nullptr;
 
 
 
