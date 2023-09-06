@@ -51,6 +51,15 @@ void Player::Move()
 	sprite->SetPosition(pos);
 }
 
+void Player::Rotate()
+{
+
+
+
+	//Šp“x‚ª0~360‚É‚È‚é‚æ‚¤‚É’²®
+
+}
+
 void Player::AddBlock()
 {
 	ImGui::Begin("add block");

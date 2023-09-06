@@ -22,6 +22,8 @@ private:
 	//移動
 	void Move();
 
+	void Rotate();
+
 
 	//デバッグ用関数
 	void AddBlock();
