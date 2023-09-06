@@ -65,14 +65,13 @@ void Block::Update()
 	vecB.x =blockSize.x * parent->tileOffset.x;
 	vecB.y =blockSize.y * parent->tileOffset.y;
 
-
-
-
 	float lenPtoB = vecB.length();
-
 	pos.x += lenPtoB * cosf(Util::Degree2Radian(theta + *parent->parentRot));
 	pos.y += lenPtoB * sinf(Util::Degree2Radian(theta+ *parent->parentRot));
 
 	sprite->SetPosition(pos);
+	//親の回転をブロックの回転に適用
+	sprite->SetRotation(*parent->parentRot);
 	sprite->MatUpdate();
+
 }
