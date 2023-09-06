@@ -64,5 +64,8 @@ public:
 
 	// 衝突したコライダーを取得
 	inline BaseCollider2D* GetHitCollider() { return hitCol_; }
+
+	// 座標を取得
+	const Vector2& GetPosition();
 #pragma endregion
 };

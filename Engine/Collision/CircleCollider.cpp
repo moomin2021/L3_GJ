@@ -26,14 +26,3 @@ void CircleCollider::Update()
 		Circle::center = offset_;
 	}
 }
-
-const Vector2& CircleCollider::GetPosition()
-{
-	if (sprite_) {
-		return offset_ + sprite_->GetPosition();
-	}
-
-	else {
-		return offset_;
-	}
-}
