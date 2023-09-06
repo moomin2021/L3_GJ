@@ -5,6 +5,7 @@
 
 struct ParentData {
 	Vector2* parentPos = nullptr;
+	float* parentRot = nullptr;
 	Vector2 tileOffset{0,0};
 };
 
@@ -35,7 +36,7 @@ public://メンバ関数
 	/// ブロックの初期化
 	/// </summary>
 	/// <param name="blockData">なんのブロックか</param>
-	/// <param name="parent">親のデータ(座標+タイルの距離)</param>
+	/// <param name="parent">親のデータ(座標&回転+タイルの距離)</param>
 	void Initialize(const BlockData& blockData, ParentData* parent);
 
 	void SetParent(ParentData* parent) { this->parent = parent; }

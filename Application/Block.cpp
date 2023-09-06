@@ -1,9 +1,10 @@
 #include "Block.h"
+#include"Util.h"
 
 //静的メンバ変数の実態
-uint16_t Block::cannonTexture =0;
+uint16_t Block::cannonTexture = 0;
 uint16_t Block::blockTexture = 0;
-Vector2 Block::blockSize = {0,0};
+Vector2 Block::blockSize = { 0,0 };
 
 
 void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, const Vector2& blockSize)
@@ -43,8 +44,34 @@ void Block::Update()
 	}
 
 	Vector2 pos = *parent->parentPos;
-	pos.x += blockSize.x * parent->tileOffset.x;
-	pos.y += blockSize.y * parent->tileOffset.y;
+	Vector2 vecB;
+
+	//親からのオフセットで角度を作成
+	Vector2 forward = { 1,0 };
+	Vector2 offset = parent->tileOffset;
+	offset.normalize();
+
+	float theta = (forward.x * offset.x) + (forward.y * offset.y) / (forward.length()) * (offset.length());
+	theta = acosf(theta);
+
+	//度数法に変換
+	theta = Util::Radian2Degree(theta);
+	//オフセットのYがマイナスなら360から引く
+	if (offset.y > 0) {
+		theta = 360.0f - theta;
+	}
+
+
+	vecB.x =blockSize.x * parent->tileOffset.x;
+	vecB.y =blockSize.y * parent->tileOffset.y;
+
+
+
+
+	float lenPtoB = vecB.length();
+
+	pos.x += lenPtoB * cosf(Util::Degree2Radian(theta + *parent->parentRot));
+	pos.y += lenPtoB * sinf(Util::Degree2Radian(theta+ *parent->parentRot));
 
 	sprite->SetPosition(pos);
 	sprite->MatUpdate();

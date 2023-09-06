@@ -108,6 +108,7 @@ void Player::AddBlock()
 		ParentData* parent = new ParentData();
 		parent->parentPos = &position;
 		parent->tileOffset = { (float)debugBlockOffsetX, (float)debugBlockOffsetY };
+		parent->parentRot = &rotation;
 		newBlock->Initialize(BlockData::None, parent);
 
 		//自機のブロック配列に格納
