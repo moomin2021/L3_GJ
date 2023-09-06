@@ -1,5 +1,6 @@
 #include "Block.h"
 #include"Util.h"
+#include"CollisionAttribute.h"
 
 
 //静的メンバ変数の実態
@@ -28,7 +29,7 @@ void Block::Initialize(const BlockData& blockData, ParentData* parent)
 	//コライダーのセット
 	collider = std::make_unique<CircleCollider>(Vector2{0,0},blockSize.x);
 	//属性つける
-	//collider->SetAttribute();
+	collider->SetAttribute(COL_BLOCK);
 	collider->SetSprite(sprite.get());
 	//マネージャに登録
 	colManager->AddCollider(collider.get());

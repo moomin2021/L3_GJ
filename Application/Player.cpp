@@ -2,6 +2,7 @@
 #include<imgui_impl_dx12.h>
 #include"Easing.h"
 #include"Util.h"
+#include"CollisionAttribute.h"
 
 void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 {
@@ -23,7 +24,7 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	//コライダーのセット
 	collider = std::make_unique<CircleCollider>(Vector2{ 0,0 },Block::GetBlockSize().x);
 	//属性つける
-	//collider->SetAttribute();
+	collider->SetAttribute(COL_PLAYER);
 	collider->SetSprite(sprite.get());
 	//マネージャに登録
 	colManager->AddCollider(collider.get());
@@ -56,6 +57,21 @@ void Player::Draw()
 		blocks[i]->Draw();
 	}
 
+}
+
+void Player::OnCollision()
+{
+	//何かに当たったら
+	if (collider->GetIsHit()) {
+
+		if (collider->GetHitCollider()->GetAttribute() == COL_BLOCK) {
+			//ブロックに当たった
+			//自機から対象へのベクトル作成
+			Vector2 vecBtoP = collider->GetHitCollider().
+
+		}
+			
+	}
 }
 
 void Player::Move()
