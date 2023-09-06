@@ -67,6 +67,12 @@ void Scene1::Initialize()
 	// エネミー
 	enemy_ = std::make_unique<TestEnemy>();
 	enemy_->Initialize();
+
+	//背景
+	backGroundTexture= Texture::GetInstance()->LoadTexture("Resources/backGround.png");
+	backGroundSprite = std::make_unique<Sprite>();
+	backGroundSprite->SetSize({ (float)WinAPI::GetInstance()->GetWidth(),(float)WinAPI::GetInstance()->GetHeight() });
+	backGroundSprite->MatUpdate();
 }
 
 void Scene1::Update()
@@ -108,6 +114,7 @@ void Scene1::Update()
 
 void Scene1::Draw()
 {
+	
 	PipelineManager::PreDraw("Object3D");
 
 	// プレイヤー描画
@@ -126,6 +133,9 @@ void Scene1::Draw()
 	for (size_t i = 0; i < pieces.size(); i++) {
 		pieces[i]->Draw();
 	}
+
+	backGroundSprite->Draw(backGroundTexture);
+
 }
 
 void Scene1::ObjUpdate()

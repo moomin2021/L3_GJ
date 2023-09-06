@@ -17,6 +17,16 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	rotation = 0;
 
 	pad = Pad::GetInstance();
+
+	colManager = CollisionManager2D::GetInstance();
+
+	//コライダーのセット
+	collider = std::make_unique<CircleCollider>(Vector2{ 0,0 },Block::GetBlockSize().x);
+	//属性つける
+	//collider->SetAttribute();
+	collider->SetSprite(sprite.get());
+	//マネージャに登録
+	colManager->AddCollider(collider.get());
 }
 
 void Player::Update()
@@ -123,6 +133,5 @@ void Player::UpdateBlocks()
 {
 	for (size_t i = 0; i < blocks.size(); i++) {
 		blocks[i]->Update();
-
 	}
 }

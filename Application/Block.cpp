@@ -1,6 +1,7 @@
 #include "Block.h"
 #include"Util.h"
 
+
 //静的メンバ変数の実態
 uint16_t Block::cannonTexture = 0;
 uint16_t Block::blockTexture = 0;
@@ -21,6 +22,18 @@ void Block::Initialize(const BlockData& blockData, ParentData* parent)
 	sprite->SetSize(blockSize);
 	sprite->SetAnchorPoint({ 0.5f,0.5f });
 	this->parent = parent;
+
+	colManager = CollisionManager2D::GetInstance();
+
+	//コライダーのセット
+	collider = std::make_unique<CircleCollider>(Vector2{0,0},blockSize.x);
+	//属性つける
+	//collider->SetAttribute();
+	collider->SetSprite(sprite.get());
+	//マネージャに登録
+	colManager->AddCollider(collider.get());
+
+
 }
 
 

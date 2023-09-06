@@ -45,6 +45,10 @@ private:
 	//ピース配列
 	std::vector < std::unique_ptr<Piece>> pieces;
 
+	//背景テクスチャとスプライト
+	uint16_t backGroundTexture = 0;
+	std::unique_ptr<Sprite> backGroundSprite = nullptr;
+
 	// --メンバ関数-- //
 public:
 	// コンストラクタ

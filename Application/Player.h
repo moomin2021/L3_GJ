@@ -2,8 +2,9 @@
 #include"Block.h"
 #include<vector>
 #include"Pad.h"
+#include"CircleCollider.h"
+#include"CollisionManager2D.h"
 
-//ブロッククラス継承
 class Player
 {
 public:
@@ -35,6 +36,8 @@ private:
 
 	Pad* pad = nullptr;
 
+
+
 	//本体のスプライト
 	std::unique_ptr<Sprite> sprite;
 
@@ -62,6 +65,11 @@ private:
 
 	//ブロック配列
 	std::vector < std::unique_ptr< Block> > blocks;
+
+	//マネージャ
+	CollisionManager2D* colManager = nullptr;
+	//コライダー
+	std::unique_ptr<CircleCollider> collider = nullptr;
 
 };
 

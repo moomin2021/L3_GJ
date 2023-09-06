@@ -2,6 +2,8 @@
 #include"Texture.h"
 #include"Sprite.h"
 #include<memory>
+#include"CircleCollider.h"
+#include"CollisionManager2D.h"
 
 struct ParentData {
 	Vector2* parentPos = nullptr;
@@ -53,7 +55,10 @@ private://静的メンバ変数
 
 private://メンバ変数
 
-	//TODO:コライダーの定義
+	//マネージャ
+	CollisionManager2D* colManager = nullptr;
+	//コライダー
+	std::unique_ptr<CircleCollider> collider = nullptr;
 
 	std::unique_ptr<Sprite> sprite = nullptr;
 	BlockData blockData = BlockData::None;

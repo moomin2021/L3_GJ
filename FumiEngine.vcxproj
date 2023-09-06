@@ -136,6 +136,7 @@
     <ClCompile Include="Engine\Input\Pad.cpp" />
     <ClCompile Include="Application\Player.cpp" />
     <ClCompile Include="Application\Piece.cpp" />
+    <ClCompile Include="PlayerBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Scene\BaseScene.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="Application\Player.h" />
     <ClInclude Include="Engine\Input\Pad.h" />
     <ClInclude Include="Application\Piece.h" />
+    <ClInclude Include="PlayerBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Bloom.hlsli" />
