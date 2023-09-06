@@ -34,5 +34,8 @@ public:
 
 	// ”¼Œa‚ğæ“¾
 	inline float GetRadius() { return Circle::radius; }
+
+	// À•W‚ğæ“¾
+	const Vector2& GetPosition();
 #pragma endregion
 };
