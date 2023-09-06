@@ -9,7 +9,7 @@ class Player
 public:
 
 	//初期化
-	void Initialize(uint16_t playerTexture);
+	void Initialize(uint16_t playerTexture,const Vector2& pos);
 
 	//更新
 	void Update();
@@ -43,7 +43,14 @@ private:
 	const float baseSpd = 2.0f;
 
 	//回転角
-	int rotation = 0;
+	float rotation = 0;
+	float beforeRot = 0;
+	float afterRot = 0;
+
+
+	const float easeTimeMax = 15;
+	float rotEaseTime = easeTimeMax;
+
 
 	//ブロック配列
 	std::vector<Block> blocks;

@@ -6,6 +6,7 @@
 #include "CollisionManager.h"
 #include "CollisionAttribute.h"
 #include "ImGuiManager.h"
+#include"WinAPI.h"
 
 #include <imgui_impl_win32.h>
 #include <imgui_impl_DX12.h>
@@ -57,7 +58,7 @@ void Scene1::Initialize()
 	player_->Initialize();
 
 	player = std::make_unique<Player>();
-	player->Initialize(0);
+	player->Initialize(0,{96,(float)WinAPI::GetInstance()->GetHeight()/2});
 
 	// エネミー
 	enemy_ = std::make_unique<TestEnemy>();
