@@ -24,6 +24,9 @@ protected:
 
 	// 衝突したコライダー
 	BaseCollider2D* hitCol_ = nullptr;
+
+	// タグ
+	uint16_t tag_ = 0;
 #pragma endregion
 
 #pragma region メンバ関数
@@ -50,6 +53,9 @@ public:
 
 	// 衝突したコライダーを設定
 	inline void SetHitCollider(BaseCollider2D* collider) { hitCol_ = collider; }
+
+	// タグを設定
+	inline void SetTag(uint16_t tag) { tag_ = tag; }
 #pragma endregion
 
 #pragma region ゲッター関数
@@ -67,5 +73,8 @@ public:
 
 	// 座標を取得
 	const Vector2& GetPosition();
+
+	// タグを取得
+	inline uint16_t GetTag() { return tag_; }
 #pragma endregion
 };
