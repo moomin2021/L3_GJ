@@ -65,9 +65,35 @@ void Player::OnCollision()
 	if (collider->GetIsHit()) {
 
 		if (collider->GetHitCollider()->GetAttribute() == COL_BLOCK) {
+			Vector2 hitBlockOffset{ 0,0 };
+
 			//ブロックに当たった
 			//自機から対象へのベクトル作成
-			Vector2 vecBtoP = collider->GetHitCollider().
+			Vector2 vecBtoP = collider->GetHitCollider()->GetPosition() - collider->GetPosition();
+			//x成分とy成分の絶対値を比較し、縦につくか横につくか決める
+			if (fabs(vecBtoP.x) > fabs(vecBtoP.y)) {
+				//x成分のほうが大きい場合
+				if (vecBtoP.x > 0) {
+					//0以上なら上につける
+					hitBlockOffset.x = 1.0f;
+				}
+				else {
+					//0以下なら下
+					hitBlockOffset.x = -1.0f;
+				}
+			}
+			else {
+				if (vecBtoP.y > 0) {
+					//0以上なら上につける
+					hitBlockOffset.y = 1.0f;
+				}
+				else {
+					//0以下なら下
+					hitBlockOffset.y = -1.0f;
+				}
+			}
+
+			//衝突したブロック自体のくっつく場所を設定できたので、ピースのブロックすべてに対して
 
 		}
 			
