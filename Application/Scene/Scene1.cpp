@@ -120,15 +120,12 @@ void Scene1::Draw()
 	// プレイヤー描画
 	player_->Draw();
 
-
-
 	// エネミー描画
 	enemy_->Draw();
 
 	PipelineManager::PreDraw("Sprite");
 
 	player->Draw();
-
 
 	for (size_t i = 0; i < pieces.size(); i++) {
 		pieces[i]->Draw();

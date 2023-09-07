@@ -18,6 +18,9 @@ public:
 	//描画
 	void Draw();
 
+	//当たり判定コールバック
+	void OnCollision();
+
 private:
 
 	//移動
