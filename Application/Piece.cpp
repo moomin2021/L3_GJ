@@ -8,43 +8,41 @@ std::vector < std::unique_ptr<Piece>> Piece::pieces;
 void Piece::Initialize()
 {
 	//àÍíUTÉ~ÉmÇÃÇ›çÏÇÈ
-	std::unique_ptr<Block> newBlock0 = std::make_unique<Block>();
+	/*std::unique_ptr<Block> newBlock0 = std::make_unique<Block>();
 	std::unique_ptr<Block> newBlock1 = std::make_unique<Block>();
 	std::unique_ptr<Block> newBlock2 = std::make_unique<Block>();
-	std::unique_ptr<Block> newBlock3 = std::make_unique<Block>();
+	std::unique_ptr<Block> newBlock3 = std::make_unique<Block>();*/
 
 	ParentData* parent = new ParentData();
 	parent->parentPos = &parentPos;
 	parent->parentRot = &rotation;
 	parent->tileOffset = { 0,0 };
 	parent->parentTag = pieceTag;
-	newBlock0->Initialize(BlockData::Cannon, parent);
-
-
+	Block* newBlock0 = Block::CreateBlock(BlockData::None, parent);
 	childBlocks.push_back(std::move(newBlock0));
 	parent = new ParentData();
 	parent->parentPos = &parentPos;
 	parent->parentRot = &rotation;
 	parent->tileOffset = { 0,1 };
 	parent->parentTag = pieceTag;
-	newBlock1->Initialize(BlockData::None, parent);
+	Block* newBlock1= Block::CreateBlock(BlockData::Cannon, parent);
 	childBlocks.push_back(std::move(newBlock1));
 	parent = new ParentData();
 	parent->parentPos = &parentPos;
 	parent->parentRot = &rotation;
 	parent->tileOffset = { 0,-1 };
 	parent->parentTag = pieceTag;
-	newBlock2->Initialize(BlockData::None, parent);
+	Block* newBlock2 = Block::CreateBlock(BlockData::None, parent);
 	childBlocks.push_back(std::move(newBlock2));
 	parent = new ParentData();
 	parent->parentPos = &parentPos;
 	parent->parentRot = &rotation;
 	parent->tileOffset = { 1,0 };
 	parent->parentTag = pieceTag;
-	newBlock3->Initialize(BlockData::Cannon, parent);
+	Block* newBlock3 = Block::CreateBlock(BlockData::Cannon, parent);
 	childBlocks.push_back(std::move(newBlock3));
 
-	parentPos = { (float)WinAPI::GetInstance()->GetWidth(),Util::GetRandomFloat(64,WinAPI::GetInstance()->GetHeight() - 64.0f) };
+	parentPos = { (float)WinAPI::GetInstance()->GetWidth(),Util::GetRandomFloat(640,WinAPI::GetInstance()->GetHeight() - 320.0f) };
 
 	rotation = Util::GetRandomInt(0, 3) * 90.0f;
 
@@ -54,7 +52,7 @@ void Piece::Update()
 {
 	parentPos.x -= baseSpd;
 
-	ImGui::Text("tag :%d", pieceTag);
+	ImGui::Text("piece tag :%d", pieceTag);
 
 	for (size_t i = 0; i < childBlocks.size(); i++) {
 		childBlocks[i]->Update();

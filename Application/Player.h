@@ -21,6 +21,13 @@ public:
 	//当たり判定コールバック
 	void OnCollision();
 
+	//ブロックの追加
+	void AddBlock(Block* block);
+
+	Vector2 GetPosition()const { return position; }
+
+	float GetRotation()const { return rotation; }
+
 private:
 
 	//移動
@@ -31,6 +38,8 @@ private:
 
 	//デバッグ用関数
 	void AddBlock();
+
+	
 
 	//ブロック配列の更新
 	void UpdateBlocks();
@@ -51,7 +60,7 @@ private:
 	uint16_t texIndex = 0;
 
 	//速度
-	const float baseSpd = 2.0f;
+	const float baseSpd = 8.0f;
 
 	//回転角
 	float rotation = 0;
@@ -67,7 +76,7 @@ private:
 	int debugBlockOffsetY = 0;
 
 	//ブロック配列
-	std::vector < std::unique_ptr< Block> > blocks;
+	std::vector < Block* > blocks;
 
 	//マネージャ
 	CollisionManager2D* colManager = nullptr;

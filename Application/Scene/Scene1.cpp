@@ -64,6 +64,10 @@ void Scene1::Initialize()
 	player = std::make_unique<Player>();
 	player->Initialize(playerTex,{96,(float)WinAPI::GetInstance()->GetHeight()/2});
 
+	//ブロッククラスにプレイヤーをセット
+	Block::SetPlayer(player.get());
+
+
 	// エネミー
 	enemy_ = std::make_unique<TestEnemy>();
 	enemy_->Initialize();
@@ -77,6 +81,12 @@ void Scene1::Initialize()
 
 void Scene1::Update()
 {
+	//ボタンで終了
+	if (ImGui::Button("End request")) {
+		
+	}
+
+
 	// プレイヤー更新
 	player_->Update();
 
@@ -88,12 +98,6 @@ void Scene1::Update()
 	}
 
 	ImGui::Text("piece size %d", Piece::pieces.size());
-
-	//if (ImGui::Button("add piece")) {
-	//	std::unique_ptr<Piece> newPiece = std::make_unique<Piece>();
-	//	newPiece->Initialize();
-	//	pieces.push_back(std::move(newPiece));
-	//}
 
 	Piece::CreatePiece();
 
@@ -108,6 +112,8 @@ void Scene1::Update()
 
 	// カメラの更新
 	camera_->Update();
+
+	
 }
 
 void Scene1::Draw()

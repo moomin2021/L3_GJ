@@ -22,7 +22,7 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	colManager = CollisionManager2D::GetInstance();
 
 	//コライダーのセット
-	collider = std::make_unique<CircleCollider>(Vector2{ 0,0 },Block::GetBlockSize().x);
+	collider = std::make_unique<CircleCollider>(Vector2{ 0,0 },Block::GetBlockSize().x/2.0f);
 	//属性つける
 	collider->SetAttribute(COL_PLAYER);
 	collider->SetSprite(sprite.get());
@@ -156,24 +156,35 @@ void Player::AddBlock()
 
 	if (ImGui::Button("add")) {
 		//設定されているブロックのオフセットを使ってブロック生成、自機と紐つける
-		std::unique_ptr<Block> newBlock = std::make_unique<Block>();
 		ParentData* parent = new ParentData();
 		parent->parentPos = &position;
 		parent->tileOffset = { (float)debugBlockOffsetX, (float)debugBlockOffsetY };
 		parent->parentRot = &rotation;
-		newBlock->Initialize(BlockData::None, parent);
+		Block* newBlock = Block::CreateBlock(BlockData::None, parent);
 
 		//自機のブロック配列に格納
-		blocks.push_back(std::move(newBlock));
+		blocks.push_back(newBlock);
 	}
 
 	ImGui::End();
 
 }
 
+void Player::AddBlock(Block*block)
+{
+	//配列に挿入
+	blocks.push_back(block);
+}
+
 void Player::UpdateBlocks()
 {
 	for (size_t i = 0; i < blocks.size(); i++) {
+		//親の座標と回転角を更新し続ける
+		ParentData* parent = blocks[i]->GetParent();
+		parent->parentPos = &position;
+		parent->parentRot = &rotation;
+		blocks[i]->SetParent(parent);
 		blocks[i]->Update();
+		ImGui::Text("blocks[%d]offset:%1.f,%1.f", i, blocks[i]->GetOffset().x, blocks[i]->GetOffset().y);
 	}
 }

@@ -20,6 +20,8 @@ enum class BlockData {
 
 };
 
+class Player;
+
 class Block
 {
 public://静的メンバ関数
@@ -34,7 +36,9 @@ public://静的メンバ関数
 
 	static Vector2 GetBlockSize() { return blockSize; }
 
-	static void CreateBlock();
+	static Block* CreateBlock(const BlockData& blockData, ParentData* parent);
+
+	static void SetPlayer(Player* player);
 
 public://メンバ関数
 
@@ -53,15 +57,19 @@ public://メンバ関数
 
 	void OnCollison();
 
+	Vector2 GetOffset()const { return parent->tileOffset; }
+
+	ParentData* GetParent() { return parent; }
 
 
 private://静的メンバ変数
 	static uint16_t cannonTexture;
 	static uint16_t blockTexture;
 	static Vector2 blockSize;
-
-	static std::vector<Block*> pAllBlock;
 	//全てのブロックのﾎﾟｲﾝﾀ
+	static std::vector<std::unique_ptr<Block>> pAllBlock;
+	
+	static Player* player;
 
 private://メンバ変数
 

@@ -2,6 +2,7 @@
 #include"Block.h"
 #include<vector>
 
+class Player;
 
 class Piece
 {
@@ -34,7 +35,7 @@ private:
 	Vector2 parentPos;
 
 	//子ブロック配列
-	std::vector<std::unique_ptr<Block>> childBlocks;
+	std::vector<Block*> childBlocks;
 
 	//進行速度
 	const float baseSpd = 16.0f;

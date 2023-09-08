@@ -2,13 +2,15 @@
 #include"Util.h"
 #include"CollisionAttribute.h"
 #include<imgui_impl_dx12.h>
+#include"Player.h"
 
 
 //静的メンバ変数の実態
 uint16_t Block::cannonTexture = 0;
 uint16_t Block::blockTexture = 0;
 Vector2 Block::blockSize = { 0,0 };
-std::vector<Block*> Block::pAllBlock;
+std::vector<std::unique_ptr<Block>> Block::pAllBlock;
+Player* Block::player = nullptr;
 
 
 void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, const Vector2& blockSize)
@@ -16,10 +18,22 @@ void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, const Vector
 	cannonTexture = cannonTex;
 	blockTexture = blockTex;
 	Block::blockSize = blockSize;
+
+
 }
 
-void Block::CreateBlock()
+Block* Block::CreateBlock(const BlockData& blockData, ParentData* parent)
 {
+	std::unique_ptr<Block> newBlock = std::make_unique<Block>();
+	newBlock->Initialize(blockData, parent);
+	pAllBlock.push_back(std::move(newBlock));
+
+	return pAllBlock.back().get();
+}
+
+void Block::SetPlayer(Player* player)
+{
+	Block::player = player;
 }
 
 void Block::Initialize(const BlockData& blockData, ParentData* parent)
@@ -33,7 +47,7 @@ void Block::Initialize(const BlockData& blockData, ParentData* parent)
 	colManager = CollisionManager2D::GetInstance();
 
 	//コライダーのセット
-	collider = std::make_unique<CircleCollider>(Vector2{0,0},blockSize.x);
+	collider = std::make_unique<CircleCollider>(Vector2{0,0},blockSize.x/2.0f);
 	//属性つける
 	collider->SetAttribute(COL_BLOCK);
 	collider->SetSprite(sprite.get());
@@ -46,7 +60,7 @@ void Block::Initialize(const BlockData& blockData, ParentData* parent)
 	colliderTag = blockTag;
 	collider->SetTag(colliderTag);
 
-	pAllBlock.push_back(this);
+
 }
 
 
@@ -108,7 +122,7 @@ void Block::OnCollison()
 	//衝突する
 	if (collider->GetIsHit()) {
 		//衝突対象がプレイヤー
-		if (collider->GetHitCollider()->GetAttribute() == COL_PLAYER) {
+		if (collider->GetHitCollider()->GetAttribute() == COL_PLAYER && collider->GetAttribute() == COL_BLOCK) {
 
 			Vector2 hitOffset{ 0,0 };
 			Vector2 tileOffsetBefore = parent->tileOffset;
@@ -143,7 +157,7 @@ void Block::OnCollison()
 			uint16_t baseTag = collider->GetTag();
 			//ブロック総リストからどのブロックに当たったか特定
 			uint16_t hitBlockTag = collider->GetHitCollider()->GetTag();
-			Block* hitBlock = pAllBlock[hitBlockTag];
+			Block* hitBlock = pAllBlock[hitBlockTag].get();
 			//どのブロックに当たったかでどのピースに当たったかを特定
 			uint16_t pieceTag = hitBlock->parent->parentTag;
 
@@ -169,21 +183,24 @@ void Block::ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag, uint16_t p
 	//衝突したブロック
 	Vector2 hitBlockOffset = pAllBlock[hitBlockTag]->parent->tileOffset;
 
+	//左右に当たっているのなら基準ブロックのxを反転,
+
 	//ブロック配列走査
 	for (size_t i = 0; i < pAllBlock.size(); i++) {
 		//ブロックの親タグが同一なもののみ親を変える
 		if (pAllBlock[i]->parent->parentTag == parentTag) {
 			//ブロックの新しいオフセットを計算
-			Vector2 newOffset = (pAllBlock[i]->parent->tileOffset = baseBlockOffset) + (hitBlockOffset + hitOffset);
+			Vector2 newOffset = (hitBlockOffset + hitOffset)+ (pAllBlock[i]->parent->tileOffset -baseBlockOffset );
 
 			//親を衝突したブロックに変更、オフセットの設定、属性の変更
-			pAllBlock[i]->parent = pAllBlock[hitBlockTag]->parent;
 			pAllBlock[i]->parent->tileOffset = newOffset;
 			pAllBlock[i]->collider->SetAttribute(COL_PLAYER);
 
+			//親の配列にぶちこむ
+			player->AddBlock(pAllBlock[i].get());
 		}
 	}
-
+	  
 
 
 }
