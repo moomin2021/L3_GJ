@@ -231,7 +231,10 @@
     <ClCompile Include="Engine\Collision\BaseCollider2D.cpp">
       <Filter>Engine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Boss.cpp">
+    <ClCompile Include="Application\Boss\Boss.cpp">
+      <Filter>Engine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Boss\BossBullet.cpp">
       <Filter>Engine\ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -407,7 +410,10 @@
     <ClInclude Include="PlayerBullet.h">
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Boss.h">
+    <ClInclude Include="Application\Boss\Boss.h">
+      <Filter>Engine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Boss\BossBullet.h">
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
