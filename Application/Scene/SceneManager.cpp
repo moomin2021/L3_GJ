@@ -1,8 +1,7 @@
 #include "SceneManager.h"
-#include "Scene1.h"
+#include "GameScene.h"
 #include "Scene2.h"
 #include "Scene3.h"
-#include "GameScene.h"
 #include "DX12Cmd.h"
 #include "PipelineManager.h"
 #include "ImGuiManager.h"
@@ -49,15 +48,15 @@ SceneManager::SceneManager() :
 
 // デストラクタ
 SceneManager::~SceneManager() {
-	
+
 }
 
 void SceneManager::ChangeScene(int changeSceneNum)
 {
 	switch (changeSceneNum)
 	{
-	case SCENE::SCENE1:
-		nowScene_ = std::make_unique<Scene1>();
+	case SCENE::GAME:
+		nowScene_ = std::make_unique<GameScene>();
 		nowScene_->Initialize();
 		break;
 	case SCENE::SCENE2:
@@ -68,23 +67,19 @@ void SceneManager::ChangeScene(int changeSceneNum)
 		nowScene_ = std::make_unique<Scene3>();
 		nowScene_->Initialize();
 		break;
-	case SCENE::GAME:
-		nowScene_ = std::make_unique<GameScene>();
-		nowScene_->Initialize();
-		break;
 	}
 }
 
 // 更新処理
 void SceneManager::Update() {
 
-	//if (key_->TriggerKey(DIK_1)) postEffectType_ = PostEffectType::NORMAL;
-	//if (key_->TriggerKey(DIK_2)) postEffectType_ = PostEffectType::BLUR;
-	//if (key_->TriggerKey(DIK_3)) postEffectType_ = PostEffectType::BLOOM;
+	if (key_->TriggerKey(DIK_1)) postEffectType_ = PostEffectType::NORMAL;
+	if (key_->TriggerKey(DIK_2)) postEffectType_ = PostEffectType::BLUR;
+	if (key_->TriggerKey(DIK_3)) postEffectType_ = PostEffectType::BLOOM;
 
-	if (key_->TriggerKey(DIK_1)) ChangeScene(SCENE1);
-	if (key_->TriggerKey(DIK_2)) ChangeScene(SCENE2);
-	if (key_->TriggerKey(DIK_3)) ChangeScene(SCENE3);
+	//if (key_->TriggerKey(DIK_1)) ChangeScene(SCENE1);
+	//if (key_->TriggerKey(DIK_2)) ChangeScene(SCENE2);
+	//if (key_->TriggerKey(DIK_3)) ChangeScene(SCENE3);
 
 	ImGuiManager::GetInstance()->Begin();
 
@@ -121,6 +116,9 @@ void SceneManager::Draw()
 
 		gaussianPostEffect_->Draw();
 
+		ImGuiManager::GetInstance()->End();
+		ImGuiManager::GetInstance()->Draw();
+
 		// --描画後処理-- //
 		DX12Cmd::GetInstance()->PostDraw();
 	}
@@ -146,7 +144,39 @@ void SceneManager::Draw()
 
 		bloomPostEffect_->Draw();
 
+		ImGuiManager::GetInstance()->End();
+		ImGuiManager::GetInstance()->Draw();
+
 		// --描画後処理-- //
 		DX12Cmd::GetInstance()->PostDraw();
 	}
+
+	//else if (PostEffectType::BLOOM == postEffectType_) {
+	//	highLumiPostEffect_->PreDraw();
+
+	//	nowScene_->Draw();
+
+	//	highLumiPostEffect_->PostDraw();
+
+	//	gaussianPostEffect_->PreDraw();
+
+	//	PipelineManager::GetInstance()->PreDraw("HighLumi");
+	//	highLumiPostEffect_->Draw();
+
+	//	gaussianPostEffect_->PostDraw();
+
+	//	bloomPostEffect_->PreDraw();
+
+	//	PipelineManager::GetInstance()->PreDraw("Gaussian");
+
+	//	gaussianPostEffect_->Draw();
+
+	//	bloomPostEffect_->PostDraw();
+
+	//	DX12Cmd::GetInstance()->PreDraw();
+
+	//	bloomPostEffect_->Draw();
+
+	//	DX12Cmd::GetInstance()->PostDraw();
+	//}
 }

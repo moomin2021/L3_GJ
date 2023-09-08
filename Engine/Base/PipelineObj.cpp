@@ -14,11 +14,11 @@ void PipelineObj::LoadShader(std::string fileName, ShaderType shaderType)
 {
 	switch (shaderType)
 	{
-	// 頂点シェーダー
-	case VS : ShaderCompileFromFile(fileName, "vs_5_0", &vsBlob_);
+		// 頂点シェーダー
+	case VS: ShaderCompileFromFile(fileName, "vs_5_0", &vsBlob_);
 		break;
-	// ピクセルシェーダー
-	case PS : ShaderCompileFromFile(fileName, "ps_5_0", &psBlob_);
+		// ピクセルシェーダー
+	case PS: ShaderCompileFromFile(fileName, "ps_5_0", &psBlob_);
 		break;
 		// ジオメトリシェーダー
 	case GS: ShaderCompileFromFile(fileName, "gs_5_0", &gsBlob_);
@@ -37,7 +37,7 @@ void PipelineObj::AddInputLayout(const char* semanticName, DXGI_FORMAT format, u
 		D3D12_APPEND_ALIGNED_ELEMENT,				// データのオフセット値（D3D12_APPEND_ALIGNED_ELEMENTだと自動設定）
 		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,	// 入力データの種別（標準はD3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA）
 		0											// 一度に描画するインスタンス数（0でよい）
-	});
+		});
 }
 
 void PipelineObj::CreateRootParams(uint16_t texRegisterNum, uint16_t constBuffNum)
@@ -77,68 +77,110 @@ void PipelineObj::CreatePipeline(uint16_t renderTargetNum, BLENDMODE blendMode, 
 	// グラフィックスパイプライン設定
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineDesc{};
 
-	// シェーダーの設定
-	pipelineDesc.VS.pShaderBytecode = vsBlob_->GetBufferPointer();
-	pipelineDesc.VS.BytecodeLength = vsBlob_->GetBufferSize();
-	pipelineDesc.PS.pShaderBytecode = psBlob_->GetBufferPointer();
-	pipelineDesc.PS.BytecodeLength = psBlob_->GetBufferSize();
+#pragma region シェーダー設定
+	// 頂点シェーダー
+	if (vsBlob_) {
+		pipelineDesc.VS.pShaderBytecode = vsBlob_->GetBufferPointer();
+		pipelineDesc.VS.BytecodeLength = vsBlob_->GetBufferSize();
+	}
 
-	if (gsBlob_ != nullptr) {
+	// ピクセルシェーダー
+	if (psBlob_) {
+		pipelineDesc.PS.pShaderBytecode = psBlob_->GetBufferPointer();
+		pipelineDesc.PS.BytecodeLength = psBlob_->GetBufferSize();
+	}
+
+	// ジオメトリシェーダー
+	if (gsBlob_) {
 		pipelineDesc.GS.pShaderBytecode = gsBlob_->GetBufferPointer();
 		pipelineDesc.GS.BytecodeLength = gsBlob_->GetBufferSize();
 	}
+#pragma endregion
 
-	// サンプルマスクの設定
+#pragma region サンプルマスク設定
 	pipelineDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; // 標準設定
+#pragma endregion
 
-	// ラスタライザの設定
-	pipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;	// カリングしない
-	pipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;	// ポリゴン内塗りつぶし
-	pipelineDesc.RasterizerState.DepthClipEnable = true;			// 深度クリッピングを有効に
+#pragma region ラスタライザ設定
+	// カリングとは描画する必要がないポリゴンを描画しないようにする手法
+	pipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	// D3D12_CULL_MODE_NONE		= 常にすべての三角形を描画する
+	// D3D12_CULL_MODE_FRONT	= 正面を向いた三角形を描画しない
+	// D3D12_CULL_MODE_BACK		= 後ろ向きの三角形を描画しない
 
-	// デプスステンシルステート
-	pipelineDesc.DepthStencilState.DepthEnable = true;							// 深度テストを行う
+	// 三角形をレンダリングするときに使用する塗りつぶしモードを指定
+	pipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
+	// D3D12_FILL_MODE_WIREFRAME	= 頂点を結ぶ線を描画する
+	// D3D12_FILL_MODE_SOLID		= 頂点によって形成された三角形を塗りつぶす
+
+	// 距離に基づいてクリッピングを有効にするか指定
+	pipelineDesc.RasterizerState.DepthClipEnable = true;
+#pragma endregion
+
+#pragma region デプスステンシルステート
+	// 立体を描画するとき、正しい前後関係を描くための機能が深度テスト
+
+	// 深度テストを行うか
+	pipelineDesc.DepthStencilState.DepthEnable = true;
+
+	// 深度データによって変更できる深度ステンシルバッファの一部を識別する
 	pipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
 	if (isDepth) pipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;	// 書き込み許可
 	pipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;		// 小さければ合格
 	pipelineDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;								// 深度値フォーマット
+#pragma endregion
 
-	// レンダーターゲットのブレンド設定
+#pragma region ブレンド設定
 	D3D12_RENDER_TARGET_BLEND_DESC blendDesc{};
-	blendDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;// RGBA全てのチャンネルを描画
+
+	// ブレンドを有効にするか
 	blendDesc.BlendEnable = true;
+
+	// RGBAそれぞれの値に書き込むかどうか
+	blendDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	// アルファをどうブレンドするか
 	blendDesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+
+	// ピクセルシェーダーが出力するアルファ値に対して実行する操作を指定
 	blendDesc.SrcBlendAlpha = D3D12_BLEND_ONE;
+
+	// レンダーターゲットの現在のアルファ値に対して実行する操作を指定
 	blendDesc.DestBlendAlpha = D3D12_BLEND_ZERO;
 
-	if (blendMode == NONE) {
+	// 半透明
+	if (blendMode == ALPHA) {
 		blendDesc.BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
 	}
 
-	else if (blendMode == ALPHA) {
-		blendDesc.BlendOp = D3D12_BLEND_OP_ADD;
-		blendDesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blendDesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	}
-
+	// 加算
 	else if (blendMode == ADD) {
 		blendDesc.BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.SrcBlend = D3D12_BLEND_ONE;
 		blendDesc.DestBlend = D3D12_BLEND_ONE;
 	}
 
+	// 減算
 	else if (blendMode == SUB) {
-		blendDesc.BlendOpAlpha = D3D12_BLEND_OP_REV_SUBTRACT;
-		blendDesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-		blendDesc.DestBlendAlpha = D3D12_BLEND_ONE;
+		blendDesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
+		blendDesc.SrcBlend = D3D12_BLEND_ONE;
+		blendDesc.DestBlend = D3D12_BLEND_ONE;
+	}
+
+	// 反転
+	else if (blendMode == INV) {
+		blendDesc.BlendOp = D3D12_BLEND_OP_ADD;
+		blendDesc.SrcBlend = D3D12_BLEND_INV_DEST_COLOR;
+		blendDesc.DestBlend = D3D12_BLEND_ZERO;
 	}
 
 	// ブレンドステートの設定
 	for (size_t i = 0; i < renderTargetNum; i++) {
 		pipelineDesc.BlendState.RenderTarget[i] = blendDesc;
 	}
+#pragma endregion
 
 	// 頂点レイアウトの設定
 	pipelineDesc.InputLayout.pInputElementDescs = inputLayout_.data();
@@ -156,10 +198,16 @@ void PipelineObj::CreatePipeline(uint16_t renderTargetNum, BLENDMODE blendMode, 
 
 	// テクスチャサンプラーの設定
 	// スタティックサンプラー
-	CD3DX12_STATIC_SAMPLER_DESC samplerDesc =
-		CD3DX12_STATIC_SAMPLER_DESC(0, D3D12_FILTER_MIN_MAG_MIP_POINT);
-	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-	samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	D3D12_STATIC_SAMPLER_DESC samplerDesc{};
+	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;					//横繰り返し（タイリング）
+	samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;					//縦繰り返し（タイリング）
+	samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;					//奥行繰り返し（タイリング）
+	samplerDesc.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;	//ボーダーの時は黒
+	samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;					//全てリニア保管
+	samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;									//ミップマップ最大値
+	samplerDesc.MinLOD = 0.0f;												//ミップマップ最小値
+	samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+	samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 	// ルートシグネチャの設定
 	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;

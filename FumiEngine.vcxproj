@@ -89,6 +89,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application\Block.cpp" />
+    <ClCompile Include="Application\Boss.cpp" />
     <ClCompile Include="Engine\Collision\BaseCollider2D.cpp" />
     <ClCompile Include="Engine\Util\Easing.cpp" />
     <ClCompile Include="Engine\Collision\CircleCollider.cpp" />
@@ -110,7 +111,7 @@
     <ClCompile Include="Engine\Base\PipelineManager.cpp" />
     <ClCompile Include="Engine\Base\PipelineObj.cpp" />
     <ClCompile Include="Engine\2d\PostEffect.cpp" />
-    <ClCompile Include="Application\Scene\Scene1.cpp" />
+    <ClCompile Include="Application\Scene\GameScene.cpp" />
     <ClCompile Include="Application\Scene\SceneManager.cpp" />
     <ClCompile Include="Engine\2d\Sprite.cpp" />
     <ClCompile Include="Application\Scene\TemplateScene.cpp" />
@@ -120,7 +121,6 @@
     <ClCompile Include="Engine\Util\Math\Vector3.cpp" />
     <ClCompile Include="Engine\Base\WinAPI.cpp" />
     <ClCompile Include="Engine\Util\ImGuiManager.cpp" />
-    <ClCompile Include="Application\Scene\GameScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\3d\Mesh.cpp" />
     <ClCompile Include="Engine\3d\Material.cpp" />
@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="Application\Scene\BaseScene.h" />
     <ClInclude Include="Application\Block.h" />
+    <ClInclude Include="Application\Boss.h" />
     <ClInclude Include="Engine\Util\Easing.h" />
     <ClInclude Include="Engine\Collision\CircleCollider.h" />
     <ClInclude Include="Engine\Collision\BoxCollider.h" />
@@ -170,7 +171,7 @@
     <ClInclude Include="Engine\Base\PipelineObj.h" />
     <ClInclude Include="Engine\Light\PointLight.h" />
     <ClInclude Include="Engine\2d\PostEffect.h" />
-    <ClInclude Include="Application\Scene\Scene1.h" />
+    <ClInclude Include="Application\Scene\GameScene.h" />
     <ClInclude Include="Application\Scene\SceneManager.h" />
     <ClInclude Include="Engine\Light\SpotLight.h" />
     <ClInclude Include="Engine\2d\Sprite.h" />
@@ -193,7 +194,6 @@
     <ClInclude Include="Engine\Collision\SphereCollider.h" />
     <ClInclude Include="Engine\Collision\PointCollider.h" />
     <ClInclude Include="Application\Scene\Scene3.h" />
-    <ClInclude Include="Application\Scene\GameScene.h" />
     <ClInclude Include="Application\Player.h" />
     <ClInclude Include="Engine\Input\Pad.h" />
     <ClInclude Include="Application\Piece.h" />
