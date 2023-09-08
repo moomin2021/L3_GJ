@@ -2,13 +2,8 @@
 #include "BaseScene.h"
 #include "Key.h"
 #include "Camera.h"
-#include "LightGroup.h"
-#include "DirectionalLight.h"
-#include "Object3D.h"
-#include "ParticleEmitter.h"
-#include "RayCollider.h"
-#include "MeshCollider.h"
-#include "SphereCollider.h"
+#include "Sprite.h"
+#include "BoxCollider.h"
 
 #include <memory>
 
@@ -22,35 +17,11 @@ private:
 	// カメラ
 	std::unique_ptr<Camera> camera_ = nullptr;
 
-	// ライトグループ
-	std::unique_ptr<LightGroup> lightGroup_ = nullptr;
+	// スプライト
+	std::unique_ptr<Sprite> sprite_[2];
 
-	// 平行光源
-	std::unique_ptr<DirectionalLight> dirLight_ = nullptr;
-
-	// モデル
-	std::unique_ptr<Model> model_ = nullptr;
-
-	// オブジェクト
-	std::unique_ptr<Object3D> object_ = nullptr;
-
-	// パーティクルエミッター
-	std::vector<std::unique_ptr<ParticleEmitter>> particleEmitters_;
-
-	// レイコライダー
-	std::unique_ptr<RayCollider> rayCol_ = nullptr;
-
-	// メッシュコライダー
-	std::unique_ptr<MeshCollider> meshCol_ = nullptr;
-
-	// 球コライダー
-	std::unique_ptr<SphereCollider> sphereCol_ = nullptr;
-
-	// パーティクル用画像ハンドル
-	uint16_t particlehandle_ = 0;
-
-	// BGMキー
-	uint16_t bgmKey_ = 0;
+	// コライダー
+	std::unique_ptr<BoxCollider> collider_[2];
 
 	// --メンバ関数-- //
 public:
@@ -68,5 +39,12 @@ public:
 
 	// 描画処理
 	void Draw();
+
+private:
+	// 衝突時処理
+	void OnCollision();
+
+	// 行列更新
+	void MatUpdate();
 };
 
