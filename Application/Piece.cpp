@@ -44,7 +44,7 @@ void Piece::Initialize()
 
 	parentPos = { (float)WinAPI::GetInstance()->GetWidth(),Util::GetRandomFloat(640,WinAPI::GetInstance()->GetHeight() - 320.0f) };
 
-	rotation = Util::GetRandomInt(0, 3) * 90.0f;
+	//rotation = Util::GetRandomInt(0, 3) * 90.0f;
 
 }
 

@@ -200,7 +200,5 @@ void Block::ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag, uint16_t p
 			player->AddBlock(pAllBlock[i].get());
 		}
 	}
-	  
-
 
 }
