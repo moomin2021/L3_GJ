@@ -1,5 +1,5 @@
 #include "SceneManager.h"
-#include "Scene1.h"
+#include "GameScene.h"
 #include "Scene2.h"
 #include "Scene3.h"
 #include "DX12Cmd.h"
@@ -36,7 +36,7 @@ SceneManager::SceneManager() :
 	key_ = Key::GetInstance();
 
 	// ç≈èâÇÃÉVÅ[Éì
-	nowScene_ = std::make_unique<Scene1>();
+	nowScene_ = std::make_unique<GameScene>();
 	nowScene_->Initialize();
 
 	gaussianPostEffect_ = std::make_unique<PostEffect>();
@@ -55,8 +55,8 @@ void SceneManager::ChangeScene(int changeSceneNum)
 {
 	switch (changeSceneNum)
 	{
-	case SCENE::SCENE1:
-		nowScene_ = std::make_unique<Scene1>();
+	case SCENE::GAME:
+		nowScene_ = std::make_unique<GameScene>();
 		nowScene_->Initialize();
 		break;
 	case SCENE::SCENE2:
