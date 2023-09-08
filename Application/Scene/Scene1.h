@@ -13,6 +13,7 @@
 #include "TestEnemy.h"
 #include"Player.h"
 #include"Piece.h"
+#include "Boss.h"
 
 #include <memory>
 
@@ -38,6 +39,9 @@ private:
 	// プレイヤー
 	std::unique_ptr<TestPlayer> player_ = nullptr;
 	std::unique_ptr<Player> player = nullptr;
+
+	// ボス
+	std::unique_ptr<Boss> boss_ = nullptr;
 
 	// エネミー
 	std::unique_ptr<TestEnemy> enemy_ = nullptr;

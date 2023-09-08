@@ -64,6 +64,9 @@ void Scene1::Initialize()
 	player = std::make_unique<Player>();
 	player->Initialize(playerTex,{96,(float)WinAPI::GetInstance()->GetHeight()/2});
 
+	boss_ = std::make_unique<Boss>();
+	boss_->Initialize();
+
 	// エネミー
 	enemy_ = std::make_unique<TestEnemy>();
 	enemy_->Initialize();
@@ -81,6 +84,8 @@ void Scene1::Update()
 	player_->Update();
 
 	player->Update();
+
+	boss_->Update();
 
 	//ピースの更新とボタンで生成
 	for (size_t i = 0; i < Piece::pieces.size(); i++) {
@@ -129,6 +134,8 @@ void Scene1::Draw()
 		Piece::pieces[i]->Draw();
 	}
 
+	boss_->Draw();
+
 	backGroundSprite->Draw(backGroundTexture);
 
 }
@@ -137,6 +144,7 @@ void Scene1::ObjUpdate()
 {
 	player_->ObjUpdate();
 	enemy_->ObjUpdate();
+	boss_->MatUpdate();
 }
 
 void Scene1::OnCollision()
@@ -145,6 +153,7 @@ void Scene1::OnCollision()
 
 	player_->OnCollision();
 	enemy_->OnCollision();
+	boss_->OnCollision();
 
 	//判定
 	for (size_t i = 0; i < Piece::pieces.size(); i++) {
