@@ -1,7 +1,9 @@
 #pragma once
 #include "Sprite.h"
+#include "BossBullet.h"
 
-#include <memory>
+//#include <memory>
+#include <vector>
 
 class Boss
 {
@@ -27,7 +29,7 @@ private:
 	uint16_t hBossFront_ = 0;
 
 	// 状態
-	State state_ = WAIT;
+	State state_ = MOVE_SHOT;
 
 	// ボスの座標
 	Vector2 position_ = { 1500.0f, 540.0f };
@@ -35,6 +37,21 @@ private:
 	// ボス裏面の角度
 	float rotateBossBack0_ = 0.0f;
 	float rotateBossBack1_ = 45.0f;
+
+	// ボス裏面の回転速度
+	float rotateSpd_ = 3.0f;
+
+	// ボスの移動速度
+	float moveSpd_ = 0.05f;
+
+	// 弾
+	std::vector<std::unique_ptr<BossBullet>> bullets_;
+
+	// 弾を撃つ間隔[s]
+	float shotInterval_ = 1.0f;
+
+	// 弾を撃った時間
+	uint64_t shotTime_ = 0;
 #pragma endregion
 
 #pragma region メンバ関数
