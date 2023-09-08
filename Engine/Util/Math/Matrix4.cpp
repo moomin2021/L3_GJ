@@ -44,7 +44,7 @@ Matrix4 Matrix4Inverse(const Matrix4& m)
 
 		//最大の絶対値が0だったら逆行列は求められない
 		if (abs(mat[maxIndex][n]) <= 0.000001f) {
-			return result; //とりあえず単位行列返しちゃう
+			return Matrix4Identity(); //とりあえず単位行列返しちゃう
 		}
 
 		//入れ替え

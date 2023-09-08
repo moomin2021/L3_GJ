@@ -16,8 +16,19 @@ public:
 	//描画
 	void Draw();
 
+	static void CreatePiece();
+
+	void OnCollision();
+
+public:
+
+	//全ピース
+	static std::vector < std::unique_ptr<Piece>> pieces;
 
 private:
+
+	//ピース識別タグ
+	uint16_t pieceTag = 0;
 
 	//親のブロック
 	Vector2 parentPos;

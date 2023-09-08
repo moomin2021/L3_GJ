@@ -31,11 +31,11 @@ void Scene3::Initialize()
 
 #pragma region コライダー初期化
 	pCol_ = std::make_unique<PointCollider>(Vector2{ 0.0f, 0.0f });
-	pCol_->SetAttribute(COL_POINT);
+	//pCol_->SetAttribute(COL_POINT);
 	colMgr2D_->AddCollider(pCol_.get());
 
 	boxCol_ = std::make_unique<BoxCollider>(Vector2{ 500.0f, 300.0f }, Vector2{ 50.0f, 50.0f });
-	boxCol_->SetAttribute(COL_BOX);
+//	boxCol_->SetAttribute(COL_BOX);
 	colMgr2D_->AddCollider(boxCol_.get());
 #pragma endregion
 }

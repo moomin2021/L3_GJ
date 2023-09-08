@@ -92,9 +92,9 @@ void Scene2::Initialize()
 
 #pragma region コライダー
 	rayCol_ = std::make_unique<RayCollider>(Vector3{ 0.0f, 2.0f, 0.0f }, Vector3{ 0.0f, -1.0f, 0.0f });
-	rayCol_->SetAttribute(COL_ATTR_ALL);
+	//rayCol_->SetAttribute(COL_ATTR_ALL);
 	meshCol_ = std::make_unique<MeshCollider>(object_.get());
-	meshCol_->SetAttribute(COL_ATTR_ALL);
+	//meshCol_->SetAttribute(COL_ATTR_ALL);
 
 	CollisionManager::GetInstance()->AddCollider(rayCol_.get());
 	CollisionManager::GetInstance()->AddCollider(meshCol_.get());

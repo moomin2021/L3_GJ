@@ -1,12 +1,14 @@
 #include "Block.h"
 #include"Util.h"
 #include"CollisionAttribute.h"
+#include<imgui_impl_dx12.h>
 
 
 //静的メンバ変数の実態
 uint16_t Block::cannonTexture = 0;
 uint16_t Block::blockTexture = 0;
 Vector2 Block::blockSize = { 0,0 };
+std::vector<Block*> Block::pAllBlock;
 
 
 void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, const Vector2& blockSize)
@@ -14,6 +16,10 @@ void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, const Vector
 	cannonTexture = cannonTex;
 	blockTexture = blockTex;
 	Block::blockSize = blockSize;
+}
+
+void Block::CreateBlock()
+{
 }
 
 void Block::Initialize(const BlockData& blockData, ParentData* parent)
@@ -34,7 +40,13 @@ void Block::Initialize(const BlockData& blockData, ParentData* parent)
 	//マネージャに登録
 	colManager->AddCollider(collider.get());
 
+	//ブロック識別タグの設定
+	uint16_t blockTag = (uint16_t)pAllBlock.size();
 
+	colliderTag = blockTag;
+	collider->SetTag(colliderTag);
+
+	pAllBlock.push_back(this);
 }
 
 
@@ -86,5 +98,92 @@ void Block::Update()
 	//親の回転をブロックの回転に適用
 	sprite->SetRotation(*parent->parentRot);
 	sprite->MatUpdate();
+
+	
+	ImGui::Text("tag : %d", colliderTag);
+}
+
+void Block::OnCollison()
+{
+	//衝突する
+	if (collider->GetIsHit()) {
+		//衝突対象がプレイヤー
+		if (collider->GetHitCollider()->GetAttribute() == COL_PLAYER) {
+
+			Vector2 hitOffset{ 0,0 };
+			Vector2 tileOffsetBefore = parent->tileOffset;
+
+			//プレイヤーから自分へのベクトル(プレイヤからみてどこにくっつくか判定するため、)
+			Vector2 vecP = collider->GetPosition() - collider->GetHitCollider()->GetPosition();
+			//x成分とy成分の絶対値を比較し、縦につくか横につくか決める
+			if (fabs(vecP.x) > fabs(vecP.y)) {
+				//x成分のほうが大きい場合
+				if (vecP.x > 0) {
+					//0以上なら上につける
+					hitOffset.x = 1.0f;
+				}
+				else {
+					//0以下なら下
+					hitOffset.x = -1.0f;
+				}
+			}
+			else {
+				if (vecP.y > 0) {
+					//0以上なら上につける
+					hitOffset.y = 1.0f;
+				}
+				else {
+					//0以下なら下
+					hitOffset.y = -1.0f;
+				}
+			}
+
+
+			//自分のブロックタグ
+			uint16_t baseTag = collider->GetTag();
+			//ブロック総リストからどのブロックに当たったか特定
+			uint16_t hitBlockTag = collider->GetHitCollider()->GetTag();
+			Block* hitBlock = pAllBlock[hitBlockTag];
+			//どのブロックに当たったかでどのピースに当たったかを特定
+			uint16_t pieceTag = hitBlock->parent->parentTag;
+
+			//親の変更
+			ChangeParent(baseTag, hitBlockTag, pieceTag, hitOffset);
+
+
+			//Vector2 afterOffset{ 0,0 };
+
+			////オフセット計算式:自分の現在のオフセット - 衝突ブロックの元オフセット + (当たったブロックのオフセット + 衝突時に作成したオフセット)
+			//afterOffset = (tileOffsetBefore - tileOffsetBefore) + (hitBlock->parent->tileOffset + hitOffset);
+
+			////親を同一にする
+			//parent = hitBlock->parent;
+		}
+	}
+}
+
+void Block::ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag, uint16_t parentTag,const Vector2& hitOffset)
+{
+	//オフセット加算の基準ブロック
+	Vector2 baseBlockOffset = pAllBlock[baseBlockTag]->parent->tileOffset;
+	//衝突したブロック
+	Vector2 hitBlockOffset = pAllBlock[hitBlockTag]->parent->tileOffset;
+
+	//ブロック配列走査
+	for (size_t i = 0; i < pAllBlock.size(); i++) {
+		//ブロックの親タグが同一なもののみ親を変える
+		if (pAllBlock[i]->parent->parentTag == parentTag) {
+			//ブロックの新しいオフセットを計算
+			Vector2 newOffset = (pAllBlock[i]->parent->tileOffset = baseBlockOffset) + (hitBlockOffset + hitOffset);
+
+			//親を衝突したブロックに変更、オフセットの設定、属性の変更
+			pAllBlock[i]->parent = pAllBlock[hitBlockTag]->parent;
+			pAllBlock[i]->parent->tileOffset = newOffset;
+			pAllBlock[i]->collider->SetAttribute(COL_PLAYER);
+
+		}
+	}
+
+
 
 }

@@ -4,11 +4,13 @@
 #include<memory>
 #include"CircleCollider.h"
 #include"CollisionManager2D.h"
+#include<list>
 
 struct ParentData {
 	Vector2* parentPos = nullptr;
 	float* parentRot = nullptr;
 	Vector2 tileOffset{0,0};
+	uint16_t parentTag = 0;
 };
 
 enum class BlockData {
@@ -32,6 +34,8 @@ public://静的メンバ関数
 
 	static Vector2 GetBlockSize() { return blockSize; }
 
+	static void CreateBlock();
+
 public://メンバ関数
 
 	/// <summary>
@@ -47,11 +51,17 @@ public://メンバ関数
 
 	void Update();
 
+	void OnCollison();
+
+
 
 private://静的メンバ変数
 	static uint16_t cannonTexture;
 	static uint16_t blockTexture;
 	static Vector2 blockSize;
+
+	static std::vector<Block*> pAllBlock;
+	//全てのブロックのﾎﾟｲﾝﾀ
 
 private://メンバ変数
 
@@ -64,7 +74,10 @@ private://メンバ変数
 	BlockData blockData = BlockData::None;
 	ParentData* parent = nullptr;
 
+	uint16_t colliderTag = 0;
 
+private: //静的メンバ関数
 
+	void ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag,uint16_t parentTag,const Vector2& hitOffset);
 };
 

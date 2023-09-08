@@ -72,7 +72,7 @@ public:
 	inline BaseCollider2D* GetHitCollider() { return hitCol_; }
 
 	// À•W‚ğæ“¾
-	const Vector2& GetPosition();
+	Vector2 GetPosition() const;
 
 	// ƒ^ƒO‚ğæ“¾
 	inline uint16_t GetTag() { return tag_; }

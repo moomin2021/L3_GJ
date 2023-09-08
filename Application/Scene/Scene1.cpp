@@ -83,18 +83,19 @@ void Scene1::Update()
 	player->Update();
 
 	//ピースの更新とボタンで生成
-	for (size_t i = 0; i < pieces.size(); i++) {
-		pieces[i]->Update();
+	for (size_t i = 0; i < Piece::pieces.size(); i++) {
+		Piece::pieces[i]->Update();
 	}
 
-	ImGui::Text("piece size %d", pieces.size());
+	ImGui::Text("piece size %d", Piece::pieces.size());
 
-	if (ImGui::Button("add piece")) {
-		std::unique_ptr<Piece> newPiece = std::make_unique<Piece>();
-		newPiece->Initialize();
-		pieces.push_back(std::move(newPiece));
-	}
+	//if (ImGui::Button("add piece")) {
+	//	std::unique_ptr<Piece> newPiece = std::make_unique<Piece>();
+	//	newPiece->Initialize();
+	//	pieces.push_back(std::move(newPiece));
+	//}
 
+	Piece::CreatePiece();
 
 	// エネミー更新
 	enemy_->Update();
@@ -127,8 +128,8 @@ void Scene1::Draw()
 
 	player->Draw();
 
-	for (size_t i = 0; i < pieces.size(); i++) {
-		pieces[i]->Draw();
+	for (size_t i = 0; i < Piece::pieces.size(); i++) {
+		Piece::pieces[i]->Draw();
 	}
 
 	backGroundSprite->Draw(backGroundTexture);
@@ -145,4 +146,10 @@ void Scene1::OnCollision()
 {
 	player_->OnCollision();
 	enemy_->OnCollision();
+
+	//判定
+	for (size_t i = 0; i < Piece::pieces.size(); i++) {
+		Piece::pieces[i]->OnCollision();
+	}
+
 }
