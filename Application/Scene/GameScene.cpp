@@ -43,6 +43,8 @@ void GameScene::Initialize()
 	player = std::make_unique<Player>();
 	player->Initialize(playerTex,{96,(float)WinAPI::GetInstance()->GetHeight()/2});
 
+	Block::SetPlayer(player.get());
+
 	// É{ÉX
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize();
