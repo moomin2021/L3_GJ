@@ -108,9 +108,6 @@ void Scene1::Update()
 
 	// ƒJƒƒ‰‚ÌXV
 	camera_->Update();
-
-	// Õ“Ë”»’è
-	CollisionManager::GetInstance()->CheckAllCollision();
 }
 
 void Scene1::Draw()
@@ -144,6 +141,8 @@ void Scene1::ObjUpdate()
 
 void Scene1::OnCollision()
 {
+	CollisionManager2D::GetInstance()->CheckAllCollision();
+
 	player_->OnCollision();
 	enemy_->OnCollision();
 
