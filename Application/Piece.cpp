@@ -13,6 +13,8 @@ void Piece::Initialize()
 	std::unique_ptr<Block> newBlock2 = std::make_unique<Block>();
 	std::unique_ptr<Block> newBlock3 = std::make_unique<Block>();*/
 
+	uint16_t pieceTag = (uint16_t)pieces.size();
+
 	ParentData* parent = new ParentData();
 	parent->parentPos = &parentPos;
 	parent->parentRot = &rotation;
@@ -52,7 +54,7 @@ void Piece::Update()
 {
 	parentPos.x -= baseSpd;
 
-	ImGui::Text("piece tag :%d", pieceTag);
+	//ImGui::Text("piece tag :%d", pieceTag);
 
 	for (size_t i = 0; i < childBlocks.size(); i++) {
 		childBlocks[i]->Update();
@@ -71,7 +73,6 @@ void Piece::CreatePiece()
 	if (ImGui::Button("add piece")) {
 		std::unique_ptr<Piece> newPiece = std::make_unique<Piece>();
 		newPiece->Initialize();
-		newPiece->pieceTag = (uint16_t)pieces.size();
 		pieces.push_back(std::move(newPiece));
 	}
 }

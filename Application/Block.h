@@ -22,6 +22,8 @@ enum class BlockData {
 
 class Player;
 
+class Piece;
+
 class Block
 {
 public://静的メンバ関数
@@ -39,6 +41,7 @@ public://静的メンバ関数
 	static Block* CreateBlock(const BlockData& blockData, ParentData* parent);
 
 	static void SetPlayer(Player* player);
+	static void SetPiece(std::vector < std::unique_ptr<Piece>>* pieces);
 
 public://メンバ関数
 
@@ -70,6 +73,7 @@ private://静的メンバ変数
 	static std::vector<std::unique_ptr<Block>> pAllBlock;
 	
 	static Player* player;
+	static std::vector < std::unique_ptr<Piece>>* pieces;
 
 private://メンバ変数
 
