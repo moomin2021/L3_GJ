@@ -19,10 +19,10 @@ private:
 
 public:
 	enum BLENDMODE {
-		NONE,
-		ALPHA,
-		ADD,
-		SUB
+		ALPHA,	// 半透明
+		ADD,	// 加算
+		SUB,	// 減算
+		INV,	// 反転
 	};
 
 #pragma region メンバ変数
@@ -82,7 +82,7 @@ public:
 	/// パイプライン作成
 	/// </summary>
 	/// <param name="renderTargetNum"> レンダーターゲットの数 </param>
-	void CreatePipeline(uint16_t renderTargetNum,BLENDMODE blendMode = NONE, D3D12_PRIMITIVE_TOPOLOGY_TYPE primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, bool isDepth = true);
+	void CreatePipeline(uint16_t renderTargetNum, BLENDMODE blendMode = ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, bool isDepth = true);
 
 private:
 	/// <summary>

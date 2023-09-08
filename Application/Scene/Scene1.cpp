@@ -117,6 +117,8 @@ void Scene1::Update()
 
 void Scene1::Draw()
 {
+	PipelineManager::PreDraw("Sprite");
+	backGroundSprite->Draw(backGroundTexture);
 	
 	PipelineManager::PreDraw("Object3D");
 
@@ -135,9 +137,6 @@ void Scene1::Draw()
 	}
 
 	boss_->Draw();
-
-	backGroundSprite->Draw(backGroundTexture);
-
 }
 
 void Scene1::ObjUpdate()

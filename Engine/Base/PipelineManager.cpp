@@ -54,7 +54,7 @@ PipelineManager::PipelineManager() {
 	pipelineObj_["Particle"]->AddInputLayout("POSITION", DXGI_FORMAT_R32G32B32_FLOAT);
 	pipelineObj_["Particle"]->AddInputLayout("TEXCOORD", DXGI_FORMAT_R32_FLOAT);
 	pipelineObj_["Particle"]->CreateRootParams(1, 1);
-	pipelineObj_["Particle"]->CreatePipeline(2, PipelineObj::ADD,  D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT, false);
+	pipelineObj_["Particle"]->CreatePipeline(2, PipelineObj::ADD, D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT, false);
 
 	AddPipeline("Sprite");
 	pipelineObj_["Sprite"]->LoadShader("Resources/Shaders/SpritePS.hlsl", PS);
@@ -62,7 +62,7 @@ PipelineManager::PipelineManager() {
 	pipelineObj_["Sprite"]->AddInputLayout("POSITION", DXGI_FORMAT_R32G32_FLOAT);
 	pipelineObj_["Sprite"]->AddInputLayout("TEXCOORD", DXGI_FORMAT_R32G32_FLOAT);
 	pipelineObj_["Sprite"]->CreateRootParams(1, 1);
-	pipelineObj_["Sprite"]->CreatePipeline(1);
+	pipelineObj_["Sprite"]->CreatePipeline(1, PipelineObj::ALPHA, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, false);
 
 	AddPipeline("Gaussian");
 	pipelineObj_["Gaussian"]->LoadShader("Resources/Shaders/GaussianPS.hlsl", PS);
