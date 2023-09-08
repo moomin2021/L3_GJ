@@ -28,8 +28,6 @@ public:
 
 private:
 
-	//ピース識別タグ
-	uint16_t pieceTag = 0;
 
 	//親のブロック
 	Vector2 parentPos;

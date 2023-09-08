@@ -3,7 +3,7 @@
 #include"CollisionAttribute.h"
 #include<imgui_impl_dx12.h>
 #include"Player.h"
-
+#include"Piece.h"
 
 //静的メンバ変数の実態
 uint16_t Block::cannonTexture = 0;
@@ -11,7 +11,7 @@ uint16_t Block::blockTexture = 0;
 Vector2 Block::blockSize = { 0,0 };
 std::vector<std::unique_ptr<Block>> Block::pAllBlock;
 Player* Block::player = nullptr;
-
+std::vector <std::unique_ptr<Piece>>* Block::pieces;
 
 void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, const Vector2& blockSize)
 {
@@ -36,6 +36,11 @@ void Block::SetPlayer(Player* player)
 	Block::player = player;
 }
 
+void Block::SetPiece(std::vector<std::unique_ptr<Piece>>* pieces)
+{
+	Block::pieces = pieces;
+}
+
 void Block::Initialize(const BlockData& blockData, ParentData* parent)
 {
 	this->blockData = blockData;
@@ -47,7 +52,7 @@ void Block::Initialize(const BlockData& blockData, ParentData* parent)
 	colManager = CollisionManager2D::GetInstance();
 
 	//コライダーのセット
-	collider = std::make_unique<CircleCollider>(Vector2{0,0},blockSize.x/2.0f);
+	collider = std::make_unique<CircleCollider>(Vector2{ 0,0 }, blockSize.x / 2.0f);
 	//属性つける
 	collider->SetAttribute(COL_BLOCK);
 	collider->SetSprite(sprite.get());
@@ -101,20 +106,20 @@ void Block::Update()
 		theta = 360.0f - theta;
 	}
 
-	vecB.x =blockSize.x * parent->tileOffset.x;
-	vecB.y =blockSize.y * parent->tileOffset.y;
+	vecB.x = blockSize.x * parent->tileOffset.x;
+	vecB.y = blockSize.y * parent->tileOffset.y;
 
 	float lenPtoB = vecB.length();
 	pos.x += lenPtoB * cosf(Util::Degree2Radian(theta + *parent->parentRot));
-	pos.y += lenPtoB * sinf(Util::Degree2Radian(theta+ *parent->parentRot));
+	pos.y += lenPtoB * sinf(Util::Degree2Radian(theta + *parent->parentRot));
 
 	sprite->SetPosition(pos);
 	//親の回転をブロックの回転に適用
 	sprite->SetRotation(*parent->parentRot);
 	sprite->MatUpdate();
 
-	
-	ImGui::Text("tag : %d", colliderTag);
+
+	ImGui::Text("parent tag : %d", parent->parentTag);
 }
 
 void Block::OnCollison()
@@ -176,7 +181,7 @@ void Block::OnCollison()
 	}
 }
 
-void Block::ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag, uint16_t parentTag,const Vector2& hitOffset)
+void Block::ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag, uint16_t parentTag, const Vector2& hitOffset)
 {
 	//オフセット加算の基準ブロック
 	Vector2 baseBlockOffset = pAllBlock[baseBlockTag]->parent->tileOffset;
@@ -188,9 +193,9 @@ void Block::ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag, uint16_t p
 	//ブロック配列走査
 	for (size_t i = 0; i < pAllBlock.size(); i++) {
 		//ブロックの親タグが同一なもののみ親を変える
-		if (pAllBlock[i]->parent->parentTag == parentTag) {
+		if (pAllBlock[i]->parent->parentTag == parentTag && pAllBlock[i]->collider->GetAttribute() != COL_PLAYER) {
 			//ブロックの新しいオフセットを計算
-			Vector2 newOffset = (hitBlockOffset + hitOffset)+ (pAllBlock[i]->parent->tileOffset -baseBlockOffset );
+			Vector2 newOffset = (hitBlockOffset + hitOffset) + (pAllBlock[i]->parent->tileOffset - baseBlockOffset);
 
 			//親を衝突したブロックに変更、オフセットの設定、属性の変更
 			pAllBlock[i]->parent->tileOffset = newOffset;
@@ -200,5 +205,8 @@ void Block::ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag, uint16_t p
 			player->AddBlock(pAllBlock[i].get());
 		}
 	}
+
+	//ピースを削除
+	pieces->erase(pieces->begin() + parentTag);
 
 }
