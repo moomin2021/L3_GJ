@@ -135,7 +135,9 @@ void Boss::MatUpdate()
 
 void (Boss::* Boss::stateTable[]) () = {
 	&Boss::Wait,		// 待機
+	&Boss::PreMoveShot,	// 移動撃ち前処理
 	&Boss::MoveShot,	// 移動撃ち
+	&Boss::PostMoveShot,// 移動撃ち後処理
 	&Boss::PreSummon,	// 召喚前準備
 	&Boss::Summon,		// 召喚
 	&Boss::PostSummon,	// 召喚後処理
@@ -148,10 +150,33 @@ void Boss::Wait()
 	BossBackRotate(basicSpd_);
 }
 
+void Boss::PreMoveShot()
+{
+#pragma region 遷移前座標から基本座標まで移動
+	// 行動開始からの経過時間
+	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
+
+	// 経過時間の割合で移動
+	float rate = Util::Clamp(elapsedTime / time2PreMoveShot_, 1.0f, 0.0f);
+
+	// 経過時間が指定時間以上ならStateをSummonにする
+	if (elapsedTime >= time2PreMoveShot_) {
+		state_ = MOVE_SHOT;
+		sinMove_ = 0.0f;
+		actionStartTime_ = Util::GetTimrMSec();
+	}
+#pragma endregion
+
+#pragma region 裏面回転
+	// ボスの裏面回転
+	BossBackRotate(Easing::Quint::easeOut(basicSpd_, moveShotRotaSpd_, rate));
+#pragma endregion
+}
+
 void Boss::MoveShot()
 {
 	// ボスの裏面回転
-	BossBackRotate(basicSpd_);
+	BossBackRotate(moveShotRotaSpd_);
 
 #pragma region sin関数で移動処理
 	sinMove_ += sinSpd_;
@@ -176,6 +201,49 @@ void Boss::MoveShot()
 		bullets_.emplace_back(std::make_unique<BossBullet>());
 		bullets_.back()->Initialize(sBossFront_->GetPosition());
 	}
+#pragma endregion
+
+#pragma region 移動撃ち時間管理
+	// 移動撃ちを開始してから指定の時間が経っていたら召喚を終了
+	elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
+
+	if (elapsedTime >= time2MoveShot_) {
+		state_ = POST_MOVE_SHOT;
+		actionStartTime_ = Util::GetTimrMSec();
+		beforePos_ = position_;
+	}
+#pragma endregion
+}
+
+void Boss::PostMoveShot()
+{
+#pragma region 遷移前座標から基本座標まで移動
+	// 行動開始からの経過時間
+	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
+
+	// 経過時間の割合で移動
+	float rate = Util::Clamp(elapsedTime / time2PostSummon_, 1.0f, 0.0f);
+	position_.x = Easing::Quint::easeOut(beforePos_.x, basicPos_.x, rate);
+	position_.y = Easing::Quint::easeOut(beforePos_.y, basicPos_.y, rate);
+	backPos0_ = position_;
+	backPos1_ = position_;
+
+	// 経過時間が指定時間以上ならStateをWAITにする
+	if (elapsedTime >= time2MoveShot_) {
+		state_ = WAIT;
+		actionStartTime_ = Util::GetTimrMSec();
+	}
+#pragma endregion
+
+#pragma region 裏面回転
+	// ボスの裏面回転
+	BossBackRotate(Easing::Quint::easeOut(moveShotRotaSpd_, basicSpd_, rate));
+#pragma endregion
+
+#pragma region スプライトデータ更新
+	sBossBack0_->SetPosition(backPos0_);
+	sBossBack1_->SetPosition(backPos1_);
+	sBossFront_->SetPosition(position_);
 #pragma endregion
 }
 
@@ -308,8 +376,13 @@ void Boss::DebugImGui()
 	ImGui::Text("Position = { %f, %f }", position_.x, position_.y);
 	ImGui::Text("BackPos0 = { %f, %f }", backPos0_.x, backPos0_.y);
 	ImGui::Text("BackPos1 = { %f, %f }", backPos1_.x, backPos1_.y);
-	if (ImGui::Button("Start Sumoon")) {
+	if (ImGui::Button("Start Sumoon") && state_ == WAIT) {
 		state_ = PRE_SUMMON;
+		actionStartTime_ = Util::GetTimrMSec();
+	}
+
+	if (ImGui::Button("Start MoveShot") && state_ == WAIT) {
+		state_ = PRE_MOVE_SHOT;
 		actionStartTime_ = Util::GetTimrMSec();
 	}
 	ImGui::End();

@@ -12,20 +12,24 @@ class Boss
 #pragma region 列挙型
 private:
 	enum State {
-		WAIT,		// 待機
-		MOVE_SHOT,	// 移動撃ち
-		PRE_SUMMON,	// 召喚前準備
-		SUMMON,		// 召喚
-		POST_SUMMON,// 召喚あと処理
-		BOOMERANG,	// ブーメラン
+		WAIT,			// 待機
+		PRE_MOVE_SHOT,	// 移動撃ち前処理
+		MOVE_SHOT,		// 移動撃ち
+		POST_MOVE_SHOT,	// 移動撃ち後処理
+		PRE_SUMMON,		// 召喚前準備
+		SUMMON,			// 召喚
+		POST_SUMMON,	// 召喚あと処理
+		BOOMERANG,		// ブーメラン
 	};
 #pragma endregion
 
 #pragma region メンバ変数
 private:
 	std::vector<std::string> stateText_ = {
-		"WAIT", "MOVE_SHOT", "PRE_SUMMON",
-		"SUMMON", "POST_SUMMON", "BOOMERANG",
+		"WAIT",
+		"PRE_MOVE_SHOT", "MOVE_SHOT", "POST_MOVE_SHOT",
+		"PRE_SUMMON", "SUMMON", "POST_SUMMON",
+		"BOOMERANG",
 	};
 
 	// スプライト
@@ -58,6 +62,7 @@ private:
 
 	// ボス裏面の回転速度
 	float basicSpd_ = 3.0f;
+	float moveShotRotaSpd_ = 30.0f;
 	float summonRotaSpd_ = 30.0f;
 
 	// 敵
@@ -75,7 +80,9 @@ private:
 	Vector2 beforeBackPos0_ = { 0.0f, 0.0f };// 裏面0行動前座標
 	Vector2 beforeBackPos1_ = { 0.0f, 0.0f };// 裏面0行動前座標
 	uint64_t actionStartTime_ = 0;	// 行動開始時間
-	float time2Trans_ = 1.0f;		// 遷移時間
+	float time2PreMoveShot_ = 4.0f;	// 移動撃ち前時間
+	float time2MoveShot_ = 10.0f;	// 移動撃ち時間
+	float time2PostMoveShot_ = 4.0f;// 移動撃ち後時間
 	float time2PreSummon_ = 4.0f;	// 召喚前時間
 	float time2Summon_ = 10.0f;		// 召喚する時間
 	float time2PostSummon_ = 4.0f;	// 召喚後時間
@@ -111,7 +118,9 @@ private:
 
 	// 状態別行動
 	void Wait();		// 待機
+	void PreMoveShot();	// 移動撃ち前処理
 	void MoveShot();	// 移動撃ち
+	void PostMoveShot();// 移動撃ち後処理
 	void PreSummon();	// 召喚前準備
 	void Summon();		// 召喚
 	void PostSummon();	// 召喚後処理
