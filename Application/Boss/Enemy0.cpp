@@ -16,11 +16,13 @@ void Enemy0::Initialize(Vector2 pos)
 	// 裏面
 	sBack_ = std::make_unique<Sprite>();
 	sBack_->SetPosition(position_);
+	sBack_->SetSize({ 32.0f, 32.0f });
 	sBack_->SetAnchorPoint({ 0.5f, 0.5f });
 
 	// 表面
 	sFront_ = std::make_unique<Sprite>();
 	sFront_->SetPosition(position_);
+	sFront_->SetSize({ 32.0f, 32.0f });
 	sFront_->SetAnchorPoint({ 0.5f, 0.5f });
 #pragma endregion
 }
@@ -33,6 +35,12 @@ void Enemy0::Update()
 
 #pragma region 回転処理
 	rotate_ += rotateSpd_;
+#pragma endregion
+
+#pragma region 画面外に行ったら生存フラグを[OFF]にする
+	if (position_.x <= -100.0f && isAlive_) {
+		isAlive_ = false;
+	}
 #pragma endregion
 
 #pragma region スプライトデータ更新

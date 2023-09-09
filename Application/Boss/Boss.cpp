@@ -70,6 +70,18 @@ void Boss::Update()
 	}
 #pragma endregion
 
+#pragma region G‹›“G‚ÌŒãˆ—
+	// G‹›“G‚Ì¶‘¶ƒtƒ‰ƒO‚ª[OFF]‚È‚çÁ‚·
+	for (auto it = enemys_.begin(); it != enemys_.end();) {
+		// G‹›“G‚ÌXV
+		(*it)->Update();
+
+		// G‹›“G‚Ì¶‘¶ƒtƒ‰ƒO‚ª[OFF]‚É‚È‚Á‚½‚ç’e‚ğíœ
+		if ((*it)->GetIsAlive() == false) it = enemys_.erase(it);
+		else ++it;
+	}
+#pragma endregion
+
 	// ƒfƒoƒbƒN—p
 	DebugImGui();
 }
@@ -84,12 +96,22 @@ void Boss::Draw()
 	for (auto& it : bullets_) {
 		it->Draw();
 	}
+
+	// G‹›“G
+	for (auto& it : enemys_) {
+		it->Draw();
+	}
 }
 
 void Boss::OnCollision()
 {
 	// ’e
 	for (auto& it : bullets_) {
+		it->OnCollision();
+	}
+
+	// G‹›“G
+	for (auto& it : enemys_) {
 		it->OnCollision();
 	}
 }
@@ -102,6 +124,11 @@ void Boss::MatUpdate()
 
 	// ’e
 	for (auto& it : bullets_) {
+		it->MatUpdate();
+	}
+
+	// G‹›“G
+	for (auto& it : enemys_) {
 		it->MatUpdate();
 	}
 }
@@ -159,14 +186,10 @@ void Boss::PreSummon()
 	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
 
 	// Œo‰ßŠÔ‚ÌŠ„‡‚ÅˆÚ“®
-	float rate = Util::Clamp(elapsedTime / preSummonTime_, 1.0f, 0.0f);
-	//position_.x = Easing::Quint::easeOut(beforePos_.x, basicPos_.x, rate);
-	//position_.y = Easing::Quint::easeOut(beforePos_.y, basicPos_.y, rate);
-	//backPos0_ = position_;
-	//backPos1_ = position_;
+	float rate = Util::Clamp(elapsedTime / time2PreSummon_, 1.0f, 0.0f);
 
 	// Œo‰ßŠÔ‚ªw’èŠÔˆÈã‚È‚çState‚ğSummon‚É‚·‚é
-	if (elapsedTime >= preSummonTime_) {
+	if (elapsedTime >= time2PreSummon_) {
 		state_ = SUMMON;
 		sinMove_ = 0.0f;
 		actionStartTime_ = Util::GetTimrMSec();
@@ -196,11 +219,28 @@ void Boss::Summon()
 	backPos1_.y = (-sinf(sinMove_) * 300.0f) + 540.0f;;
 #pragma endregion
 
+#pragma region G‹›“G¢Š«
+	// ’e‚ğŒ‚‚Á‚Ä‚©‚ç‚ÌŒo‰ßŠÔ[s]
+	float elapsedTime = (Util::GetTimrMSec() - summonTime_) / 1000.0f;
+
+	// Œo‰ßŠÔ‚ªƒCƒ“ƒ^[ƒoƒ‹ˆÈã‚È‚ç¢Š«‚·‚é
+	if (elapsedTime >= summonInterval_) {
+		// ¢Š«‚µ‚½ŠÔ‚ğ•Û‘¶
+		summonTime_ = Util::GetTimrMSec();
+
+		// “G‚ğ¶¬
+		enemys_.emplace_back(std::make_unique<Enemy0>());
+		enemys_.back()->Initialize(backPos0_);
+		enemys_.emplace_back(std::make_unique<Enemy0>());
+		enemys_.back()->Initialize(backPos1_);
+	}
+#pragma endregion
+
 #pragma region ¢Š«ŠÔŠÇ—
 	// ¢Š«‚µ‚Ä‚©‚çw’è‚ÌŠÔ‚ªŒo‚Á‚Ä‚¢‚½‚ç¢Š«‚ğI—¹
-	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
+	elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
 
-	if (elapsedTime >= summonTime_) {
+	if (elapsedTime >= time2Summon_) {
 		state_ = POST_SUMMON;
 		actionStartTime_ = Util::GetTimrMSec();
 		beforeBackPos0_ = backPos0_;
@@ -222,14 +262,14 @@ void Boss::PostSummon()
 	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
 
 	// Œo‰ßŠÔ‚ÌŠ„‡‚ÅˆÚ“®
-	float rate = Util::Clamp(elapsedTime / postSummonTime_, 1.0f, 0.0f);
+	float rate = Util::Clamp(elapsedTime / time2PostSummon_, 1.0f, 0.0f);
 	backPos0_.x = Easing::Quint::easeOut(beforeBackPos0_.x, basicPos_.x, rate);
 	backPos0_.y = Easing::Quint::easeOut(beforeBackPos0_.y, basicPos_.y, rate);
 	backPos1_.x = Easing::Quint::easeOut(beforeBackPos1_.x, basicPos_.x, rate);
 	backPos1_.y = Easing::Quint::easeOut(beforeBackPos1_.y, basicPos_.y, rate);
 
 	// Œo‰ßŠÔ‚ªw’èŠÔˆÈã‚È‚çState‚ğSummon‚É‚·‚é
-	if (elapsedTime >= postSummonTime_) {
+	if (elapsedTime >= time2PostSummon_) {
 		state_ = WAIT;
 		actionStartTime_ = Util::GetTimrMSec();
 	}

@@ -62,6 +62,8 @@ private:
 
 	// 敵
 	std::vector<std::unique_ptr<Enemy0>> enemys_;
+	float summonInterval_ = 1.0f;	// 召喚時間
+	uint64_t summonTime_ = 0;		// 召喚した時間
 
 	// 弾関連
 	std::vector<std::unique_ptr<BossBullet>> bullets_;	// 弾
@@ -73,10 +75,10 @@ private:
 	Vector2 beforeBackPos0_ = { 0.0f, 0.0f };// 裏面0行動前座標
 	Vector2 beforeBackPos1_ = { 0.0f, 0.0f };// 裏面0行動前座標
 	uint64_t actionStartTime_ = 0;	// 行動開始時間
-	float transTime_ = 1.0f;		// 遷移時間
-	float preSummonTime_ = 4.0f;	// 召喚前時間
-	float summonTime_ = 10.0f;		// 召喚時間
-	float postSummonTime_ = 4.0f;	// 召喚後時間
+	float time2Trans_ = 1.0f;		// 遷移時間
+	float time2PreSummon_ = 4.0f;	// 召喚前時間
+	float time2Summon_ = 10.0f;		// 召喚する時間
+	float time2PostSummon_ = 4.0f;	// 召喚後時間
 
 #pragma endregion
 

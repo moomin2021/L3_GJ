@@ -15,6 +15,9 @@ private:
 	std::unique_ptr<Sprite> sBack_ = nullptr;// 裏面
 	std::unique_ptr<Sprite> sFront_ = nullptr;// 表面
 
+	// 生存フラグ
+	bool isAlive_ = true;
+
 	// 座標
 	Vector2 position_ = { 0.0f, 0.0f };
 
@@ -25,7 +28,7 @@ private:
 	float speed_ = 10.0f;
 
 	// 回転速度
-	float rotateSpd_ = 1.0f;
+	float rotateSpd_ = 3.0f;
 #pragma endregion
 
 #pragma region メンバ関数
@@ -58,5 +61,10 @@ public:
 
 	// 表面ハンドルを設定
 	static void SetFrontHandle(uint16_t handle) { hFront_ = handle; }
+#pragma endregion
+
+#pragma region ゲッター関数
+	// 生存フラグを取得
+	bool GetIsAlive() { return isAlive_; }
 #pragma endregion
 };
