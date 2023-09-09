@@ -134,14 +134,16 @@ void Boss::MatUpdate()
 }
 
 void (Boss::* Boss::stateTable[]) () = {
-	&Boss::Wait,		// 待機
-	&Boss::PreMoveShot,	// 移動撃ち前処理
-	&Boss::MoveShot,	// 移動撃ち
-	&Boss::PostMoveShot,// 移動撃ち後処理
-	&Boss::PreSummon,	// 召喚前準備
-	&Boss::Summon,		// 召喚
-	&Boss::PostSummon,	// 召喚後処理
-	&Boss::Boomerang,	// ブーメラン
+	&Boss::Wait,			// 待機
+	&Boss::PreMoveShot,		// 移動撃ち前処理
+	&Boss::MoveShot,		// 移動撃ち
+	&Boss::PostMoveShot,	// 移動撃ち後処理
+	&Boss::PreSummon,		// 召喚前準備
+	&Boss::Summon,			// 召喚
+	&Boss::PostSummon,		// 召喚後処理
+	&Boss::PreBoomerang,	// ブーメラン前処理
+	&Boss::Boomerang,		// ブーメラン
+	&Boss::PostBoomerang,	// ブーメラン後処理
 };
 
 void Boss::Wait()
@@ -354,9 +356,106 @@ void Boss::PostSummon()
 #pragma endregion
 }
 
+void Boss::PreBoomerang()
+{
+#pragma region 遷移前座標から基本座標まで移動
+	// 行動開始からの経過時間
+	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
+
+	// 経過時間の割合で移動
+	float rate = Util::Clamp(elapsedTime / time2PreBoomerang_, 1.0f, 0.0f);
+
+	// 経過時間が指定時間以上ならStateをBoomerangにする
+	if (elapsedTime >= time2PreBoomerang_) {
+		state_ = BOOMERANG;
+		actionStartTime_ = Util::GetTimrMSec();
+	}
+
+	// 経過時間の割合で移動
+	backPos0_.x = Easing::Quint::easeOut(basicPos_.x, 1500.0f, rate);
+	backPos0_.y = Easing::Quint::easeOut(basicPos_.y, 840.0f, rate);
+	backPos1_.x = Easing::Quint::easeOut(basicPos_.x, 1500.0f, rate);
+	backPos1_.y = Easing::Quint::easeOut(basicPos_.y, 840.0f, rate);
+#pragma endregion
+
+#pragma region 裏面回転
+	// ボスの裏面回転
+	BossBackRotate(Easing::Quint::easeOut(basicSpd_, boomerangRotaSpd_, rate));
+#pragma endregion
+
+#pragma region スプライトデータ更新
+	sBossBack0_->SetPosition(backPos0_);
+	sBossBack1_->SetPosition(backPos1_);
+	sBossFront_->SetPosition(position_);
+#pragma endregion
+}
+
 void Boss::Boomerang()
 {
+	if (isBoomerang_ == false) {
+		backPos0_.x -= 30.0f;
+		backPos1_.x -= 30.0f;
 
+		if (backPos0_.x <= -300.0f) {
+			isBoomerang_ = true;
+			backPos0_.y = 240.0f;
+			backPos1_.y = 240.0f;
+		}
+	}
+
+	else {
+		backPos0_.x += 30.0f;
+		backPos1_.x += 30.0f;
+
+		if (backPos0_.x >= 1500.0f) {
+			isBoomerang_ = false;
+			state_ = POST_BOOMERANG;
+			actionStartTime_ = Util::GetTimrMSec();
+			beforeBackPos0_ = backPos0_;
+			beforeBackPos1_ = backPos1_;
+		}
+	}
+
+#pragma region 裏面回転
+	// ボスの裏面回転
+	BossBackRotate(boomerangRotaSpd_);
+#pragma endregion
+
+#pragma region スプライトデータ更新
+	sBossBack0_->SetPosition(backPos0_);
+	sBossBack1_->SetPosition(backPos1_);
+#pragma endregion
+}
+
+void Boss::PostBoomerang()
+{
+#pragma region 遷移前座標から基本座標まで移動
+	// 行動開始からの経過時間
+	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
+
+	// 経過時間の割合で移動
+	float rate = Util::Clamp(elapsedTime / time2PostBoomerang_, 1.0f, 0.0f);
+	backPos0_.x = Easing::Quint::easeOut(beforeBackPos0_.x, basicPos_.x, rate);
+	backPos0_.y = Easing::Quint::easeOut(beforeBackPos0_.y, basicPos_.y, rate);
+	backPos1_.x = Easing::Quint::easeOut(beforeBackPos1_.x, basicPos_.x, rate);
+	backPos1_.y = Easing::Quint::easeOut(beforeBackPos1_.y, basicPos_.y, rate);
+
+	// 経過時間が指定時間以上ならStateをWAITにする
+	if (elapsedTime >= time2PostBoomerang_) {
+		state_ = WAIT;
+		actionStartTime_ = Util::GetTimrMSec();
+	}
+#pragma endregion
+
+#pragma region 裏面回転
+	// ボスの裏面回転
+	BossBackRotate(Easing::Quint::easeOut(boomerangRotaSpd_, basicSpd_, rate));
+#pragma endregion
+
+#pragma region スプライトデータ更新
+	sBossBack0_->SetPosition(backPos0_);
+	sBossBack1_->SetPosition(backPos1_);
+#pragma endregion
 }
 
 void Boss::BossBackRotate(float rotate)
@@ -383,6 +482,11 @@ void Boss::DebugImGui()
 
 	if (ImGui::Button("Start MoveShot") && state_ == WAIT) {
 		state_ = PRE_MOVE_SHOT;
+		actionStartTime_ = Util::GetTimrMSec();
+	}
+
+	if (ImGui::Button("Start Boomerang") && state_ == WAIT) {
+		state_ = PRE_BOOMERANG;
 		actionStartTime_ = Util::GetTimrMSec();
 	}
 	ImGui::End();
