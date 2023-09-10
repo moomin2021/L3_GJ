@@ -28,6 +28,10 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	collider->SetSprite(sprite.get());
 	//ƒ}ƒl[ƒWƒƒ‚É“o˜^
 	colManager->AddCollider(collider.get());
+
+	//‘Ì—ÍŠÖŒW‚Ì‰Šú‰»
+	health = healthMax;
+
 }
 
 void Player::Update()
@@ -46,6 +50,7 @@ void Player::Update()
 	UpdateBlocks();
 
 	ImGui::Text("pos %f,%f", position.x, position.y);
+	ImGui::Text("health %d", health);
 
 }
 

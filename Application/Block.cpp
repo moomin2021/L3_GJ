@@ -127,10 +127,10 @@ void Block::Update()
 	sprite->MatUpdate();
 
 
-	ImGui::Text("parent tag %d", parent->parentTag);
-	ImGui::Text("offset %f,%f", parent->tileOffset.x,parent->tileOffset.y);
-	ImGui::Text("pos %f,%f", pos.x,pos.y);
-	ImGui::Text("current offset : %f,%f", currentOffset.x, currentOffset.y);
+	//ImGui::Text("parent tag %d", parent->parentTag);
+	//ImGui::Text("offset %f,%f", parent->tileOffset.x,parent->tileOffset.y);
+	//ImGui::Text("pos %f,%f", pos.x,pos.y);
+	//ImGui::Text("current offset : %f,%f", currentOffset.x, currentOffset.y);
 }
 
 void Block::OffsetUpdate()
