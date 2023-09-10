@@ -168,15 +168,6 @@
     <ClCompile Include="Engine\Util\ImGuiManager.cpp">
       <Filter>Engine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Scene\Scene2.cpp">
-      <Filter>Engine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Scene\TestPlayer.cpp">
-      <Filter>Engine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Scene\TestEnemy.cpp">
-      <Filter>Engine\ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Collision\CollisionManager.cpp">
       <Filter>Engine\ソース ファイル</Filter>
     </ClCompile>
@@ -207,9 +198,6 @@
     <ClCompile Include="Engine\Collision\CircleCollider.cpp">
       <Filter>Engine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Scene\Scene3.cpp">
-      <Filter>Engine\ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Block.cpp">
       <Filter>Engine\ソース ファイル</Filter>
     </ClCompile>
@@ -238,6 +226,15 @@
       <Filter>Engine\ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Application\Boss\Enemy0.cpp">
+      <Filter>Engine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Scene\TitleScene.cpp">
+      <Filter>Engine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Scene\ResultScene.cpp">
+      <Filter>Engine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\UIManager.cpp">
       <Filter>Engine\ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -341,15 +338,6 @@
     <ClInclude Include="Engine\Util\ImGuiManager.h">
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Scene\Scene2.h">
-      <Filter>Engine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Scene\TestPlayer.h">
-      <Filter>Engine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Scene\TestEnemy.h">
-      <Filter>Engine\ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Collision\BaseCollider.h">
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
@@ -392,9 +380,6 @@
     <ClInclude Include="Engine\Collision\CircleCollider.h">
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Scene\Scene3.h">
-      <Filter>Engine\ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Block.h">
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
@@ -420,6 +405,15 @@
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Application\Boss\Enemy0.h">
+      <Filter>Engine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Scene\TitleScene.h">
+      <Filter>Engine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Scene\ResultScene.h">
+      <Filter>Engine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\UIManager.h">
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

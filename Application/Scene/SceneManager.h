@@ -7,9 +7,9 @@
 
 // ƒV[ƒ“—ñ‹“Œ^
 enum SCENE {
-	SCENE2,
-	SCENE3,
+	TITLE,
 	GAME,
+	RESULT,
 };
 
 enum PostEffectType {

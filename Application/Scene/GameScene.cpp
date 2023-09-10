@@ -57,6 +57,10 @@ void GameScene::Initialize()
 	backGroundSprite = std::make_unique<Sprite>();
 	backGroundSprite->SetSize({ (float)WinAPI::GetInstance()->GetWidth(),(float)WinAPI::GetInstance()->GetHeight() });
 	backGroundSprite->MatUpdate();
+
+	// UIマネージャー
+	uiMgr_ = std::make_unique<UIManager>();
+	uiMgr_->Initialize();
 }
 
 void GameScene::Update()
@@ -109,6 +113,9 @@ void GameScene::Draw()
 
 	// ボス
 	boss_->Draw();
+
+	// UIマネージャー
+	uiMgr_->Draw();
 }
 
 void GameScene::MatUpdate()
@@ -118,6 +125,9 @@ void GameScene::MatUpdate()
 
 	// ボス
 	boss_->MatUpdate();
+
+	// UIマネージャー
+	uiMgr_->MatUpdate();
 }
 
 void GameScene::OnCollision()

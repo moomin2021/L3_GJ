@@ -128,18 +128,17 @@
     <ClCompile Include="Engine\3d\Material.cpp" />
     <ClCompile Include="Engine\Base\Sound.cpp" />
     <ClCompile Include="Engine\3d\ParticleEmitter.cpp" />
-    <ClCompile Include="Application\Scene\Scene2.cpp" />
-    <ClCompile Include="Application\Scene\TestPlayer.cpp" />
-    <ClCompile Include="Application\Scene\TestEnemy.cpp" />
     <ClCompile Include="Engine\Collision\MeshCollider.cpp" />
     <ClCompile Include="Engine\Collision\RayCollider.cpp" />
     <ClCompile Include="Engine\Collision\SphereCollider.cpp" />
     <ClCompile Include="Engine\Collision\PointCollider.cpp" />
-    <ClCompile Include="Application\Scene\Scene3.cpp" />
     <ClCompile Include="Engine\Input\Pad.cpp" />
     <ClCompile Include="Application\Player.cpp" />
     <ClCompile Include="Application\Piece.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="Application\Scene\TitleScene.cpp" />
+    <ClCompile Include="Application\Scene\ResultScene.cpp" />
+    <ClCompile Include="Application\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Scene\BaseScene.h" />
@@ -190,18 +189,17 @@
     <ClInclude Include="Engine\Base\Sound.h" />
     <ClInclude Include="Engine\3d\ParticleEmitter.h" />
     <ClInclude Include="Engine\Util\ImGuiManager.h" />
-    <ClInclude Include="Application\Scene\Scene2.h" />
-    <ClInclude Include="Application\Scene\TestPlayer.h" />
-    <ClInclude Include="Application\Scene\TestEnemy.h" />
     <ClInclude Include="Engine\Collision\MeshCollider.h" />
     <ClInclude Include="Engine\Collision\RayCollider.h" />
     <ClInclude Include="Engine\Collision\SphereCollider.h" />
     <ClInclude Include="Engine\Collision\PointCollider.h" />
-    <ClInclude Include="Application\Scene\Scene3.h" />
     <ClInclude Include="Application\Player.h" />
     <ClInclude Include="Engine\Input\Pad.h" />
     <ClInclude Include="Application\Piece.h" />
     <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="Application\Scene\TitleScene.h" />
+    <ClInclude Include="Application\Scene\ResultScene.h" />
+    <ClInclude Include="Application\UIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Bloom.hlsli" />
