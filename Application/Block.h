@@ -64,6 +64,7 @@ public://メンバ関数
 
 	ParentData* GetParent() { return parent; }
 
+	void OffsetUpdate();
 
 private://静的メンバ変数
 	static uint16_t cannonTexture;
@@ -81,6 +82,8 @@ private://メンバ変数
 	CollisionManager2D* colManager = nullptr;
 	//コライダー
 	std::unique_ptr<CircleCollider> collider = nullptr;
+
+	Vector2 currentOffset{ 0,0 };
 
 	std::unique_ptr<Sprite> sprite = nullptr;
 	BlockData blockData = BlockData::None;
