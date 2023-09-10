@@ -7,8 +7,8 @@
 #include<list>
 
 struct ParentData {
-	Vector2* parentPos = nullptr;
-	float* parentRot = nullptr;
+	Vector2 parentPos{ 0,0 };
+	float parentRot = 0.0f;
 	Vector2 tileOffset{0,0};
 	uint16_t parentTag = 0;
 };

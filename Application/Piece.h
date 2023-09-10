@@ -36,7 +36,7 @@ private:
 	std::vector<Block*> childBlocks;
 
 	//êiçsë¨ìx
-	const float baseSpd = 16.0f;
+	const float baseSpd = 8.0f;
 
 	//âÒì]äp
 	float rotation = 0;

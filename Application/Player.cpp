@@ -28,6 +28,10 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	collider->SetSprite(sprite.get());
 	//マネージャに登録
 	colManager->AddCollider(collider.get());
+
+	//体力関係の初期化
+	health = healthMax;
+
 }
 
 void Player::Update()
@@ -44,6 +48,9 @@ void Player::Update()
 
 	sprite->MatUpdate();
 	UpdateBlocks();
+
+	ImGui::Text("pos %f,%f", position.x, position.y);
+	ImGui::Text("health %d", health);
 
 }
 
@@ -144,7 +151,7 @@ void Player::Rotate()
 
 		for (size_t i = 0; i < blocks.size(); i++) {
 			ParentData* parent = blocks[i]->GetParent();
-			*parent->parentRot = Easing::Circ::easeOut(0.0f, childRotation, timerate);
+			parent->parentRot = Easing::Circ::easeOut(0.0f, childRotation, timerate);
 		}
 	}
 	else {
@@ -184,9 +191,9 @@ void Player::AddBlock()
 	if (ImGui::Button("add")) {
 		//設定されているブロックのオフセットを使ってブロック生成、自機と紐つける
 		ParentData* parent = new ParentData();
-		parent->parentPos = &position;
+		parent->parentPos = position;
 		parent->tileOffset = { (float)debugBlockOffsetX, (float)debugBlockOffsetY };
-		parent->parentRot = &rotation;
+		parent->parentRot = rotation;
 		Block* newBlock = Block::CreateBlock(BlockData::None, parent);
 
 		//自機のブロック配列に格納
@@ -208,7 +215,7 @@ void Player::UpdateBlocks()
 	for (size_t i = 0; i < blocks.size(); i++) {
 		//親の座標と回転角を更新し続ける
 		ParentData* parent = blocks[i]->GetParent();
-		parent->parentPos = &position;
+		parent->parentPos = position;
 	//	parent->parentRot = &rotation;
 		blocks[i]->SetParent(parent);
 		blocks[i]->Update();
