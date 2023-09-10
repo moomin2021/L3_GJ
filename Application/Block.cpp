@@ -88,7 +88,7 @@ void Block::Update()
 		return;
 	}
 
-	Vector2 pos = *parent->parentPos;
+	Vector2 pos = parent->parentPos;
 	Vector2 vecB;
 
 	//親からのオフセットで角度を作成
@@ -112,36 +112,37 @@ void Block::Update()
 	float lenPtoB = vecB.length();
 
 	//ブロックのベクトルと角度でローカル座標計算
-	pos.x += lenPtoB * cosf(Util::Degree2Radian(theta + *parent->parentRot));
-	pos.y += lenPtoB * sinf(Util::Degree2Radian(theta + *parent->parentRot));
+	pos.x += lenPtoB * cosf(Util::Degree2Radian(theta + parent->parentRot));
+	pos.y += lenPtoB * sinf(Util::Degree2Radian(theta + parent->parentRot));
 
 
 	//親の角度が90度で割り切れるたびにオフセットの更新
-	if (fabs(*parent->parentRot / 90.0f) == 0.0f) {
+	if (fabs(parent->parentRot / 90.0f) == 0.0f) {
 		OffsetUpdate();
 	}
 
 	sprite->SetPosition(pos);
 	//親の回転をブロックの回転に適用
-	sprite->SetRotation(*parent->parentRot);
+	sprite->SetRotation(parent->parentRot);
 	sprite->MatUpdate();
 
 
-	ImGui::Text("parent tag : %d", parent->parentTag);
-	ImGui::Text("parent rot : %f", *parent->parentRot);
+	ImGui::Text("parent tag %d", parent->parentTag);
+	ImGui::Text("offset %f,%f", parent->tileOffset.x,parent->tileOffset.y);
+	ImGui::Text("pos %f,%f", pos.x,pos.y);
 	ImGui::Text("current offset : %f,%f", currentOffset.x, currentOffset.y);
 }
 
 void Block::OffsetUpdate()
 {
 	//親の回転が0なら更新しない
-	if (*parent->parentRot == 0.0f) {
+	if (parent->parentRot == 0.0f) {
 		return;
 	}
 
 	//ブロックから自機へのベクトル作成
 	Vector2 myPos = sprite->GetPosition();
-	Vector2 vecBtoP = sprite->GetPosition() - *parent->parentPos;
+	Vector2 vecBtoP = sprite->GetPosition() - parent->parentPos;
 	float lenBtoP = vecBtoP.length();
 	Vector2 btoPNorm = vecBtoP;
 	btoPNorm.normalize();
@@ -170,7 +171,7 @@ void Block::OffsetUpdate()
 	parent->tileOffset = currentOffset;
 
 	//親のオフセットを0に設定
-	*parent->parentRot = 0.0f;
+	parent->parentRot = 0.0f;
 
 }
 
