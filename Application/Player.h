@@ -43,6 +43,7 @@ private:
 	//デバッグ用関数
 	void AddBlock();
 
+	//弾の更新
 	void BulletsUpdate();
 
 	//ブロック配列の更新
@@ -50,6 +51,10 @@ private:
 
 	//ブロックのオフセットの更新
 	void UpdateOffset();
+
+	//ブロックリセット
+	void BlockReset();
+
 private:
 
 	Pad* pad = nullptr;
@@ -85,6 +90,11 @@ private:
 	int shotCooltimeMax = 30;
 	int shotCooltime = shotCooltimeMax;
 	std::list < std::unique_ptr<PlayerBullet>> bullets;
+
+	//レベル関係パラメータ
+	int currentEXP = 0;
+	int level = 1;
+
 
 	//デバッグ用
 	int debugBlockOffsetX = 0;

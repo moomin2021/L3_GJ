@@ -88,7 +88,14 @@ void GameScene::Update()
 	//	pieces.push_back(std::move(newPiece));
 	//}
 
-	Piece::CreatePiece();
+	if (ImGui::Button("add piece")) {
+		Piece::CreatePiece();
+	}
+
+	//ボタン押下でピース発生
+	if (Key::GetInstance()->TriggerKey(DIK_P)) {
+		Piece::CreatePiece();
+	}
 
 	// 衝突時処理
 	OnCollision();

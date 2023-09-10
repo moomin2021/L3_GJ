@@ -52,11 +52,15 @@ void Player::Update()
 	//ブロックを増やすデバッグ関数
 	AddBlock();
 
+	//ブロックリセット
+	BlockReset();
+
 	sprite->MatUpdate();
 	UpdateBlocks();
 
 	ImGui::Text("pos %f,%f", position.x, position.y);
 	ImGui::Text("health %d", health);
+	ImGui::Text("Lv.%d : EXP %d", level, currentEXP);
 
 }
 
@@ -277,4 +281,23 @@ void Player::UpdateBlocks()
 
 void Player::UpdateOffset()
 {
+}
+
+void Player::BlockReset()
+{
+	//Aボタントリガーでリセット
+	if (pad->GetTriggerButton(BUTTON::PAD_A)) {
+		//配列にあるブロックの数を保存
+		int blockCount = (int)blocks.size();
+
+		//TODO:形成されている形を検知して加算する経験値に倍率をかける
+
+		//経験値に加算
+		currentEXP += blockCount;
+
+		//配列をクリア
+		blocks.clear();
+
+	}
+
 }
