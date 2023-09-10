@@ -6,10 +6,10 @@
 
 Camera* ParticleEmitter2D::sCamera_ = nullptr;
 
-ParticleEmitter2D::ParticleEmitter2D()
+ParticleEmitter2D::ParticleEmitter2D(uint16_t maxVertex)
 {
 	CreateConstBuff();// 定数バッファ生成
-	CreateVertexBuff();// 頂点バッファ生成
+	CreateVertexBuff(maxVertex);// 頂点バッファ生成
 	CreateIndexBuff();// インデックスバッファ生成
 }
 
@@ -169,7 +169,7 @@ void ParticleEmitter2D::CreateConstBuff()
 #pragma endregion
 }
 
-void ParticleEmitter2D::CreateVertexBuff()
+void ParticleEmitter2D::CreateVertexBuff(uint16_t maxVertex)
 {
 	// デバイス取得
 	ID3D12Device* device = DX12Cmd::GetInstance()->GetDevice();
@@ -178,7 +178,7 @@ void ParticleEmitter2D::CreateVertexBuff()
 	HRESULT result;
 
 	// 頂点データ全体のサイズ = 頂点データ一つ分のサイズ * 頂点データの要素数
-	UINT sizeVB = static_cast<UINT>(sizeof(Vertex) * MAX_VERTEX);
+	UINT sizeVB = static_cast<UINT>(sizeof(Vertex) * maxVertex);
 
 	// 頂点バッファの設定
 	D3D12_HEAP_PROPERTIES heapProp{};		// ヒープ設定

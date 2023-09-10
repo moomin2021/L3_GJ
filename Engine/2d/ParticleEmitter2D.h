@@ -69,7 +69,7 @@ private:
 #pragma region メンバ関数
 public:
 	// コンストラクタ
-	ParticleEmitter2D();
+	ParticleEmitter2D(uint16_t maxVertex);
 
 	// デストラクタ
 	~ParticleEmitter2D();
@@ -94,7 +94,7 @@ private:
 	void CreateConstBuff();
 
 	// 頂点バッファ生成
-	void CreateVertexBuff();
+	void CreateVertexBuff(uint16_t maxVertex);
 
 	// インデックスバッファ生成
 	void CreateIndexBuff();

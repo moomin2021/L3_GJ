@@ -13,6 +13,10 @@ Boss::~Boss() {
 
 void Boss::Initialize()
 {
+#pragma region インスタンス取得
+	key_ = Key::GetInstance();
+#pragma endregion
+
 #pragma region スプライト
 	// ボス裏面0
 	sBossBack0_ = std::make_unique<Sprite>();
@@ -55,8 +59,8 @@ void Boss::Initialize()
 #pragma endregion
 
 #pragma region パーティクルエミッター
-	emitterBack0_ = std::make_unique<ParticleEmitter2D>();
-	emitterBack1_ = std::make_unique<ParticleEmitter2D>();
+	emitterBack0_ = std::make_unique<ParticleEmitter2D>(60);
+	emitterBack1_ = std::make_unique<ParticleEmitter2D>(60);
 #pragma endregion
 }
 
@@ -243,14 +247,14 @@ void Boss::PostMoveShot()
 	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
 
 	// 経過時間の割合で移動
-	float rate = Util::Clamp(elapsedTime / time2PostSummon_, 1.0f, 0.0f);
+	float rate = Util::Clamp(elapsedTime / time2PostMoveShot_, 1.0f, 0.0f);
 	position_.x = Easing::Quint::easeOut(beforePos_.x, basicPos_.x, rate);
 	position_.y = Easing::Quint::easeOut(beforePos_.y, basicPos_.y, rate);
 	backPos0_ = position_;
 	backPos1_ = position_;
 
 	// 経過時間が指定時間以上ならStateをWAITにする
-	if (elapsedTime >= time2MoveShot_) {
+	if (elapsedTime >= time2PostMoveShot_) {
 		state_ = WAIT;
 		actionStartTime_ = Util::GetTimrMSec();
 	}
@@ -501,24 +505,39 @@ void Boss::BossBackRotate(float rotate)
 
 void Boss::DebugImGui()
 {
-	ImGui::Begin("Boss");
-	ImGui::Text("State = %s", stateText_[state_].c_str());
-	ImGui::Text("Position = { %f, %f }", position_.x, position_.y);
-	ImGui::Text("BackPos0 = { %f, %f }", backPos0_.x, backPos0_.y);
-	ImGui::Text("BackPos1 = { %f, %f }", backPos1_.x, backPos1_.y);
-	if (ImGui::Button("Start Sumoon") && state_ == WAIT) {
+	//ImGui::Begin("Boss");
+	//ImGui::Text("State = %s", stateText_[state_].c_str());
+	//ImGui::Text("Position = { %f, %f }", position_.x, position_.y);
+	//ImGui::Text("BackPos0 = { %f, %f }", backPos0_.x, backPos0_.y);
+	//ImGui::Text("BackPos1 = { %f, %f }", backPos1_.x, backPos1_.y);
+	//if (ImGui::Button("Start Sumoon") && state_ == WAIT) {
+	//	state_ = PRE_SUMMON;
+	//	actionStartTime_ = Util::GetTimrMSec();
+	//}
+
+	//if (ImGui::Button("Start MoveShot") && state_ == WAIT) {
+	//	state_ = PRE_MOVE_SHOT;
+	//	actionStartTime_ = Util::GetTimrMSec();
+	//}
+
+	//if (ImGui::Button("Start Boomerang") && state_ == WAIT) {
+	//	state_ = PRE_BOOMERANG;
+	//	actionStartTime_ = Util::GetTimrMSec();
+	//}
+	//ImGui::End();
+
+	if (key_->TriggerKey(DIK_8) && state_ == WAIT) {
 		state_ = PRE_SUMMON;
 		actionStartTime_ = Util::GetTimrMSec();
 	}
 
-	if (ImGui::Button("Start MoveShot") && state_ == WAIT) {
+	if (key_->TriggerKey(DIK_9) && state_ == WAIT) {
 		state_ = PRE_MOVE_SHOT;
 		actionStartTime_ = Util::GetTimrMSec();
 	}
 
-	if (ImGui::Button("Start Boomerang") && state_ == WAIT) {
+	if (key_->TriggerKey(DIK_0) && state_ == WAIT) {
 		state_ = PRE_BOOMERANG;
 		actionStartTime_ = Util::GetTimrMSec();
 	}
-	ImGui::End();
 }
