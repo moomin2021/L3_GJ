@@ -22,7 +22,7 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	colManager = CollisionManager2D::GetInstance();
 
 	//コライダーのセット
-	collider = std::make_unique<CircleCollider>(Vector2{ 0,0 },Block::GetBlockSize().x/2.0f);
+	collider = std::make_unique<CircleCollider>(Vector2{ 0,0 }, Block::GetBlockSize().x / 2.0f);
 	//属性つける
 	collider->SetAttribute(COL_PLAYER);
 	collider->SetSprite(sprite.get());
@@ -96,7 +96,7 @@ void Player::OnCollision()
 			//衝突したブロック自体のくっつく場所を設定できたので、ピースのブロックすべてに対して
 
 		}
-			
+
 	}
 }
 
@@ -120,12 +120,32 @@ void Player::Rotate()
 
 
 	float timerate = rotEaseTime / easeTimeMax;
+	//timerateの上下限設定
+	//timerate = Util::Clamp(timerate, 1.0f, 0.0f);
+
+	ImGui::Text("rotEaseTime %f", rotEaseTime);
+	ImGui::Text("easeTimeMax %f", easeTimeMax);
+	ImGui::Text("timerate %f", timerate);
+	ImGui::Text("rotate %f", rotation);
+
+
+
 	//timeRateが1以下なら補間
-	if (timerate < 1.0f) {
-		rotation = Easing::Circ::easeOut(beforeRot, afterRot, timerate);
+	if (timerate <= 1.0f) {
+
+		
+
+		rotation = beforeRot + Easing::Circ::easeOut(0.0f, childRotation, timerate);
+
+
 		//回転角を弧度法に変換
 		sprite->SetRotation(rotation);
 		rotEaseTime++;
+
+		for (size_t i = 0; i < blocks.size(); i++) {
+			ParentData* parent = blocks[i]->GetParent();
+			*parent->parentRot = Easing::Circ::easeOut(0.0f, childRotation, timerate);
+		}
 	}
 	else {
 		//ボタンのトリガーで回転を検知
@@ -141,7 +161,14 @@ void Player::Rotate()
 			rotEaseTime = 0;
 		}
 
+		////子の回転の大きさ
+		childRotation = afterRot - beforeRot;
+		//子のオフセット更新(子の関数内で一度しか更新しないようにする
+		for (size_t i = 0; i < blocks.size(); i++) {
+			blocks[i]->OffsetUpdate();
+		}
 	}
+
 	//角度が0~360になるように調整
 
 }
@@ -170,7 +197,7 @@ void Player::AddBlock()
 
 }
 
-void Player::AddBlock(Block*block)
+void Player::AddBlock(Block* block)
 {
 	//配列に挿入
 	blocks.push_back(block);
@@ -182,9 +209,13 @@ void Player::UpdateBlocks()
 		//親の座標と回転角を更新し続ける
 		ParentData* parent = blocks[i]->GetParent();
 		parent->parentPos = &position;
-		parent->parentRot = &rotation;
+	//	parent->parentRot = &rotation;
 		blocks[i]->SetParent(parent);
 		blocks[i]->Update();
 		ImGui::Text("blocks[%d]offset:%1.f,%1.f", i, blocks[i]->GetOffset().x, blocks[i]->GetOffset().y);
 	}
+}
+
+void Player::UpdateOffset()
+{
 }

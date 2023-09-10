@@ -44,6 +44,8 @@ private:
 	//ブロック配列の更新
 	void UpdateBlocks();
 
+	//ブロックのオフセットの更新
+	void UpdateOffset();
 private:
 
 	Pad* pad = nullptr;
@@ -66,6 +68,7 @@ private:
 	float rotation = 0;
 	float beforeRot = 0;
 	float afterRot = 0;
+	float childRotation = 0;
 
 
 	const float easeTimeMax = 15;

@@ -106,12 +106,20 @@ void Block::Update()
 		theta = 360.0f - theta;
 	}
 
+	//ブロックベクトルの大きさを取得
 	vecB.x = blockSize.x * parent->tileOffset.x;
 	vecB.y = blockSize.y * parent->tileOffset.y;
-
 	float lenPtoB = vecB.length();
+
+	//ブロックのベクトルと角度でローカル座標計算
 	pos.x += lenPtoB * cosf(Util::Degree2Radian(theta + *parent->parentRot));
 	pos.y += lenPtoB * sinf(Util::Degree2Radian(theta + *parent->parentRot));
+
+
+	//親の角度が90度で割り切れるたびにオフセットの更新
+	if (fabs(*parent->parentRot / 90.0f) == 0.0f) {
+		OffsetUpdate();
+	}
 
 	sprite->SetPosition(pos);
 	//親の回転をブロックの回転に適用
@@ -120,6 +128,50 @@ void Block::Update()
 
 
 	ImGui::Text("parent tag : %d", parent->parentTag);
+	ImGui::Text("parent rot : %f", *parent->parentRot);
+	ImGui::Text("current offset : %f,%f", currentOffset.x, currentOffset.y);
+}
+
+void Block::OffsetUpdate()
+{
+	//親の回転が0なら更新しない
+	if (*parent->parentRot == 0.0f) {
+		return;
+	}
+
+	//ブロックから自機へのベクトル作成
+	Vector2 myPos = sprite->GetPosition();
+	Vector2 vecBtoP = sprite->GetPosition() - *parent->parentPos;
+	float lenBtoP = vecBtoP.length();
+	Vector2 btoPNorm = vecBtoP;
+	btoPNorm.normalize();
+	//ブロックから自機へのベクトルと正面ベクトルで自機から何度の向きにいるか計算
+	Vector2 forward(1, 0);
+	float theta = (forward.x * btoPNorm.x) + (forward.y * btoPNorm.y) / (forward.length()) * (btoPNorm.length());
+	theta = acosf(theta);
+
+	//度数法に変換
+	theta = Util::Radian2Degree(theta);
+	//オフセットのYがマイナスなら360から引く
+	if (vecBtoP.y > 0) {
+		theta = 360.0f - theta;
+	}
+
+	//座標計算
+	Vector2 pos;
+	pos.x = lenBtoP * cosf(Util::Degree2Radian(theta));
+	pos.y = lenBtoP * sinf(Util::Degree2Radian(theta));
+
+	//ブロックサイズで割って現在のオフセット計算
+	currentOffset.x = pos.x / blockSize.x;
+	currentOffset.y = pos.y / blockSize.y;
+
+	//オフセット更新
+	parent->tileOffset = currentOffset;
+
+	//親のオフセットを0に設定
+	*parent->parentRot = 0.0f;
+
 }
 
 void Block::OnCollison()
@@ -168,18 +220,11 @@ void Block::OnCollison()
 
 			//親の変更
 			ChangeParent(baseTag, hitBlockTag, pieceTag, hitOffset);
-
-
-			//Vector2 afterOffset{ 0,0 };
-
-			////オフセット計算式:自分の現在のオフセット - 衝突ブロックの元オフセット + (当たったブロックのオフセット + 衝突時に作成したオフセット)
-			//afterOffset = (tileOffsetBefore - tileOffsetBefore) + (hitBlock->parent->tileOffset + hitOffset);
-
-			////親を同一にする
-			//parent = hitBlock->parent;
 		}
 	}
 }
+
+
 
 void Block::ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag, uint16_t parentTag, const Vector2& hitOffset)
 {
@@ -199,6 +244,7 @@ void Block::ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag, uint16_t p
 
 			//親を衝突したブロックに変更、オフセットの設定、属性の変更
 			pAllBlock[i]->parent->tileOffset = newOffset;
+			//*pAllBlock[i]->parent->parentRot = 0.0f;
 			pAllBlock[i]->collider->SetAttribute(COL_PLAYER);
 
 			//親の配列にぶちこむ
