@@ -237,6 +237,9 @@
     <ClCompile Include="Application\UIManager.cpp">
       <Filter>Engine\ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\2d\ParticleEmitter2D.cpp">
+      <Filter>Engine\ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Base\WinAPI.h">
@@ -416,6 +419,9 @@
     <ClInclude Include="Application\UIManager.h">
       <Filter>Engine\ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\2d\ParticleEmitter2D.h">
+      <Filter>Engine\ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Object3D.hlsli">
@@ -437,6 +443,7 @@
       <Filter>Engine\シェーダーファイル</Filter>
     </None>
     <None Include="Resources\Shaders\Particle.hlsli" />
+    <None Include="Resources\Shaders\Particle2D.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\Object3DPS.hlsl">
@@ -478,5 +485,8 @@
     <FxCompile Include="Resources\Shaders\ParticlePS.hlsl" />
     <FxCompile Include="Resources\Shaders\ParticleVS.hlsl" />
     <FxCompile Include="Resources\Shaders\ParticleGS.hlsl" />
+    <FxCompile Include="Resources\Shaders\Particle2DVS.hlsl" />
+    <FxCompile Include="Resources\Shaders\Particle2DPS.hlsl" />
+    <FxCompile Include="Resources\Shaders\Particle2DGS.hlsl" />
   </ItemGroup>
 </Project>

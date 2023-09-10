@@ -5,7 +5,6 @@
 #include "LightGroup.h"
 #include "DirectionalLight.h"
 #include "Object3D.h"
-#include "ParticleEmitter.h"
 #include "RayCollider.h"
 #include "MeshCollider.h"
 #include "SphereCollider.h"
@@ -13,6 +12,7 @@
 #include"Piece.h"
 #include "Boss.h"
 #include "UIManager.h"
+#include "ParticleEmitter2D.h"
 
 #include <memory>
 
@@ -38,9 +38,12 @@ private:
 	//背景テクスチャとスプライト
 	uint16_t backGroundTexture = 0;
 	std::unique_ptr<Sprite> backGroundSprite = nullptr;
+	uint16_t particleHandle_ = 0;
 
 	// UIマネージャー
 	std::unique_ptr<UIManager> uiMgr_ = nullptr;
+
+	std::unique_ptr<ParticleEmitter2D> emitter_ = nullptr;
 
 	// --メンバ関数-- //
 public:
