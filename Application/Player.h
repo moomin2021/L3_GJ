@@ -4,6 +4,7 @@
 #include"Pad.h"
 #include"CircleCollider.h"
 #include"CollisionManager2D.h"
+#include"PlayerBullet.h"
 
 class Player
 {
@@ -33,13 +34,16 @@ private:
 	//移動
 	void Move();
 
+	//回転
 	void Rotate();
 
+	//攻撃
+	void Attack();
 
 	//デバッグ用関数
 	void AddBlock();
 
-	
+	void BulletsUpdate();
 
 	//ブロック配列の更新
 	void UpdateBlocks();
@@ -75,8 +79,12 @@ private:
 	float rotEaseTime = easeTimeMax;
 
 	int healthMax = 10;
-
 	int health = healthMax;
+
+	//射撃用パラメータ
+	int shotCooltimeMax = 30;
+	int shotCooltime = shotCooltimeMax;
+	std::list < std::unique_ptr<PlayerBullet>> bullets;
 
 	//デバッグ用
 	int debugBlockOffsetX = 0;

@@ -64,7 +64,11 @@ public://ƒƒ“ƒoŠÖ”
 
 	ParentData* GetParent() { return parent; }
 
+	BlockData GetBlockData() const { return blockData; }
+
 	void OffsetUpdate();
+
+	Vector2 GetPosition()const { return sprite->GetPosition(); }
 
 private://Ã“Iƒƒ“ƒo•Ï”
 	static uint16_t cannonTexture;

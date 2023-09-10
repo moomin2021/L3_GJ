@@ -136,7 +136,7 @@
     <ClCompile Include="Application\Player.cpp" />
     <ClCompile Include="Application\Piece.cpp" />
     <ClCompile Include="Engine\2d\ParticleEmitter2D.cpp" />
-    <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="Application\PlayerBullet.cpp" />
     <ClCompile Include="Application\Scene\TitleScene.cpp" />
     <ClCompile Include="Application\Scene\ResultScene.cpp" />
     <ClCompile Include="Application\UIManager.cpp" />
@@ -198,7 +198,7 @@
     <ClInclude Include="Engine\Input\Pad.h" />
     <ClInclude Include="Application\Piece.h" />
     <ClInclude Include="Engine\2d\ParticleEmitter2D.h" />
-    <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="Application\PlayerBullet.h" />
     <ClInclude Include="Application\Scene\TitleScene.h" />
     <ClInclude Include="Application\Scene\ResultScene.h" />
     <ClInclude Include="Application\UIManager.h" />

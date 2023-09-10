@@ -43,6 +43,12 @@ void Player::Update()
 	//回転
 	Rotate();
 
+	//攻撃
+	Attack();
+
+	//弾の更新
+	BulletsUpdate();
+
 	//ブロックを増やすデバッグ関数
 	AddBlock();
 
@@ -62,6 +68,11 @@ void Player::Draw()
 	//ブロックたちの描画
 	for (size_t i = 0; i < blocks.size(); i++) {
 		blocks[i]->Draw();
+	}
+
+	//弾描画
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets) {
+		bullet->Draw();
 	}
 
 }
@@ -180,6 +191,30 @@ void Player::Rotate()
 
 }
 
+void Player::Attack()
+{
+	//射撃のクールタイム減らす
+	if (shotCooltime > 0) {
+		shotCooltime--;
+	}
+	else {
+		//0以下ならクールタイムリセット、IDがcannonのブロックからのみ攻撃を行う
+		for (size_t i = 0; i < blocks.size(); i++) {
+			if (blocks[i]->GetBlockData() == BlockData::Cannon) {
+				Vector2 pos = blocks[i]->GetPosition();
+				Vector2 vel(16.0f, 0.0f);
+				std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
+
+				newBullet->Initialize(pos, vel);
+
+				bullets.push_back(std::move(newBullet));
+			}
+		}
+
+		shotCooltime = shotCooltimeMax;
+	}
+}
+
 void Player::AddBlock()
 {
 
@@ -201,6 +236,23 @@ void Player::AddBlock()
 	}
 
 	ImGui::End();
+
+}
+
+void Player::BulletsUpdate()
+{
+	//死んでる弾を消す
+	bullets.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
+		if (!bullet->IsAlive()) {
+			return true;
+		}
+		return false;
+		});
+
+	//弾の更新
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets) {
+		bullet->Update();
+	}
 
 }
 

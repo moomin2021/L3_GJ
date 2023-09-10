@@ -44,6 +44,9 @@ void GameScene::Initialize()
 	player = std::make_unique<Player>();
 	player->Initialize(playerTex,{96,(float)WinAPI::GetInstance()->GetHeight()/2});
 
+	//自機の弾のテクスチャの読み込みとセット
+	PlayerBullet::SetBulletTex(LoadTexture("Resources/bullet_player.png"));
+
 	//プレイヤーとピース配列のセット
 	Block::SetPlayer(player.get());
 	Block::SetPiece(&Piece::pieces);

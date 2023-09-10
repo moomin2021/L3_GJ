@@ -6,6 +6,8 @@ class PlayerBullet
 {
 public:
 
+	static void SetBulletTex(uint16_t tex);
+
 	void Initialize(const Vector2& pos, const Vector2& velocity);
 
 	void Update();

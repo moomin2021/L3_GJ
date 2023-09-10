@@ -175,6 +175,7 @@ void Block::OffsetUpdate()
 
 }
 
+
 void Block::OnCollison()
 {
 	//è’ìÀÇ∑ÇÈ
