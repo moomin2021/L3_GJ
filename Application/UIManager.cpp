@@ -58,7 +58,7 @@ void UIManager::Initialize()
 
 	sKakeru2_ = std::make_unique<Sprite>();
 	sKakeru2_->SetPosition({ 1890.0f, 1058.0f });
-	sKakeru2_->SetSize({ 53.0f, 29.0f });
+	sKakeru2_->SetSize({ 64.0f, 29.0f });
 	sKakeru2_->SetAnchorPoint({ 0.5f, 0.5f });
 	sKakeru2_->SetRotation(-15.0f);
 
