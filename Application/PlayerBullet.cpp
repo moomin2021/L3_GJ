@@ -18,7 +18,7 @@ void PlayerBullet::Initialize(const Vector2& pos, const Vector2& velocity)
 	sprite->SetPosition(pos);
 	sprite->SetAnchorPoint({ 0.5f,0.5f });
 	sprite->MatUpdate();
-	sprite->SetSize({16.0f, 16.0f});
+	sprite->SetSize({16.0f, 12.0f});
 	this->vel = velocity;
 }
 

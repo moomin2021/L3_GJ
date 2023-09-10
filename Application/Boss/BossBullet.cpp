@@ -10,7 +10,7 @@ BossBullet::~BossBullet() {}
 void BossBullet::Initialize(Vector2 pos)
 {
 	sprite_ = std::make_unique<Sprite>();
-	sprite_->SetSize({ 16.0f, 8.0f });
+	sprite_->SetSize({ 16.0f, 12.0f });
 	position_ = pos;
 }
 
