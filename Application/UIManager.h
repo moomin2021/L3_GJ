@@ -8,7 +8,7 @@ class UIManager
 #pragma region メンバ変数
 private:
 	// スプライト
-	std::unique_ptr<Sprite> sFrame_ = nullptr;
+	std::unique_ptr<Sprite> sTitleFrame_ = nullptr;
 	std::unique_ptr<Sprite> sExp_ = nullptr;
 	std::unique_ptr<Sprite> sExpIn_ = nullptr;
 	std::unique_ptr<Sprite> sExpText_ = nullptr;
@@ -22,7 +22,7 @@ private:
 	std::unique_ptr<Sprite> sNextText_ = nullptr;
 
 	// 画像ハンドル
-	uint16_t hFrame_ = 0;
+	uint16_t hTitleFrame_ = 0;
 	uint16_t hExp_ = 0;
 	uint16_t hExpIn_ = 0;
 	uint16_t hExpText_ = 0;

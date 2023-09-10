@@ -18,9 +18,15 @@ private:
 
 	// スプライト
 	std::unique_ptr<Sprite> sBackGround_ = nullptr;
+	std::unique_ptr<Sprite> sTitleFrame_ = nullptr;
+	std::unique_ptr<Sprite> sTitleLogo_ = nullptr;
+	std::unique_ptr<Sprite> sPressA_ = nullptr;
 
 	// 画像ハンドル
 	uint16_t hBackGround_ = 0;
+	uint16_t hTitleFrame_ = 0;
+	uint16_t hTitleLogo_ = 0;
+	uint16_t hPressA_ = 0;
 
 #pragma endregion
 
