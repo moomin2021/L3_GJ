@@ -36,7 +36,7 @@ SceneManager::SceneManager() :
 	key_ = Key::GetInstance();
 
 	// Å‰‚ÌƒV[ƒ“
-	nowScene_ = std::make_unique<GameScene>();
+	nowScene_ = std::make_unique<TitleScene>();
 	nowScene_->Initialize();
 
 	gaussianPostEffect_ = std::make_unique<PostEffect>();

@@ -8,8 +8,8 @@ UIManager::~UIManager() {}
 void UIManager::Initialize()
 {
 #pragma region スプライト
-	sFrame_ = std::make_unique<Sprite>();
-	sFrame_->SetSize({ 1920.0f, 1080.0f });
+	sTitleFrame_ = std::make_unique<Sprite>();
+	sTitleFrame_->SetSize({ 1920.0f, 1080.0f });
 
 	sExp_ = std::make_unique<Sprite>();
 	sExp_->SetPosition({ 344.0f, 1035.0f });
@@ -70,7 +70,7 @@ void UIManager::Initialize()
 #pragma endregion
 
 #pragma region 画像ハンドル
-	hFrame_ = LoadTexture("Resources/frame.png");
+	hTitleFrame_ = LoadTexture("Resources/frame.png");
 	hExpIn_ = LoadTexture("Resources/hp_player_in.png");
 	hExp_ = LoadTexture("Resources/hp_player.png");
 	hExpText_ = LoadTexture("Resources/exp_text.png");
@@ -87,7 +87,7 @@ void UIManager::Initialize()
 
 void UIManager::MatUpdate()
 {
-	sFrame_->MatUpdate();
+	sTitleFrame_->MatUpdate();
 	sExp_->MatUpdate();
 	sExpIn_->MatUpdate();
 	sExpText_->MatUpdate();
@@ -103,7 +103,7 @@ void UIManager::MatUpdate()
 
 void UIManager::Draw()
 {
-	sFrame_->Draw(hFrame_);
+	sTitleFrame_->Draw(hTitleFrame_);
 	sExp_->Draw(hExp_);
 	sExpIn_->Draw(hExpIn_);
 	sExpText_->Draw(hExpText_);
