@@ -92,6 +92,7 @@
     <ClCompile Include="Application\Boss\Boss.cpp" />
     <ClCompile Include="Application\Boss\BossBullet.cpp" />
     <ClCompile Include="Application\Boss\Enemy0.cpp" />
+    <ClCompile Include="Application\BlockManager.cpp" />
     <ClCompile Include="Engine\Collision\BaseCollider2D.cpp" />
     <ClCompile Include="Engine\Util\Easing.cpp" />
     <ClCompile Include="Engine\Collision\CircleCollider.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="Application\Boss\Boss.h" />
     <ClInclude Include="Application\Boss\BossBullet.h" />
     <ClInclude Include="Application\Boss\Enemy0.h" />
+    <ClInclude Include="Application\BlockManager.h" />
     <ClInclude Include="Engine\Util\Easing.h" />
     <ClInclude Include="Engine\Collision\CircleCollider.h" />
     <ClInclude Include="Engine\Collision\BoxCollider.h" />

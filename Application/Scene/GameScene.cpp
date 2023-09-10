@@ -20,8 +20,11 @@ GameScene::~GameScene() {}
 
 void GameScene::Initialize()
 {
-	// キーボード入力インスタンス取得
-	key_ = Key::GetInstance();
+#pragma region インスタンス取得
+	key_ = Key::GetInstance();				// キーボード入力
+	blockMgr_ = BlockManager::GetInstance();// ブロックマネージャー
+	blockMgr_->Initialize();
+#pragma endregion
 
 	// カメラ
 	camera_ = std::make_unique<Camera>();
@@ -35,18 +38,11 @@ void GameScene::Initialize()
 	uint16_t cannonTex = Texture::GetInstance()->LoadTexture("Resources/piece_cannon.png");
 	uint16_t playerTex = Texture::GetInstance()->LoadTexture("Resources/player.png");
 
-
-	//ブロッククラス静的初期化
-	Block::StaticInitialize(blockTex, cannonTex, { 32,32 });
-
 	// プレイヤー
 	player = std::make_unique<Player>();
-	player->Initialize(playerTex,{96,(float)WinAPI::GetInstance()->GetHeight()/2});
+	player->Initialize();
 
-	//プレイヤーとピース配列のセット
 	Block::SetPlayer(player.get());
-	Block::SetPiece(&Piece::pieces);
-
 
 	// ボス
 	boss_ = std::make_unique<Boss>();
@@ -67,26 +63,30 @@ void GameScene::Update()
 	// ボス
 	boss_->Update();
 
-	//ピースの更新とボタンで生成
-	for (size_t i = 0; i < Piece::pieces.size(); i++) {
-		Piece::pieces[i]->Update();
+	// ブロックマネージャー
+	blockMgr_->Update();
+
+	// ピースの生存フラグが[OFF]なら消す
+	for (auto it = pieces_.begin(); it != pieces_.end();) {
+		// ピースの更新
+		(*it)->Update();
+
+		// ピースの生存フラグが[OFF]になったら弾を削除
+		if ((*it)->GetIsAlive() == false) it = pieces_.erase(it);
+		else ++it;
 	}
 
-	ImGui::Text("piece size %d", Piece::pieces.size());
-
-	//if (ImGui::Button("add piece")) {
-	//	std::unique_ptr<Piece> newPiece = std::make_unique<Piece>();
-	//	newPiece->Initialize();
-	//	pieces.push_back(std::move(newPiece));
-	//}
-
-	Piece::CreatePiece();
+	if (ImGui::Button("add piece")) {
+		CreatePiece();
+	}
 
 	// 衝突時処理
 	OnCollision();
 
 	// オブジェクト更新処理
 	MatUpdate();
+
+	ImGui::Text("PieceCount = %d", pieces_.size());
 }
 
 void GameScene::Draw()
@@ -103,12 +103,11 @@ void GameScene::Draw()
 	// プレイヤー
 	player->Draw();
 
-	for (size_t i = 0; i < Piece::pieces.size(); i++) {
-		Piece::pieces[i]->Draw();
-	}
-
 	// ボス
 	boss_->Draw();
+
+	// ブロックマネージャー
+	blockMgr_->Draw();
 }
 
 void GameScene::MatUpdate()
@@ -118,6 +117,12 @@ void GameScene::MatUpdate()
 
 	// ボス
 	boss_->MatUpdate();
+
+	// プレイヤー
+	player->MatUpdate();
+
+	// ブロックマネージャー
+	blockMgr_->MatUpdate();
 }
 
 void GameScene::OnCollision()
@@ -128,9 +133,22 @@ void GameScene::OnCollision()
 	// ボス
 	boss_->OnCollision();
 
-	//判定
-	for (size_t i = 0; i < Piece::pieces.size(); i++) {
-		Piece::pieces[i]->OnCollision();
+	// ブロックマネージャー
+	blockMgr_->OnCollision();
+
+	for (auto& it : pieces_) {
+		it->OnCollision();
 	}
 
+}
+
+void GameScene::CreatePiece()
+{
+	// ピース生成
+	pieces_.emplace_back(std::make_unique<Piece>());
+	pieces_.back()->Initialize(Vector2{2100.0f, 540.0f});
+	pieces_.back()->AddBlock(blockMgr_->CreateBlock(Vector2{ 0.0f, 0.0f }, pieces_.back().get()));
+	pieces_.back()->AddBlock(blockMgr_->CreateBlock(Vector2{ -1.0f, 0.0f }, pieces_.back().get()));
+	pieces_.back()->AddBlock(blockMgr_->CreateBlock(Vector2{ 0.0f, -1.0f }, pieces_.back().get()));
+	pieces_.back()->AddBlock(blockMgr_->CreateBlock(Vector2{ 1.0f, 0.0f }, pieces_.back().get()));
 }

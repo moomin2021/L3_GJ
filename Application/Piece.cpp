@@ -3,83 +3,62 @@
 #include"Util.h"
 #include<imgui_impl_dx12.h>
 
-std::vector < std::unique_ptr<Piece>> Piece::pieces;
-
-void Piece::Initialize()
+Piece::Piece()
 {
-	//一旦Tミノのみ作る
-	/*std::unique_ptr<Block> newBlock0 = std::make_unique<Block>();
-	std::unique_ptr<Block> newBlock1 = std::make_unique<Block>();
-	std::unique_ptr<Block> newBlock2 = std::make_unique<Block>();
-	std::unique_ptr<Block> newBlock3 = std::make_unique<Block>();*/
+}
 
-	uint16_t pieceTag = (uint16_t)pieces.size();
+Piece::~Piece()
+{
+	// クリア
+	blocks_.clear();
+}
 
-	ParentData* parent = new ParentData();
-	parent->parentPos = &parentPos;
-	parent->parentRot = &rotation;
-	parent->tileOffset = { 0,0 };
-	parent->parentTag = pieceTag;
-	Block* newBlock0 = Block::CreateBlock(BlockData::None, parent);
-	childBlocks.push_back(std::move(newBlock0));
-	parent = new ParentData();
-	parent->parentPos = &parentPos;
-	parent->parentRot = &rotation;
-	parent->tileOffset = { 0,1 };
-	parent->parentTag = pieceTag;
-	Block* newBlock1= Block::CreateBlock(BlockData::Cannon, parent);
-	childBlocks.push_back(std::move(newBlock1));
-	parent = new ParentData();
-	parent->parentPos = &parentPos;
-	parent->parentRot = &rotation;
-	parent->tileOffset = { 0,-1 };
-	parent->parentTag = pieceTag;
-	Block* newBlock2 = Block::CreateBlock(BlockData::None, parent);
-	childBlocks.push_back(std::move(newBlock2));
-	parent = new ParentData();
-	parent->parentPos = &parentPos;
-	parent->parentRot = &rotation;
-	parent->tileOffset = { 1,0 };
-	parent->parentTag = pieceTag;
-	Block* newBlock3 = Block::CreateBlock(BlockData::Cannon, parent);
-	childBlocks.push_back(std::move(newBlock3));
-
-	parentPos = { (float)WinAPI::GetInstance()->GetWidth(),Util::GetRandomFloat(640,WinAPI::GetInstance()->GetHeight() - 320.0f) };
-
-	//rotation = Util::GetRandomInt(0, 3) * 90.0f;
-
+void Piece::Initialize(const Vector2& pos)
+{
+	// 初期座標設定
+	position_ = pos;
 }
 
 void Piece::Update()
 {
-	parentPos.x -= baseSpd;
+	// 座標更新
+	position_.x -= moveSpd_;
 
-	//ImGui::Text("piece tag :%d", pieceTag);
+	// ブロックの位置を修正
+	for (auto& it : blocks_) {
+		// ブロックのオフセットから座標を計算
+		Vector2 newPos = position_ + it->GetOffset() * 32.0f;
+		it->SetPosition(newPos);
+	}
 
-	for (size_t i = 0; i < childBlocks.size(); i++) {
-		childBlocks[i]->Update();
+	// ピースが画面外に行ったら生存フラグを[OFF]にする
+	if (position_.x <= -300.0f) {
+		isAlive_ = false;
+	}
+
+	// ピースの生存フラグが[OFF]になったらブロックの生存フラグも[OFF]にする
+	if (isAlive_ == false && isCol_ == false) {
+		for (auto& it : blocks_) {
+			it->SetIsAlive(false);
+		}
 	}
 }
 
 void Piece::Draw()
 {
-	for (size_t i = 0; i < childBlocks.size(); i++) {
-		childBlocks[i]->Draw();
-	}
-}
-
-void Piece::CreatePiece()
-{
-	if (ImGui::Button("add piece")) {
-		std::unique_ptr<Piece> newPiece = std::make_unique<Piece>();
-		newPiece->Initialize();
-		pieces.push_back(std::move(newPiece));
-	}
 }
 
 void Piece::OnCollision()
 {
-	for (size_t i = 0; i < childBlocks.size(); i++) {
-		childBlocks[i]->OnCollison();
+	// 衝突フラグが[ON]になったらブロックの所属をプレイヤーに変える
+	if (isCol_) {
+		isAlive_ = false;
+		for (auto& it : blocks_) {
+			it->SetAffChangePlayer();
+		}
 	}
+}
+
+void Piece::MatUpdate()
+{
 }

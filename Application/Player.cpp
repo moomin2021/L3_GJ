@@ -4,187 +4,111 @@
 #include"Util.h"
 #include"CollisionAttribute.h"
 
-void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
+Player::Player() {}
+
+Player::~Player() {}
+
+void Player::Initialize()
 {
-	texIndex = playerTexture;
+#pragma region インスタンス
+	pad_ = Pad::GetInstance();
+	colMgr2D_ = CollisionManager2D::GetInstance();
+#pragma endregion
 
-	sprite = std::make_unique<Sprite>();
+#pragma region スプライト
+	sprite_ = std::make_unique<Sprite>();
+	sprite_->SetPosition({0.0f, 0.0f});
+	sprite_->SetSize({ 32.0f, 32.0f });
+	sprite_->SetAnchorPoint({ 0.5f, 0.5f });
+#pragma endregion
 
-	//スプライトのサイズをブロックのサイズと合わせる
-	sprite->SetSize(Block::GetBlockSize());
-	sprite->SetPosition(pos);
-	sprite->SetAnchorPoint({ 0.5f,0.5f });
+#pragma region 画像ハンドル
+	handle_ = LoadTexture("Resources/player.png");
+#pragma endregion
 
-	rotation = 0;
-
-	pad = Pad::GetInstance();
-
-	colManager = CollisionManager2D::GetInstance();
-
-	//コライダーのセット
-	collider = std::make_unique<CircleCollider>(Vector2{ 0,0 },Block::GetBlockSize().x/2.0f);
-	//属性つける
-	collider->SetAttribute(COL_PLAYER);
-	collider->SetSprite(sprite.get());
-	//マネージャに登録
-	colManager->AddCollider(collider.get());
+#pragma region コライダー
+	collider_ = std::make_unique<BoxCollider>(Vector2{ 0.0f, 0.0f }, Vector2{ 16.0f, 16.0f });
+	collider_->SetAttribute(COL_PLAYER);
+	collider_->SetSprite(sprite_.get());
+	colMgr2D_->AddCollider(collider_.get());
+#pragma endregion
 }
 
 void Player::Update()
 {
-
-	//移動
+	// 移動処理
 	Move();
 
-	//回転
+	// 回転処理
 	Rotate();
-
-	//ブロックを増やすデバッグ関数
-	AddBlock();
-
-	sprite->MatUpdate();
-	UpdateBlocks();
-
 }
 
 void Player::Draw()
 {
-	//自機描画
-	sprite->Draw(texIndex);
-
-	//ブロックたちの描画
-	for (size_t i = 0; i < blocks.size(); i++) {
-		blocks[i]->Draw();
-	}
-
+	sprite_->Draw(handle_);
 }
 
 void Player::OnCollision()
 {
-	//何かに当たったら
-	if (collider->GetIsHit()) {
+}
 
-		if (collider->GetHitCollider()->GetAttribute() == COL_BLOCK) {
-			Vector2 hitBlockOffset{ 0,0 };
-
-			//ブロックに当たった
-			//自機から対象へのベクトル作成
-			Vector2 vecBtoP = collider->GetHitCollider()->GetPosition() - collider->GetPosition();
-			//x成分とy成分の絶対値を比較し、縦につくか横につくか決める
-			if (fabs(vecBtoP.x) > fabs(vecBtoP.y)) {
-				//x成分のほうが大きい場合
-				if (vecBtoP.x > 0) {
-					//0以上なら上につける
-					hitBlockOffset.x = 1.0f;
-				}
-				else {
-					//0以下なら下
-					hitBlockOffset.x = -1.0f;
-				}
-			}
-			else {
-				if (vecBtoP.y > 0) {
-					//0以上なら上につける
-					hitBlockOffset.y = 1.0f;
-				}
-				else {
-					//0以下なら下
-					hitBlockOffset.y = -1.0f;
-				}
-			}
-
-			//衝突したブロック自体のくっつく場所を設定できたので、ピースのブロックすべてに対して
-
-		}
-			
-	}
+void Player::MatUpdate()
+{
+	sprite_->MatUpdate();
 }
 
 void Player::Move()
 {
-	//パッド入力で移動
-	Vector2 spd;
-	spd = pad->GetLStick() * baseSpd;
-	spd.y = -spd.y;
+	// パッド入力を取得
+	Vector2 input = pad_->GetLStick();
 
-	position = sprite->GetPosition();
+	// ウィンドウ座標を合わせて反転
+	input.y = -input.y;
 
-	position += spd;
+	// 座標を更新
+	position_ += input * baseSpd_;
 
-	sprite->SetPosition(position);
+	// スプライトに座標を設定
+	sprite_->SetPosition(position_);
 }
 
 void Player::Rotate()
 {
+	// 回転してからの経過時間[s]
+	float elapsedTime = (Util::GetTimrMSec() - startRotateTime_) / 1000.0f;
 
+	// 経過時間の割合が0.0f ~ 1.0fの間になるように
+	float rate = Util::Clamp(elapsedTime / rotateTime_, 1.0f, 0.0f);
 
+	// 経過時間の割合が1.0f以下なら
+	if (rate <= 1.0f) {
+		// 回転角を更新
+		rotate_ = Easing::Circ::easeOut(beforeRotate_, afterRotate_, rate);
 
-	float timerate = rotEaseTime / easeTimeMax;
-	//timeRateが1以下なら補間
-	if (timerate < 1.0f) {
-		rotation = Easing::Circ::easeOut(beforeRot, afterRot, timerate);
-		//回転角を弧度法に変換
-		sprite->SetRotation(rotation);
-		rotEaseTime++;
+		// スプライトの回転角を設定
+		sprite_->SetRotation(rotate_);
 	}
-	else {
-		//ボタンのトリガーで回転を検知
-		//LBキーで左回転、RBキーで右回転
-		if (pad->GetTriggerButton(PAD_LB)) {
-			beforeRot = sprite->GetRotation();
-			afterRot = beforeRot - 90.0f;
-			rotEaseTime = 0;
+
+	// 経過時間が回転時間異常なら回転入力を許可する
+	if (elapsedTime >= rotateTime_) {
+		// [LB]なら左回転
+		if (pad_->GetTriggerButton(PAD_LB)) {
+			// 回転開始時間を保存
+			startRotateTime_ = Util::GetTimrMSec();
+
+			// 回転前と回転後の回転角を保存
+			beforeRotate_ = sprite_->GetRotation();
+			afterRotate_ = beforeRotate_ - 90.0f;
 		}
-		else if (pad->GetTriggerButton(PAD_RB)) {
-			beforeRot = sprite->GetRotation();
-			afterRot = beforeRot + 90.0f;
-			rotEaseTime = 0;
+
+		// [RB]なら右回転
+		else if (pad_->GetTriggerButton(PAD_RB)) {
+			// 回転開始時間を保存
+			startRotateTime_ = Util::GetTimrMSec();
+
+			// 回転前と回転後の回転角を保存
+			beforeRotate_ = sprite_->GetRotation();
+			afterRotate_ = beforeRotate_ + 90.0f;
 		}
-
-	}
-	//角度が0~360になるように調整
-
-}
-
-void Player::AddBlock()
-{
-
-	ImGui::Begin("add block");
-
-	ImGui::SliderInt("offsetX", &debugBlockOffsetX, -5, 5);
-	ImGui::SliderInt("offsetY", &debugBlockOffsetY, -5, 5);
-
-	if (ImGui::Button("add")) {
-		//設定されているブロックのオフセットを使ってブロック生成、自機と紐つける
-		ParentData* parent = new ParentData();
-		parent->parentPos = &position;
-		parent->tileOffset = { (float)debugBlockOffsetX, (float)debugBlockOffsetY };
-		parent->parentRot = &rotation;
-		Block* newBlock = Block::CreateBlock(BlockData::None, parent);
-
-		//自機のブロック配列に格納
-		blocks.push_back(newBlock);
-	}
-
-	ImGui::End();
-
-}
-
-void Player::AddBlock(Block*block)
-{
-	//配列に挿入
-	blocks.push_back(block);
-}
-
-void Player::UpdateBlocks()
-{
-	for (size_t i = 0; i < blocks.size(); i++) {
-		//親の座標と回転角を更新し続ける
-		ParentData* parent = blocks[i]->GetParent();
-		parent->parentPos = &position;
-		parent->parentRot = &rotation;
-		blocks[i]->SetParent(parent);
-		blocks[i]->Update();
-		ImGui::Text("blocks[%d]offset:%1.f,%1.f", i, blocks[i]->GetOffset().x, blocks[i]->GetOffset().y);
 	}
 }

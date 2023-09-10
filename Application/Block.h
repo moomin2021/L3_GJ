@@ -2,94 +2,98 @@
 #include"Texture.h"
 #include"Sprite.h"
 #include<memory>
-#include"CircleCollider.h"
+#include"BoxCollider.h"
 #include"CollisionManager2D.h"
+
 #include<list>
 
-struct ParentData {
-	Vector2* parentPos = nullptr;
-	float* parentRot = nullptr;
-	Vector2 tileOffset{0,0};
-	uint16_t parentTag = 0;
-};
-
-enum class BlockData {
-	Player,	//プレイヤー
-	None,	//通常ブロック
-	Cannon	//大砲
-
-};
-
 class Player;
-
 class Piece;
 
-class Block
-{
-public://静的メンバ関数
-	
-	/// <summary>
-	/// 静的初期化
-	/// </summary>
-	/// <param name="cannonTex">大砲のテクスチャ</param>
-	/// <param name="blockTex">ブロックのテクスチャ</param>
-	/// <param name="blockSize">ブロックの大きさ</param>
-	static void StaticInitialize(uint16_t cannonTex, uint16_t blockTex, const Vector2& blockSize);
+class Block {
+#pragma region メンバ変数
+private:
+	// インスタンス
+	static CollisionManager2D* sColMgr2D_;
+	static Player* sPlayer_;
 
-	static Vector2 GetBlockSize() { return blockSize; }
+	// スプライト
+	std::unique_ptr<Sprite> sprite_ = nullptr;
 
-	static Block* CreateBlock(const BlockData& blockData, ParentData* parent);
+	// 画像ハンドル
+	uint16_t handle_ = 0;
 
-	static void SetPlayer(Player* player);
-	static void SetPiece(std::vector < std::unique_ptr<Piece>>* pieces);
+	// コライダー
+	std::unique_ptr<BoxCollider> collider_ = nullptr;
 
-public://メンバ関数
+	// 所属しているピース
+	Piece* piece_ = nullptr;
 
-	/// <summary>
-	/// ブロックの初期化
-	/// </summary>
-	/// <param name="blockData">なんのブロックか</param>
-	/// <param name="parent">親のデータ(座標&回転+タイルの距離)</param>
-	void Initialize(const BlockData& blockData, ParentData* parent);
+	// オフセット
+	Vector2 offset_ = { 0.0f, 0.0f };
 
-	void SetParent(ParentData* parent) { this->parent = parent; }
+	// 生存フラグ
+	bool isAlive_ = true;
 
-	virtual void Draw();
+	// ピースに所属しているかフラグ
+	bool isPiece_ = true;
+#pragma endregion
 
+#pragma region メンバ関数
+public:
+	// コンストラクタ
+	Block();
+
+	// デストラクタ
+	~Block();
+
+	// 初期化処理
+	void Initialize();
+
+	// 更新処理
 	void Update();
 
-	void OnCollison();
+	// 描画処理
+	void Draw();
 
-	Vector2 GetOffset()const { return parent->tileOffset; }
+	// 衝突時処理
+	void OnCollision();
 
-	ParentData* GetParent() { return parent; }
+	// 行列更新処理
+	void MatUpdate();
 
+	// ブロックの所属をプレイヤーに変える
+	void SetAffChangePlayer();
+#pragma endregion
 
-private://静的メンバ変数
-	static uint16_t cannonTexture;
-	static uint16_t blockTexture;
-	static Vector2 blockSize;
-	//全てのブロックのﾎﾟｲﾝﾀ
-	static std::vector<std::unique_ptr<Block>> pAllBlock;
-	
-	static Player* player;
-	static std::vector < std::unique_ptr<Piece>>* pieces;
+#pragma region セッター関数
+	// コリジョンマネージャー2Dを設定
+	static void SetColMgr2D(CollisionManager2D* colMgr2D) { sColMgr2D_ = colMgr2D; }
 
-private://メンバ変数
+	// プレイヤーを設定
+	static void SetPlayer(Player* player) { sPlayer_ = player; }
 
-	//マネージャ
-	CollisionManager2D* colManager = nullptr;
-	//コライダー
-	std::unique_ptr<CircleCollider> collider = nullptr;
+	// 画像ハンドルを設定
+	void SetHandle(uint16_t handle) { handle_ = handle; }
 
-	std::unique_ptr<Sprite> sprite = nullptr;
-	BlockData blockData = BlockData::None;
-	ParentData* parent = nullptr;
+	// 座標を設定
+	void SetPosition(const Vector2 pos) { sprite_->SetPosition(pos); }
 
-	uint16_t colliderTag = 0;
+	// ピースを設定
+	void SetPiece(Piece* piece) { piece_ = piece; }
 
-private: //静的メンバ関数
+	// オフセット設定
+	void SetOffset(const Vector2& offset) { offset_ = offset; }
 
-	void ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag,uint16_t parentTag,const Vector2& hitOffset);
+	// 生存フラグを設定
+	void SetIsAlive(bool frag) { isAlive_ = frag; }
+#pragma endregion
+
+#pragma region ゲッター関数
+	// オフセットを取得
+	const Vector2& GetOffset() { return offset_; }
+
+	// 生存フラグを取得
+	bool GetIsAlive() { return isAlive_; }
+#pragma endregion
 };
-

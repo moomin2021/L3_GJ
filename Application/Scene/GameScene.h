@@ -14,6 +14,7 @@
 #include"Player.h"
 #include"Piece.h"
 #include "Boss.h"
+#include "BlockManager.h"
 
 #include <memory>
 
@@ -21,8 +22,9 @@ class GameScene : public BaseScene
 {
 	// --メンバ変数-- //
 private:
-	// キーボード入力
-	Key* key_ = nullptr;
+	// インスタンス
+	Key* key_				= nullptr;// キーボード入力
+	BlockManager* blockMgr_	= nullptr;// ブロックマネージャー
 
 	// カメラ
 	std::unique_ptr<Camera> camera_ = nullptr;
@@ -34,7 +36,7 @@ private:
 	std::unique_ptr<Boss> boss_ = nullptr;
 
 	//ピース配列
-	std::vector < std::unique_ptr<Piece>> pieces;
+	std::vector < std::unique_ptr<Piece>> pieces_;
 
 	//背景テクスチャとスプライト
 	uint16_t backGroundTexture = 0;
@@ -63,5 +65,8 @@ private:
 
 	// 衝突時処理
 	void OnCollision();
+
+	// ピースを作成
+	void CreatePiece();
 };
 
