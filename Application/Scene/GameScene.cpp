@@ -29,11 +29,12 @@ void GameScene::Initialize()
 
 	// カメラセット
 	Sprite::SetCamera(camera_.get());
-	ParticleEmitter::SetCamera(camera_.get());
+	ParticleEmitter2D::SetCamera(camera_.get());
 
 	uint16_t blockTex = Texture::GetInstance()->LoadTexture("Resources/piece.png");
 	uint16_t cannonTex = Texture::GetInstance()->LoadTexture("Resources/piece_cannon.png");
 	uint16_t playerTex = Texture::GetInstance()->LoadTexture("Resources/player.png");
+	particleHandle_ = LoadTexture("Resources/effect2.png");
 
 
 	//ブロッククラス静的初期化
@@ -61,6 +62,9 @@ void GameScene::Initialize()
 	// UIマネージャー
 	uiMgr_ = std::make_unique<UIManager>();
 	uiMgr_->Initialize();
+
+	emitter_ = std::make_unique<ParticleEmitter2D>();
+	emitter_->SetPosition({ 500.0f, 500.0f });
 }
 
 void GameScene::Update()
@@ -85,6 +89,15 @@ void GameScene::Update()
 	//}
 
 	Piece::CreatePiece();
+
+	//emitter_->Add(120, { 0.0f, 0.0f }, { 2.0f, 2.0f }, {1.0f, 1.0f}, 1.0f, 0.0f);
+	static int num = 0;
+	num++;
+	if (num % 200 == 0) {
+		emitter_->Add(120, { 0.0f, 0.0f }, { 100.0f, 100.0f }, { 00.0f, 0.0f }, 100.0f, 0.0f);
+	}
+
+	emitter_->Update();
 
 	// 衝突時処理
 	OnCollision();
@@ -113,6 +126,13 @@ void GameScene::Draw()
 
 	// ボス
 	boss_->Draw();
+
+	PipelineManager::PreDraw("Particle2D", D3D10_PRIMITIVE_TOPOLOGY_POINTLIST);
+
+	emitter_->Draw(particleHandle_);
+
+
+	PipelineManager::PreDraw("Sprite");
 
 	// UIマネージャー
 	uiMgr_->Draw();
