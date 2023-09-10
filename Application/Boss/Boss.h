@@ -3,6 +3,7 @@
 #include "BossBullet.h"
 #include "Enemy0.h"
 #include "ParticleEmitter2D.h"
+#include "Key.h"
 
 #include <memory>
 #include <string>
@@ -34,6 +35,9 @@ private:
 		"PRE_SUMMON", "SUMMON", "POST_SUMMON",
 		"PRE_BOOMERANG", "BOOMERANG", "POST_BOOMERANG",
 	};
+
+	// インスタンス
+	Key* key_ = nullptr;
 
 	// スプライト
 	std::unique_ptr<Sprite> sBossBack0_ = nullptr;	// ボス裏面0
@@ -88,15 +92,15 @@ private:
 	Vector2 beforeBackPos0_ = { 0.0f, 0.0f };// 裏面0行動前座標
 	Vector2 beforeBackPos1_ = { 0.0f, 0.0f };// 裏面0行動前座標
 	uint64_t actionStartTime_= 0;	// 行動開始時間
-	float time2PreMoveShot_		= 4.0f;	// 移動撃ち前時間
+	float time2PreMoveShot_		= 3.0f;	// 移動撃ち前時間
 	float time2MoveShot_		= 10.0f;// 移動撃ち時間
-	float time2PostMoveShot_	= 4.0f;	// 移動撃ち後時間
-	float time2PreSummon_		= 4.0f;	// 召喚前時間
+	float time2PostMoveShot_	= 3.0f;	// 移動撃ち後時間
+	float time2PreSummon_		= 3.0f;	// 召喚前時間
 	float time2Summon_			= 10.0f;// 召喚する時間
-	float time2PostSummon_		= 4.0f;	// 召喚後時間
-	float time2PreBoomerang_	= 4.0f;	// 召喚前時間
+	float time2PostSummon_		= 3.0f;	// 召喚後時間
+	float time2PreBoomerang_	= 3.0f;	// 召喚前時間
 	float time2Boomerang_		= 10.0f;// 召喚する時間
-	float time2PostBoomerang_	= 4.0f;	// 召喚後時間
+	float time2PostBoomerang_	= 3.0f;	// 召喚後時間
 
 	bool isBoomerang_ = false;
 
