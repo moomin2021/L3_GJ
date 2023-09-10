@@ -14,7 +14,7 @@ float4 main(VSOutput input) : SV_TARGET
 {
     //2.抽出した画像にブラーをかける
     float totalWeight = 0, _Sigma = 0.002;
-    float _StepWidth = _Sigma / 5.0f;
+    float _StepWidth = _Sigma / 2.0f;
     float4 col = float4(0, 0, 0, 0);
 
                 // xyで2αの幅で色を取得
