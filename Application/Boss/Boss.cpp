@@ -38,7 +38,7 @@ void Boss::Initialize()
 #pragma region 画像ハンドル
 	hBossBack_ = LoadTexture("Resources/boss_back.png");
 	hBossFront_ = LoadTexture("Resources/boss_Front.png");
-	hParticle_ = LoadTexture("Resources/boss_Front.png");
+	hParticle_ = LoadTexture("Resources/particle_enemy.png");
 #pragma endregion
 
 #pragma region BossBullet
@@ -169,6 +169,11 @@ void Boss::Wait()
 {
 	// ボスの裏面回転
 	BossBackRotate(basicSpd_);
+
+	float rnd0X = Util::GetRandomFloat(0.0f, 1.0f) * 2.0f - 1.0f;
+	float rnd0Y = Util::GetRandomFloat(0.0f, 1.0f) * 2.0f - 1.0f;
+	emitterBack0_->Add(60, { rnd0X * 100.0f, rnd0Y * 100.0f }, { 0.0f, 0.0f }, { 0.0f, 0.0f }, 32.0f, 0.0f);
+	emitterBack0_->SetPosition({500.0f, 500.0f});
 }
 
 void Boss::PreMoveShot()
@@ -305,12 +310,12 @@ void Boss::Summon()
 #pragma region パーティクル
 	float rnd0X = Util::GetRandomFloat(0.0f, 1.0f) * 2.0f - 1.0f;
 	float rnd0Y = Util::GetRandomFloat(0.0f, 1.0f) * 2.0f - 1.0f;
-	emitterBack0_->Add(60, { 0.0f, 0.0f }, {0.0f, 0.0f}, { 30.0f * rnd0X, 30.0f * rnd0Y }, 32.0f, 0.0f);
+	emitterBack0_->Add(60, { rnd0X * 1000.0f, rnd0Y * 1000.0f }, {0.0f, 0.0f}, { 30.0f * rnd0X, 30.0f * rnd0Y }, 32.0f, 0.0f);
 	emitterBack0_->SetPosition(backPos0_);
 
 	float rnd1X = Util::GetRandomFloat(0.0f, 1.0f) * 2.0f - 1.0f;
 	float rnd1Y = Util::GetRandomFloat(0.0f, 1.0f) * 2.0f - 1.0f;
-	emitterBack1_->Add(60, { 0.0f, 0.0f }, {0.0f, 0.0f}, { 30.0f * rnd1X, 30.0f * rnd1Y }, 32.0f, 0.0f);
+	emitterBack1_->Add(60, { rnd1X * 1000.0f, rnd1Y * 1000.0f }, {0.0f, 0.0f}, { 30.0f * rnd1X, 30.0f * rnd1Y }, 32.0f, 0.0f);
 	emitterBack1_->SetPosition(backPos1_);
 #pragma endregion
 

@@ -43,8 +43,6 @@ private:
 	// UIマネージャー
 	std::unique_ptr<UIManager> uiMgr_ = nullptr;
 
-	std::unique_ptr<ParticleEmitter2D> emitter_ = nullptr;
-
 	// --メンバ関数-- //
 public:
 	// コンストラクタ
