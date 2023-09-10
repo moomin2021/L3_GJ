@@ -19,7 +19,9 @@ private:
 		PRE_SUMMON,		// 召喚前準備
 		SUMMON,			// 召喚
 		POST_SUMMON,	// 召喚あと処理
+		PRE_BOOMERANG,	// ブーメラン前処理
 		BOOMERANG,		// ブーメラン
+		POST_BOOMERANG,	// ブーメラン後処理
 	};
 #pragma endregion
 
@@ -29,7 +31,7 @@ private:
 		"WAIT",
 		"PRE_MOVE_SHOT", "MOVE_SHOT", "POST_MOVE_SHOT",
 		"PRE_SUMMON", "SUMMON", "POST_SUMMON",
-		"BOOMERANG",
+		"PRE_BOOMERANG", "BOOMERANG", "POST_BOOMERANG",
 	};
 
 	// スプライト
@@ -64,6 +66,7 @@ private:
 	float basicSpd_ = 3.0f;
 	float moveShotRotaSpd_ = 30.0f;
 	float summonRotaSpd_ = 30.0f;
+	float boomerangRotaSpd_ = 30.0f;
 
 	// 敵
 	std::vector<std::unique_ptr<Enemy0>> enemys_;
@@ -79,13 +82,18 @@ private:
 	Vector2 beforePos_ = { 0.0f, 0.0f };	// 行動遷移前座標
 	Vector2 beforeBackPos0_ = { 0.0f, 0.0f };// 裏面0行動前座標
 	Vector2 beforeBackPos1_ = { 0.0f, 0.0f };// 裏面0行動前座標
-	uint64_t actionStartTime_ = 0;	// 行動開始時間
-	float time2PreMoveShot_ = 4.0f;	// 移動撃ち前時間
-	float time2MoveShot_ = 10.0f;	// 移動撃ち時間
-	float time2PostMoveShot_ = 4.0f;// 移動撃ち後時間
-	float time2PreSummon_ = 4.0f;	// 召喚前時間
-	float time2Summon_ = 10.0f;		// 召喚する時間
-	float time2PostSummon_ = 4.0f;	// 召喚後時間
+	uint64_t actionStartTime_= 0;	// 行動開始時間
+	float time2PreMoveShot_		= 4.0f;	// 移動撃ち前時間
+	float time2MoveShot_		= 10.0f;// 移動撃ち時間
+	float time2PostMoveShot_	= 4.0f;	// 移動撃ち後時間
+	float time2PreSummon_		= 4.0f;	// 召喚前時間
+	float time2Summon_			= 10.0f;// 召喚する時間
+	float time2PostSummon_		= 4.0f;	// 召喚後時間
+	float time2PreBoomerang_	= 4.0f;	// 召喚前時間
+	float time2Boomerang_		= 10.0f;// 召喚する時間
+	float time2PostBoomerang_	= 4.0f;	// 召喚後時間
+
+	bool isBoomerang_ = false;
 
 #pragma endregion
 
@@ -117,14 +125,16 @@ private:
 	static void (Boss::* stateTable[]) ();
 
 	// 状態別行動
-	void Wait();		// 待機
-	void PreMoveShot();	// 移動撃ち前処理
-	void MoveShot();	// 移動撃ち
-	void PostMoveShot();// 移動撃ち後処理
-	void PreSummon();	// 召喚前準備
-	void Summon();		// 召喚
-	void PostSummon();	// 召喚後処理
-	void Boomerang();	// ブーメラン
+	void Wait();			// 待機
+	void PreMoveShot();		// 移動撃ち前処理
+	void MoveShot();		// 移動撃ち
+	void PostMoveShot();	// 移動撃ち後処理
+	void PreSummon();		// 召喚前準備
+	void Summon();			// 召喚
+	void PostSummon();		// 召喚後処理
+	void PreBoomerang();	// ブーメラン前処理
+	void Boomerang();		// ブーメラン
+	void PostBoomerang();	// ブーメラン後処理
 
 	void BossBackRotate(float rotate);// ボスの裏面回転
 
