@@ -169,11 +169,6 @@ void Boss::Wait()
 {
 	// ƒ{ƒX‚Ì— –Ê‰ñ“]
 	BossBackRotate(basicSpd_);
-
-	float rnd0X = Util::GetRandomFloat(0.0f, 1.0f) * 2.0f - 1.0f;
-	float rnd0Y = Util::GetRandomFloat(0.0f, 1.0f) * 2.0f - 1.0f;
-	emitterBack0_->Add(60, { rnd0X * 100.0f, rnd0Y * 100.0f }, { 0.0f, 0.0f }, { 0.0f, 0.0f }, 32.0f, 0.0f);
-	emitterBack0_->SetPosition({500.0f, 500.0f});
 }
 
 void Boss::PreMoveShot()
