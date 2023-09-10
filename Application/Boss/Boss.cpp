@@ -59,8 +59,8 @@ void Boss::Initialize()
 #pragma endregion
 
 #pragma region パーティクルエミッター
-	emitterBack0_ = std::make_unique<ParticleEmitter2D>(60);
-	emitterBack1_ = std::make_unique<ParticleEmitter2D>(60);
+	emitterBack0_ = std::make_unique<ParticleEmitter2D>(120);
+	emitterBack1_ = std::make_unique<ParticleEmitter2D>(120);
 #pragma endregion
 }
 
@@ -450,6 +450,24 @@ void Boss::Boomerang()
 			beforeBackPos1_ = backPos1_;
 		}
 	}
+
+#pragma region パーティクル
+	for (size_t i = 0; i < 2; i++) {
+		float rnd0X = Util::GetRandomFloat(0.0f, 360.0f);
+		float rnd0Y = Util::GetRandomFloat(0.0f, 360.0f);
+		Vector2 result0 = { cosf(rnd0X), sinf(rnd0Y) };
+		result0.normalize();
+		emitterBack0_->Add(60, { result0.x * 70.0f, result0.y * 70.0f }, { result0.x * 1.5f, result0.y * 1.5f }, { 0.0f, 0.0f }, 32.0f, 0.0f);
+		emitterBack0_->SetPosition(backPos0_);
+
+		float rnd1X = Util::GetRandomFloat(-360.0f, 0.0f);
+		float rnd1Y = Util::GetRandomFloat(-360.0f, 0.0f);
+		Vector2 result1 = { cosf(rnd1X), sinf(rnd1Y) };
+		result1.normalize();
+		emitterBack1_->Add(60, { result1.x * 70.0f, result1.y * 70.0f }, { result1.x * 1.5f, result1.y * 1.5f }, { 0.0f, 0.0f }, 32.0f, 0.0f);
+		emitterBack1_->SetPosition(backPos1_);
+	}
+#pragma endregion
 
 #pragma region 裏面回転
 	// ボスの裏面回転
