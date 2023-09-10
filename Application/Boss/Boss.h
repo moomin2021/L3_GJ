@@ -2,6 +2,7 @@
 #include "Sprite.h"
 #include "BossBullet.h"
 #include "Enemy0.h"
+#include "ParticleEmitter2D.h"
 
 #include <memory>
 #include <string>
@@ -42,6 +43,7 @@ private:
 	// 画像ハンドル
 	uint16_t hBossBack_ = 0;
 	uint16_t hBossFront_ = 0;
+	uint16_t hParticle_ = 0;
 
 	// 状態
 	State state_ = WAIT;
@@ -56,6 +58,9 @@ private:
 	float sinMove_ = 0.0f;	// sin関数に渡す数値
 	float sinSpd_ = 0.05f;	// sin値の加算速度
 
+	// パーティクルエミッター
+	std::unique_ptr<ParticleEmitter2D> emitterBack0_ = nullptr;
+	std::unique_ptr<ParticleEmitter2D> emitterBack1_ = nullptr;
 
 	// ボス裏面の角度
 	float rotateBossBack0_ = 0.0f;

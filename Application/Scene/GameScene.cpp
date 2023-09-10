@@ -65,9 +65,6 @@ void GameScene::Initialize()
 	// UIマネージャー
 	uiMgr_ = std::make_unique<UIManager>();
 	uiMgr_->Initialize();
-
-	emitter_ = std::make_unique<ParticleEmitter2D>();
-	emitter_->SetPosition({ 500.0f, 500.0f });
 }
 
 void GameScene::Update()
@@ -92,15 +89,6 @@ void GameScene::Update()
 	//}
 
 	Piece::CreatePiece();
-
-	//emitter_->Add(120, { 0.0f, 0.0f }, { 2.0f, 2.0f }, {1.0f, 1.0f}, 1.0f, 0.0f);
-	static int num = 0;
-	num++;
-	if (num % 200 == 0) {
-		emitter_->Add(120, { 0.0f, 0.0f }, { 100.0f, 100.0f }, { 00.0f, 0.0f }, 100.0f, 0.0f);
-	}
-
-	emitter_->Update();
 
 	// 衝突時処理
 	OnCollision();
@@ -129,11 +117,6 @@ void GameScene::Draw()
 
 	// ボス
 	boss_->Draw();
-
-	PipelineManager::PreDraw("Particle2D", D3D10_PRIMITIVE_TOPOLOGY_POINTLIST);
-
-	emitter_->Draw(particleHandle_);
-
 
 	PipelineManager::PreDraw("Sprite");
 
