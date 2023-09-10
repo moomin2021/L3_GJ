@@ -93,7 +93,7 @@ void GameScene::Update()
 	//emitter_->Add(120, { 0.0f, 0.0f }, { 2.0f, 2.0f }, {1.0f, 1.0f}, 1.0f, 0.0f);
 	static int num = 0;
 	num++;
-	if (num % 200 == 0) {
+	if (num % 50 == 0) {
 		emitter_->Add(120, { 0.0f, 0.0f }, { 100.0f, 100.0f }, { 00.0f, 0.0f }, 100.0f, 0.0f);
 	}
 

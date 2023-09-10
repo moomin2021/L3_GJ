@@ -2,6 +2,7 @@
 #include "Texture.h"
 #include "Util.h"
 #include "Easing.h"
+#include "PipelineManager.h"
 
 #include <imgui_impl_DX12.h>
 
@@ -37,6 +38,7 @@ void Boss::Initialize()
 #pragma region 画像ハンドル
 	hBossBack_ = LoadTexture("Resources/boss_back.png");
 	hBossFront_ = LoadTexture("Resources/boss_Front.png");
+	hParticle_ = LoadTexture("Resources/boss_Front.png");
 #pragma endregion
 
 #pragma region BossBullet
@@ -50,6 +52,11 @@ void Boss::Initialize()
 #pragma region Enemy0
 	Enemy0::SetBackHandle(LoadTexture("Resources/enemy_back.png"));
 	Enemy0::SetFrontHandle(LoadTexture("Resources/enemy_front.png"));
+#pragma endregion
+
+#pragma region パーティクルエミッター
+	emitterBack0_ = std::make_unique<ParticleEmitter2D>();
+	emitterBack1_ = std::make_unique<ParticleEmitter2D>();
 #pragma endregion
 }
 
@@ -88,6 +95,8 @@ void Boss::Update()
 
 void Boss::Draw()
 {
+	PipelineManager::PreDraw("Sprite");
+
 	sBossBack0_->Draw(hBossBack_);// ボス裏面0
 	sBossBack1_->Draw(hBossBack_);// ボス裏面1
 	sBossFront_->Draw(hBossFront_);// ボス表面
@@ -101,6 +110,11 @@ void Boss::Draw()
 	for (auto& it : enemys_) {
 		it->Draw();
 	}
+
+	PipelineManager::PreDraw("Particle2D", D3D10_PRIMITIVE_TOPOLOGY_POINTLIST);
+
+	emitterBack0_->Draw(hParticle_);
+	emitterBack1_->Draw(hParticle_);
 }
 
 void Boss::OnCollision()
@@ -131,6 +145,11 @@ void Boss::MatUpdate()
 	for (auto& it : enemys_) {
 		it->MatUpdate();
 	}
+
+#pragma region パーティクルエミッター
+	emitterBack0_->Update();
+	emitterBack1_->Update();
+#pragma endregion
 }
 
 void (Boss::* Boss::stateTable[]) () = {
@@ -282,6 +301,18 @@ void Boss::Summon()
 {
 	// ボスの裏面回転
 	BossBackRotate(summonRotaSpd_);
+
+#pragma region パーティクル
+	float rnd0X = Util::GetRandomFloat(0.0f, 1.0f) * 2.0f - 1.0f;
+	float rnd0Y = Util::GetRandomFloat(0.0f, 1.0f) * 2.0f - 1.0f;
+	emitterBack0_->Add(60, { 0.0f, 0.0f }, {0.0f, 0.0f}, { 30.0f * rnd0X, 30.0f * rnd0Y }, 32.0f, 0.0f);
+	emitterBack0_->SetPosition(backPos0_);
+
+	float rnd1X = Util::GetRandomFloat(0.0f, 1.0f) * 2.0f - 1.0f;
+	float rnd1Y = Util::GetRandomFloat(0.0f, 1.0f) * 2.0f - 1.0f;
+	emitterBack1_->Add(60, { 0.0f, 0.0f }, {0.0f, 0.0f}, { 30.0f * rnd1X, 30.0f * rnd1Y }, 32.0f, 0.0f);
+	emitterBack1_->SetPosition(backPos1_);
+#pragma endregion
 
 #pragma region sin関数で移動処理
 	sinMove_ += sinSpd_;
