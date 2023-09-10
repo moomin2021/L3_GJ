@@ -70,9 +70,13 @@ private:
 	float afterRot = 0;
 	float childRotation = 0;
 
-
+	//回転のイージング用パラメータ
 	const float easeTimeMax = 15;
 	float rotEaseTime = easeTimeMax;
+
+	int healthMax = 10;
+
+	int health = healthMax;
 
 	//デバッグ用
 	int debugBlockOffsetX = 0;
