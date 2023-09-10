@@ -44,6 +44,9 @@ void GameScene::Initialize()
 	player = std::make_unique<Player>();
 	player->Initialize(playerTex,{96,(float)WinAPI::GetInstance()->GetHeight()/2});
 
+	//自機の弾のテクスチャの読み込みとセット
+	PlayerBullet::SetBulletTex(LoadTexture("Resources/bullet_player.png"));
+
 	//プレイヤーとピース配列のセット
 	Block::SetPlayer(player.get());
 	Block::SetPiece(&Piece::pieces);
@@ -85,7 +88,14 @@ void GameScene::Update()
 	//	pieces.push_back(std::move(newPiece));
 	//}
 
-	Piece::CreatePiece();
+	if (ImGui::Button("add piece")) {
+		Piece::CreatePiece();
+	}
+
+	//ボタン押下でピース発生
+	if (Key::GetInstance()->TriggerKey(DIK_P)) {
+		Piece::CreatePiece();
+	}
 
 	// 衝突時処理
 	OnCollision();

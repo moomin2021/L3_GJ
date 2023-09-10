@@ -77,11 +77,11 @@ void Piece::Draw()
 
 void Piece::CreatePiece()
 {
-	if (ImGui::Button("add piece")) {
+
 		std::unique_ptr<Piece> newPiece = std::make_unique<Piece>();
 		newPiece->Initialize();
 		pieces.push_back(std::move(newPiece));
-	}
+	
 }
 
 void Piece::OnCollision()
