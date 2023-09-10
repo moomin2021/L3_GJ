@@ -9,11 +9,10 @@
 #include "RayCollider.h"
 #include "MeshCollider.h"
 #include "SphereCollider.h"
-#include "TestPlayer.h"
-#include "TestEnemy.h"
 #include"Player.h"
 #include"Piece.h"
 #include "Boss.h"
+#include "UIManager.h"
 
 #include <memory>
 
@@ -39,6 +38,9 @@ private:
 	//背景テクスチャとスプライト
 	uint16_t backGroundTexture = 0;
 	std::unique_ptr<Sprite> backGroundSprite = nullptr;
+
+	// UIマネージャー
+	std::unique_ptr<UIManager> uiMgr_ = nullptr;
 
 	// --メンバ関数-- //
 public:

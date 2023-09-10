@@ -7,9 +7,9 @@
 
 // シーン列挙型
 enum SCENE {
-	SCENE2,
-	SCENE3,
+	TITLE,
 	GAME,
+	RESULT,
 };
 
 enum PostEffectType {
@@ -48,15 +48,15 @@ public:
 	// 描画処理
 	void Draw();
 
+	// シーン切り替え
+	void ChangeScene(int changeSceneNum);
+
 private:
 	// コンストラクタ
 	SceneManager();
 
 	// デストラクタ
 	~SceneManager();
-
-	// シーン切り替え
-	void ChangeScene(int changeSceneNum);
 
 	// --禁止-- //
 public:

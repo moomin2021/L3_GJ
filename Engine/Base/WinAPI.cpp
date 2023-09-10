@@ -54,7 +54,7 @@ void WinAPI::Initialize(uint16_t winWidth, uint16_t winHeight)
 	winRect_ = { 0, 0, winWidth, winHeight };
 
 	// 自動でサイズを補正する
-	AdjustWindowRect(&winRect_, WS_OVERLAPPEDWINDOW, false);
+	AdjustWindowRect(&winRect_, WS_POPUP, false);
 
 	// ウィンドウオブジェクトの生成
 	CreateWindowObj();
