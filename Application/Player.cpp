@@ -31,6 +31,7 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	//‘®«‚Â‚¯‚é
 	collider->SetAttribute(COL_PLAYER);
 	collider->SetSprite(sprite.get());
+	collider->SetTag(-1);
 	//ƒ}ƒl[ƒWƒƒ‚É“o˜^
 	colManager->AddCollider(collider.get());
 
