@@ -298,7 +298,7 @@ void Player::UpdateOffset()
 void Player::BlockReset()
 {
 	//Aボタントリガーでリセット
-	if (pad->GetTriggerButton(BUTTON::PAD_A)) {
+	if (pad->GetTriggerButton(BUTTON::PAD_A) || key->TriggerKey(DIK_SPACE)) {
 		//配列にあるブロックの数を保存
 		int blockCount = (int)blocks.size();
 

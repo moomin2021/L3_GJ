@@ -16,8 +16,16 @@ void Piece::Initialize()
 	uint16_t pieceTag = (uint16_t)pieces.size();
 
 	ParentData* parent = new ParentData();
-	parentPos = { (float)WinAPI::GetInstance()->GetWidth(),Util::GetRandomFloat(640,WinAPI::GetInstance()->GetHeight() - 320.0f) };
 
+	//cŽ²‚Ìƒ^ƒCƒ‹‚Ì”
+	int tileVertical = WinAPI::GetInstance()->GetHeight() / (int)Block::GetBlockSize().y;
+	//ã‰º‚ÌUI•ªŒ¸‚ç‚·
+	tileVertical -= 6;
+
+	Vector2 parentOffset = { 64.0f,(float)Util::GetRandomInt(3,tileVertical) };
+
+	parentPos.x = parentOffset.x * Block::GetBlockSize().x;
+	parentPos.y = parentOffset.y * Block::GetBlockSize().y + (Block::GetBlockSize().y/2.0f);
 
 	parent->parentPos = parentPos;
 	parent->parentRot = rotation;

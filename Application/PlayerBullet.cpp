@@ -30,8 +30,8 @@ void PlayerBullet::Update()
 	pos = sprite->GetPosition();
 	pos += vel;
 
-	ImGui::Text("vel %f,%f", vel.x, vel.y);
-	ImGui::Text("pos %f,%f", pos.x, pos.y);
+	//ImGui::Text("vel %f,%f", vel.x, vel.y);
+	//ImGui::Text("pos %f,%f", pos.x, pos.y);
 
 	sprite->SetPosition(pos);
 	sprite->MatUpdate();
