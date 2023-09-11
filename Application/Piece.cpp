@@ -69,17 +69,11 @@ void Piece::Initialize()
 
 void Piece::Update()
 {
-	//数フレームに1回移動
-	if (moveCoolTime > 0) {
-		moveCoolTime--;
-	}
-	else {
-		moveCoolTime = moveCoolTimeMax;
-		parentPos.x -= baseSpd;
-	}
 
+
+	parentPos.x -= baseSpd;
 	//parentPos.x -= baseSpd;
-	ImGui::Text("pos %f,%f", parentPos.x, parentPos.y);
+	//ImGui::Text("pos %f,%f", parentPos.x, parentPos.y);
 
 	//ImGui::Text("piece tag :%d", pieceTag);
 
@@ -110,9 +104,18 @@ void Piece::CreatePiece()
 void Piece::ALlPieceUpdate()
 {
 	//ピースの更新とボタンで生成
-	for (size_t i = 0; i < Piece::pieces.size(); i++) {
-		pieces[i]->Update();
+		//数フレームに1回移動
+	if (moveCoolTime > 0) {
+		moveCoolTime--;
 	}
+	else {
+		moveCoolTime = moveCoolTimeMax;
+		for (size_t i = 0; i < Piece::pieces.size(); i++) {
+			pieces[i]->Update();
+		}
+	}
+
+	
 
 	ImGui::Text("piece size %d", Piece::pieces.size());
 

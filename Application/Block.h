@@ -90,6 +90,8 @@ private://ƒƒ“ƒo•Ï”
 
 	Vector2 currentOffset{ 0,0 };
 
+	Vector2 oldPos{ 0,0 };
+
 	std::unique_ptr<Sprite> sprite = nullptr;
 	BlockData blockData = BlockData::None;
 	ParentData* parent = nullptr;

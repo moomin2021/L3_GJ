@@ -17,6 +17,9 @@ public:
 	//更新
 	void Update();
 
+	//行列の更新
+	void MatUpdate();
+
 	//描画
 	void Draw();
 
@@ -67,6 +70,7 @@ private:
 
 	//座標
 	Vector2 position{0,0};
+	Vector2 oldPos{ 0,0 };
 
 	//テクスチャ
 	uint16_t texIndex = 0;
@@ -98,7 +102,6 @@ private:
 	//レベル関係パラメータ
 	int currentEXP = 0;
 	int level = 1;
-
 
 	//デバッグ用
 	int debugBlockOffsetX = 0;

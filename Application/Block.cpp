@@ -93,6 +93,9 @@ void Block::Update()
 	}
 
 	Vector2 pos = parent->parentPos;
+
+	oldPos = sprite->GetPosition();
+
 	Vector2 vecB;
 
 	//親からのオフセットで角度を作成
@@ -187,11 +190,13 @@ void Block::OnCollison()
 		//衝突対象がプレイヤー
 		if (collider->GetHitCollider()->GetAttribute() == COL_PLAYER && collider->GetAttribute() == COL_BLOCK) {
 
+			
+
 			Vector2 hitOffset{ 0,0 };
 			Vector2 tileOffsetBefore = parent->tileOffset;
 
-			//プレイヤーから自分へのベクトル(プレイヤからみてどこにくっつくか判定するため、)
-			Vector2 vecP = collider->GetPosition() - collider->GetHitCollider()->GetPosition();
+			//プレイヤーから自分へのベクトル(プレイヤからみてどこにくっつくか判定するため)
+			Vector2 vecP = oldPos - collider->GetHitCollider()->GetPosition();
 			//x成分とy成分の絶対値を比較し、縦につくか横につくか決める
 			if (fabs(vecP.x) > fabs(vecP.y)) {
 				//x成分のほうが大きい場合

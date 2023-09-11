@@ -60,13 +60,19 @@ void Player::Update()
 	//ブロックリセット
 	BlockReset();
 
-	sprite->MatUpdate();
-	UpdateBlocks();
+	/*sprite->MatUpdate();
+	UpdateBlocks();*/
 
 	ImGui::Text("pos %f,%f", position.x, position.y);
 	ImGui::Text("health %d", health);
 	ImGui::Text("Lv.%d : EXP %d", level, currentEXP);
 
+}
+
+void Player::MatUpdate()
+{
+	sprite->MatUpdate();
+	UpdateBlocks();
 }
 
 void Player::Draw()
@@ -129,12 +135,17 @@ void Player::OnCollision()
 
 void Player::Move()
 {
+	
+
 	//パッド入力で移動
 	//数フレームに一回
 	if (moveCoolTime > 0) {
 		moveCoolTime--;
 	}
 	else {
+
+		//前フレームの座標を保存
+		oldPos = sprite->GetPosition();
 
 		Vector2 spd;
 		spd = pad->GetLStick() * baseSpd;

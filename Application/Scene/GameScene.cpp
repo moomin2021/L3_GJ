@@ -42,7 +42,7 @@ void GameScene::Initialize()
 
 	// プレイヤー
 	Vector2 playerPos = { Block::GetBlockSize().x * 3.0f + (Block::GetBlockSize().x / 2.0f),
-	((float)WinAPI::GetInstance()->GetHeight() / 2) - (Block::GetBlockSize().y / 2.0f) };
+	Block::GetBlockSize().y * 15.0f - (Block::GetBlockSize().y / 2.0f) };
 
 
 	player = std::make_unique<Player>();
@@ -73,6 +73,7 @@ void GameScene::Initialize()
 
 void GameScene::Update()
 {
+
 	// プレイヤー
 	player->Update();
 
@@ -80,6 +81,8 @@ void GameScene::Update()
 	boss_->Update();
 
 	Piece::ALlPieceUpdate();
+
+
 
 	// 衝突時処理
 	OnCollision();
@@ -119,6 +122,9 @@ void GameScene::MatUpdate()
 {
 	// カメラの更新
 	camera_->Update();
+
+	//プレイヤー
+	player->MatUpdate();
 
 	// ボス
 	boss_->MatUpdate();
