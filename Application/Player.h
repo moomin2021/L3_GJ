@@ -2,6 +2,7 @@
 #include"Block.h"
 #include<vector>
 #include"Pad.h"
+#include"Key.h"
 #include"CircleCollider.h"
 #include"CollisionManager2D.h"
 #include"PlayerBullet.h"
@@ -59,7 +60,7 @@ private:
 
 	Pad* pad = nullptr;
 
-
+	Key* key = nullptr;
 
 	//本体のスプライト
 	std::unique_ptr<Sprite> sprite;

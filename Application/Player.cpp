@@ -18,6 +18,7 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	rotation = 0;
 
 	pad = Pad::GetInstance();
+	key = Key::GetInstance();
 
 	colManager = CollisionManager2D::GetInstance();
 
@@ -127,6 +128,13 @@ void Player::Move()
 	//パッド入力で移動
 	Vector2 spd;
 	spd = pad->GetLStick() * baseSpd;
+
+	if (key->PushKey(DIK_W) || key->PushKey(DIK_A) || key->PushKey(DIK_S) || key->PushKey(DIK_D)) {
+		spd.x = (key->PushKey(DIK_D) - key->PushKey(DIK_A)) * baseSpd;
+		spd.y = (key->PushKey(DIK_W) - key->PushKey(DIK_S)) * baseSpd;
+	}
+
+
 	spd.y = -spd.y;
 
 	position = sprite->GetPosition();
@@ -172,12 +180,12 @@ void Player::Rotate()
 	else {
 		//ボタンのトリガーで回転を検知
 		//LBキーで左回転、RBキーで右回転
-		if (pad->GetTriggerButton(PAD_LB)) {
+		if (pad->GetTriggerButton(PAD_LB) || key->TriggerKey(DIK_J)) {
 			beforeRot = sprite->GetRotation();
 			afterRot = beforeRot - 90.0f;
 			rotEaseTime = 0;
 		}
-		else if (pad->GetTriggerButton(PAD_RB)) {
+		else if (pad->GetTriggerButton(PAD_RB) || key->TriggerKey(DIK_K)) {
 			beforeRot = sprite->GetRotation();
 			afterRot = beforeRot + 90.0f;
 			rotEaseTime = 0;
