@@ -330,6 +330,9 @@ void Player::BlockReset()
 		currentEXP += blockCount;
 
 		//”z—ñ‚ğƒNƒŠƒA
+		for (size_t i = 0; i < blocks.size(); i++) {
+			blocks[i]->SetAlive(false);
+		}
 		blocks.clear();
 
 	}

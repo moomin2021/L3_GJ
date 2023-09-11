@@ -44,7 +44,14 @@ public://静的メンバ関数
 	static void SetPlayer(Player* player);
 	static void SetPiece(std::vector < std::unique_ptr<Piece>>* pieces);
 
+	static size_t GetBlockCount() { return pAllBlock.size(); }
+
+	static void AllBlockDeleteCheck();
+
 public://メンバ関数
+
+
+	~Block();
 
 	/// <summary>
 	/// ブロックの初期化
@@ -70,6 +77,8 @@ public://メンバ関数
 	void OffsetUpdate();
 
 	Vector2 GetPosition()const { return sprite->GetPosition(); }
+
+	void SetAlive(bool alive) { isAlive = alive; }
 
 private://静的メンバ変数
 	static uint16_t cannonTexture;
@@ -98,7 +107,11 @@ private://メンバ変数
 
 	uint16_t colliderTag = 0;
 
+	bool isAlive = false;
+
 private: //静的メンバ関数
+
+
 
 	void ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag,uint16_t parentTag,const Vector2& hitOffset);
 };
