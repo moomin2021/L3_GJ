@@ -28,6 +28,8 @@ private:
 	uint16_t hTitleLogo_ = 0;
 	uint16_t hPressA_ = 0;
 
+	uint16_t soundHandle_ = 0;
+
 #pragma endregion
 
 #pragma region ƒƒ“ƒoŠÖ”

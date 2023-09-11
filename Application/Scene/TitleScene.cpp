@@ -2,6 +2,7 @@
 #include "PipelineManager.h"
 #include "Texture.h"
 #include "SceneManager.h"
+#include "Sound.h"
 
 TitleScene::TitleScene() {}
 
@@ -42,6 +43,8 @@ void TitleScene::Initialize()
 	hTitleLogo_ = LoadTexture("Resources/title_logo.png");
 	hPressA_ = LoadTexture("Resources/pressA.png");
 #pragma endregion
+
+	soundHandle_ = Sound::GetInstance()->LoadWave("Resources/Sound/a.wav");
 }
 
 void TitleScene::Update()
