@@ -130,22 +130,33 @@ void Player::OnCollision()
 void Player::Move()
 {
 	//パッド入力で移動
-	Vector2 spd;
-	spd = pad->GetLStick() * baseSpd;
+	//数フレームに一回
+	if (moveCoolTime > 0) {
+		moveCoolTime--;
+	}
+	else {
 
-	if (key->PushKey(DIK_W) || key->PushKey(DIK_A) || key->PushKey(DIK_S) || key->PushKey(DIK_D)) {
-		spd.x = (key->PushKey(DIK_D) - key->PushKey(DIK_A)) * baseSpd;
-		spd.y = (key->PushKey(DIK_W) - key->PushKey(DIK_S)) * baseSpd;
+		Vector2 spd;
+		spd = pad->GetLStick() * baseSpd;
+
+		if (key->PushKey(DIK_W) || key->PushKey(DIK_A) || key->PushKey(DIK_S) || key->PushKey(DIK_D)) {
+			spd.x = (key->PushKey(DIK_D) - key->PushKey(DIK_A)) * baseSpd;
+			spd.y = (key->PushKey(DIK_W) - key->PushKey(DIK_S)) * baseSpd;
+			moveCoolTime = moveCoolTimeMax;
+		}
+
+
+		spd.y = -spd.y;
+
+		position = sprite->GetPosition();
+
+		position += spd;
+
+		sprite->SetPosition(position);
+
 	}
 
-
-	spd.y = -spd.y;
-
-	position = sprite->GetPosition();
-
-	position += spd;
-
-	sprite->SetPosition(position);
+	ImGui::SliderInt("move cooltime", &moveCoolTimeMax, 1, 15);
 }
 
 void Player::Rotate()

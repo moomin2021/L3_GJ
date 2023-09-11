@@ -41,8 +41,12 @@ void GameScene::Initialize()
 	Block::StaticInitialize(blockTex, cannonTex, { 32,32 });
 
 	// プレイヤー
+	Vector2 playerPos = { Block::GetBlockSize().x * 3.0f + (Block::GetBlockSize().x / 2.0f),
+	((float)WinAPI::GetInstance()->GetHeight() / 2) - (Block::GetBlockSize().y / 2.0f) };
+
+
 	player = std::make_unique<Player>();
-	player->Initialize(playerTex,{96,(float)WinAPI::GetInstance()->GetHeight()/2});
+	player->Initialize(playerTex,playerPos);
 
 	//自機の弾のテクスチャの読み込みとセット
 	PlayerBullet::SetBulletTex(LoadTexture("Resources/bullet_player.png"));

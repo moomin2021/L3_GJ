@@ -71,8 +71,11 @@ private:
 	//ƒeƒNƒXƒ`ƒƒ
 	uint16_t texIndex = 0;
 
-	//‘¬“x
-	const float baseSpd = 8.0f;
+	//ˆÚ“®ŠÖŒW
+	const float baseSpd = 32.0f;
+	int moveCoolTimeMax = 1;
+	int moveCoolTime = moveCoolTimeMax;
+
 
 	//‰ñ“]Šp
 	float rotation = 0;
