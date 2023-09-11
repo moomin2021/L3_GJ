@@ -41,6 +41,15 @@ void Block::SetPiece(std::vector<std::unique_ptr<Piece>>* pieces)
 	Block::pieces = pieces;
 }
 
+void Block::AllBlockDeleteCheck()
+{
+	for (size_t i = 0; i < pAllBlock.size(); i++) {
+		if (!pAllBlock[i]->isAlive) {
+			pAllBlock.erase(pAllBlock.begin() + i);
+		}
+	}
+}
+
 void Block::Initialize(const BlockData& blockData, ParentData* parent)
 {
 	this->blockData = blockData;
@@ -69,7 +78,7 @@ void Block::Initialize(const BlockData& blockData, ParentData* parent)
 	colliderTag = blockTag;
 	collider->SetTag(colliderTag);
 
-
+	isAlive = true;
 }
 
 
@@ -236,6 +245,11 @@ void Block::OnCollison()
 }
 
 
+
+Block::~Block()
+{
+	CollisionManager2D::GetInstance()->RemoveCollider(collider.get());
+}
 
 void Block::ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag, uint16_t parentTag, const Vector2& hitOffset)
 {

@@ -81,8 +81,9 @@ void GameScene::Update()
 	boss_->Update();
 
 	Piece::ALlPieceUpdate();
+	ImGui::Text("all block %d,", (int)Block::GetBlockCount());
 
-
+	Block::AllBlockDeleteCheck();
 
 	// Õ“Ëˆ—
 	OnCollision();
