@@ -16,7 +16,7 @@
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// WinAPI‚Ì‰Šú‰»
-	WinAPI::GetInstance()->Initialize(1856, 1024);
+	WinAPI::GetInstance()->Initialize(1856, 960);
 
 	// DirectX12‚Ì‰Šú‰»
 	DX12Cmd::GetInstance()->Initialize();
