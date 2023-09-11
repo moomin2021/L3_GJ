@@ -7,7 +7,7 @@
 //Ã“Iƒƒ“ƒo‚ÌÀ‘Ô
 std::vector < std::unique_ptr<Piece>> Piece::pieces;
 
-int Piece::moveCoolTimeMax = 15;
+int Piece::moveCoolTimeMax = 4;
 int Piece::moveCoolTime = Piece::moveCoolTimeMax;
 float Piece::baseSpd = 32.0f;
 
