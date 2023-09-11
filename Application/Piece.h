@@ -19,12 +19,19 @@ public:
 
 	static void CreatePiece();
 
+	static void ALlPieceUpdate();
+
 	void OnCollision();
 
 public:
 
 	//全ピース
 	static std::vector < std::unique_ptr<Piece>> pieces;
+
+	//進行速度
+	static int moveCoolTimeMax;
+	static int moveCoolTime;
+	static float baseSpd;
 
 private:
 
@@ -35,8 +42,10 @@ private:
 	//子ブロック配列
 	std::vector<Block*> childBlocks;
 
-	//進行速度
-	const float baseSpd = 8.0f;
+
+
+
+
 
 	//回転角
 	float rotation = 0;
