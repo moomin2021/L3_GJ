@@ -142,6 +142,8 @@ void GameScene::OnCollision()
 	// ƒ{ƒX
 	boss_->OnCollision();
 
+	player->OnCollision();
+
 	//”»’è
 	for (size_t i = 0; i < Piece::pieces.size(); i++) {
 		Piece::pieces[i]->OnCollision();

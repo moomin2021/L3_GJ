@@ -107,6 +107,8 @@ private:
 	int debugBlockOffsetX = 0;
 	int debugBlockOffsetY = 0;
 
+	Block* playerBlock = nullptr;
+
 	//ブロック配列
 	std::vector < Block* > blocks;
 
