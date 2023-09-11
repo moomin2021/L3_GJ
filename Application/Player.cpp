@@ -18,11 +18,16 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	rotation = 0;
 
 	pad = Pad::GetInstance();
+	key = Key::GetInstance();
 
 	colManager = CollisionManager2D::GetInstance();
 
 	//コライダーのセット
-	collider = std::make_unique<CircleCollider>(Vector2{ 0,0 }, Block::GetBlockSize().x / 2.0f);
+	Vector2 size = Block::GetBlockSize();
+	//判定は実際の大きさの90％に
+	size *= 0.9f; 
+
+	collider = std::make_unique<BoxCollider>(Vector2{ 0,0 }, Vector2(size.x / 2.0f, size.y / 2.0f));
 	//属性つける
 	collider->SetAttribute(COL_PLAYER);
 	collider->SetSprite(sprite.get());
@@ -125,15 +130,33 @@ void Player::OnCollision()
 void Player::Move()
 {
 	//パッド入力で移動
-	Vector2 spd;
-	spd = pad->GetLStick() * baseSpd;
-	spd.y = -spd.y;
+	//数フレームに一回
+	if (moveCoolTime > 0) {
+		moveCoolTime--;
+	}
+	else {
 
-	position = sprite->GetPosition();
+		Vector2 spd;
+		spd = pad->GetLStick() * baseSpd;
 
-	position += spd;
+		if (key->PushKey(DIK_W) || key->PushKey(DIK_A) || key->PushKey(DIK_S) || key->PushKey(DIK_D)) {
+			spd.x = (key->PushKey(DIK_D) - key->PushKey(DIK_A)) * baseSpd;
+			spd.y = (key->PushKey(DIK_W) - key->PushKey(DIK_S)) * baseSpd;
+			moveCoolTime = moveCoolTimeMax;
+		}
 
-	sprite->SetPosition(position);
+
+		spd.y = -spd.y;
+
+		position = sprite->GetPosition();
+
+		position += spd;
+
+		sprite->SetPosition(position);
+
+	}
+
+	ImGui::SliderInt("move cooltime", &moveCoolTimeMax, 1, 15);
 }
 
 void Player::Rotate()
@@ -155,7 +178,7 @@ void Player::Rotate()
 	//timeRateが1以下なら補間
 	if (timerate <= 1.0f) {
 
-		
+
 
 		rotation = beforeRot + Easing::Circ::easeOut(0.0f, childRotation, timerate);
 
@@ -172,12 +195,12 @@ void Player::Rotate()
 	else {
 		//ボタンのトリガーで回転を検知
 		//LBキーで左回転、RBキーで右回転
-		if (pad->GetTriggerButton(PAD_LB)) {
+		if (pad->GetTriggerButton(PAD_LB) || key->TriggerKey(DIK_J)) {
 			beforeRot = sprite->GetRotation();
 			afterRot = beforeRot - 90.0f;
 			rotEaseTime = 0;
 		}
-		else if (pad->GetTriggerButton(PAD_RB)) {
+		else if (pad->GetTriggerButton(PAD_RB) || key->TriggerKey(DIK_K)) {
 			beforeRot = sprite->GetRotation();
 			afterRot = beforeRot + 90.0f;
 			rotEaseTime = 0;
@@ -272,7 +295,7 @@ void Player::UpdateBlocks()
 		//親の座標と回転角を更新し続ける
 		ParentData* parent = blocks[i]->GetParent();
 		parent->parentPos = position;
-	//	parent->parentRot = &rotation;
+		//	parent->parentRot = &rotation;
 		blocks[i]->SetParent(parent);
 		blocks[i]->Update();
 		ImGui::Text("blocks[%d]offset:%1.f,%1.f", i, blocks[i]->GetOffset().x, blocks[i]->GetOffset().y);
@@ -286,7 +309,7 @@ void Player::UpdateOffset()
 void Player::BlockReset()
 {
 	//Aボタントリガーでリセット
-	if (pad->GetTriggerButton(BUTTON::PAD_A)) {
+	if (pad->GetTriggerButton(BUTTON::PAD_A) || key->TriggerKey(DIK_SPACE)) {
 		//配列にあるブロックの数を保存
 		int blockCount = (int)blocks.size();
 

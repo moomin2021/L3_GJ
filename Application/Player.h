@@ -2,7 +2,8 @@
 #include"Block.h"
 #include<vector>
 #include"Pad.h"
-#include"CircleCollider.h"
+#include"Key.h"
+#include"BoxCollider.h"
 #include"CollisionManager2D.h"
 #include"PlayerBullet.h"
 
@@ -59,7 +60,7 @@ private:
 
 	Pad* pad = nullptr;
 
-
+	Key* key = nullptr;
 
 	//本体のスプライト
 	std::unique_ptr<Sprite> sprite;
@@ -70,8 +71,11 @@ private:
 	//テクスチャ
 	uint16_t texIndex = 0;
 
-	//速度
-	const float baseSpd = 8.0f;
+	//移動関係
+	const float baseSpd = 32.0f;
+	int moveCoolTimeMax = 2;
+	int moveCoolTime = moveCoolTimeMax;
+
 
 	//回転角
 	float rotation = 0;
@@ -106,7 +110,7 @@ private:
 	//マネージャ
 	CollisionManager2D* colManager = nullptr;
 	//コライダー
-	std::unique_ptr<CircleCollider> collider = nullptr;
+	std::unique_ptr<BoxCollider> collider = nullptr;
 
 };
 

@@ -2,8 +2,14 @@
 #include"WinAPI.h"
 #include"Util.h"
 #include<imgui_impl_dx12.h>
+#include"Key.h"
 
+//静的メンバの実態
 std::vector < std::unique_ptr<Piece>> Piece::pieces;
+
+int Piece::moveCoolTimeMax = 4;
+int Piece::moveCoolTime = Piece::moveCoolTimeMax;
+float Piece::baseSpd = 32.0f;
 
 void Piece::Initialize()
 {
@@ -16,8 +22,16 @@ void Piece::Initialize()
 	uint16_t pieceTag = (uint16_t)pieces.size();
 
 	ParentData* parent = new ParentData();
-	parentPos = { (float)WinAPI::GetInstance()->GetWidth(),Util::GetRandomFloat(640,WinAPI::GetInstance()->GetHeight() - 320.0f) };
 
+	//縦軸のタイルの数
+	int tileVertical = WinAPI::GetInstance()->GetHeight() / (int)Block::GetBlockSize().y;
+	//上下のUI分減らす
+	tileVertical -= 6;
+
+	Vector2 parentOffset = { 64.0f,(float)Util::GetRandomInt(3,tileVertical) };
+
+	parentPos.x = parentOffset.x * Block::GetBlockSize().x + (Block::GetBlockSize().x / 2.0f);
+	parentPos.y = parentOffset.y * Block::GetBlockSize().y + (Block::GetBlockSize().y/2.0f);
 
 	parent->parentPos = parentPos;
 	parent->parentRot = rotation;
@@ -55,7 +69,16 @@ void Piece::Initialize()
 
 void Piece::Update()
 {
-	parentPos.x -= baseSpd;
+	//数フレームに1回移動
+	if (moveCoolTime > 0) {
+		moveCoolTime--;
+	}
+	else {
+		moveCoolTime = moveCoolTimeMax;
+		parentPos.x -= baseSpd;
+	}
+
+	//parentPos.x -= baseSpd;
 	ImGui::Text("pos %f,%f", parentPos.x, parentPos.y);
 
 	//ImGui::Text("piece tag :%d", pieceTag);
@@ -82,6 +105,36 @@ void Piece::CreatePiece()
 		newPiece->Initialize();
 		pieces.push_back(std::move(newPiece));
 	
+}
+
+void Piece::ALlPieceUpdate()
+{
+	//ピースの更新とボタンで生成
+	for (size_t i = 0; i < Piece::pieces.size(); i++) {
+		pieces[i]->Update();
+	}
+
+	ImGui::Text("piece size %d", Piece::pieces.size());
+
+	ImGui::SliderInt("moveCoolTime", &moveCoolTimeMax, 1, 60);
+
+	//UとIでクールタイムを増減
+	if (Key::GetInstance()->TriggerKey(DIK_U)) {
+		moveCoolTimeMax--;
+	}
+	else if (Key::GetInstance()->TriggerKey(DIK_I)) {
+		moveCoolTimeMax++;
+	}
+
+
+	if (ImGui::Button("add piece")) {
+		CreatePiece();
+	}
+
+	//ボタン押下でピース発生
+	if (Key::GetInstance()->TriggerKey(DIK_P)) {
+		CreatePiece();
+	}
 }
 
 void Piece::OnCollision()

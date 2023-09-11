@@ -53,7 +53,7 @@ void TitleScene::Update()
 	MatUpdate();
 
 	// Aボタンを押したらゲームシーンに切り替える
-	if (pad_->GetTriggerButton(PAD_A)) {
+	if (pad_->GetTriggerButton(PAD_A) || Key::GetInstance()->TriggerKey(DIK_SPACE)) {
 		SceneManager::GetInstance()->ChangeScene(SCENE::GAME);
 	}
 }

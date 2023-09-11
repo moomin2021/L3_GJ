@@ -41,8 +41,12 @@ void GameScene::Initialize()
 	Block::StaticInitialize(blockTex, cannonTex, { 32,32 });
 
 	// プレイヤー
+	Vector2 playerPos = { Block::GetBlockSize().x * 3.0f + (Block::GetBlockSize().x / 2.0f),
+	((float)WinAPI::GetInstance()->GetHeight() / 2) - (Block::GetBlockSize().y / 2.0f) };
+
+
 	player = std::make_unique<Player>();
-	player->Initialize(playerTex,{96,(float)WinAPI::GetInstance()->GetHeight()/2});
+	player->Initialize(playerTex,playerPos);
 
 	//自機の弾のテクスチャの読み込みとセット
 	PlayerBullet::SetBulletTex(LoadTexture("Resources/bullet_player.png"));
@@ -75,27 +79,7 @@ void GameScene::Update()
 	// ボス
 	boss_->Update();
 
-	//ピースの更新とボタンで生成
-	for (size_t i = 0; i < Piece::pieces.size(); i++) {
-		Piece::pieces[i]->Update();
-	}
-
-	ImGui::Text("piece size %d", Piece::pieces.size());
-
-	//if (ImGui::Button("add piece")) {
-	//	std::unique_ptr<Piece> newPiece = std::make_unique<Piece>();
-	//	newPiece->Initialize();
-	//	pieces.push_back(std::move(newPiece));
-	//}
-
-	if (ImGui::Button("add piece")) {
-		Piece::CreatePiece();
-	}
-
-	//ボタン押下でピース発生
-	if (Key::GetInstance()->TriggerKey(DIK_P)) {
-		Piece::CreatePiece();
-	}
+	Piece::ALlPieceUpdate();
 
 	// 衝突時処理
 	OnCollision();
