@@ -34,8 +34,9 @@ public://静的メンバ関数
 	/// </summary>
 	/// <param name="cannonTex">大砲のテクスチャ</param>
 	/// <param name="blockTex">ブロックのテクスチャ</param>
+	/// <param name="playerTex">プレイヤーのテクスチャ</param>
 	/// <param name="blockSize">ブロックの大きさ</param>
-	static void StaticInitialize(uint16_t cannonTex, uint16_t blockTex, const Vector2& blockSize);
+	static void StaticInitialize(uint16_t cannonTex, uint16_t blockTex,uint16_t playerTex, const Vector2& blockSize);
 
 	static Vector2 GetBlockSize() { return blockSize; }
 
@@ -83,6 +84,7 @@ public://メンバ関数
 private://静的メンバ変数
 	static uint16_t cannonTexture;
 	static uint16_t blockTexture;
+	static uint16_t playerTexture;
 	static Vector2 blockSize;
 	//全てのブロックのﾎﾟｲﾝﾀ
 	static std::vector<std::unique_ptr<Block>> pAllBlock;

@@ -31,7 +31,7 @@ void Piece::Initialize()
 	Vector2 parentOffset = { 64.0f,(float)Util::GetRandomInt(3,tileVertical) };
 
 	parentPos.x = parentOffset.x * Block::GetBlockSize().x + (Block::GetBlockSize().x / 2.0f);
-	parentPos.y = parentOffset.y * Block::GetBlockSize().y + (Block::GetBlockSize().y/2.0f);
+	parentPos.y = parentOffset.y * Block::GetBlockSize().y + (Block::GetBlockSize().y / 2.0f);
 
 	parent->parentPos = parentPos;
 	parent->parentRot = rotation;
@@ -95,10 +95,10 @@ void Piece::Draw()
 void Piece::CreatePiece()
 {
 
-		std::unique_ptr<Piece> newPiece = std::make_unique<Piece>();
-		newPiece->Initialize();
-		pieces.push_back(std::move(newPiece));
-	
+	std::unique_ptr<Piece> newPiece = std::make_unique<Piece>();
+	newPiece->Initialize();
+	pieces.push_back(std::move(newPiece));
+
 }
 
 void Piece::ALlPieceUpdate()
@@ -115,7 +115,7 @@ void Piece::ALlPieceUpdate()
 		}
 	}
 
-	
+
 
 	ImGui::Text("piece size %d", Piece::pieces.size());
 

@@ -6,34 +6,20 @@
 
 void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 {
-	texIndex = playerTexture;
 
-	sprite = std::make_unique<Sprite>();
+	//自ブロック生成
+	ParentData* p = new ParentData();
+	p->parentPos = pos;
+	p->parentRot = 0.0f;
+	p->parentTag = 0;
+	p->tileOffset = { 0,0 };
 
-	//スプライトのサイズをブロックのサイズと合わせる
-	sprite->SetSize(Block::GetBlockSize());
-	sprite->SetPosition(pos);
-	sprite->SetAnchorPoint({ 0.5f,0.5f });
+	playerBlock = Block::CreateBlock(BlockData::Player, p);
 
 	rotation = 0;
 
 	pad = Pad::GetInstance();
 	key = Key::GetInstance();
-
-	colManager = CollisionManager2D::GetInstance();
-
-	//コライダーのセット
-	Vector2 size = Block::GetBlockSize();
-	//判定は実際の大きさの90％に
-	size *= 0.9f; 
-
-	collider = std::make_unique<BoxCollider>(Vector2{ 0,0 }, Vector2(size.x / 2.0f, size.y / 2.0f));
-	//属性つける
-	collider->SetAttribute(COL_PLAYER);
-	collider->SetSprite(sprite.get());
-	collider->SetTag(-1);
-	//マネージャに登録
-	colManager->AddCollider(collider.get());
 
 	//体力関係の初期化
 	health = healthMax;
@@ -72,14 +58,14 @@ void Player::Update()
 
 void Player::MatUpdate()
 {
-	sprite->MatUpdate();
+	playerBlock->Update();
 	UpdateBlocks();
 }
 
 void Player::Draw()
 {
 	//自機描画
-	sprite->Draw(texIndex);
+	playerBlock->Draw();
 
 	//ブロックたちの描画
 	for (size_t i = 0; i < blocks.size(); i++) {
@@ -95,43 +81,43 @@ void Player::Draw()
 
 void Player::OnCollision()
 {
-	//何かに当たったら
-	if (collider->GetIsHit()) {
+	////何かに当たったら
+	//if (collider->GetIsHit()) {
 
-		if (collider->GetHitCollider()->GetAttribute() == COL_BLOCK) {
-			Vector2 hitBlockOffset{ 0,0 };
+	//	if (collider->GetHitCollider()->GetAttribute() == COL_BLOCK) {
+	//		Vector2 hitBlockOffset{ 0,0 };
 
-			//ブロックに当たった
-			//自機から対象へのベクトル作成
-			Vector2 vecBtoP = collider->GetHitCollider()->GetPosition() - collider->GetPosition();
-			//x成分とy成分の絶対値を比較し、縦につくか横につくか決める
-			if (fabs(vecBtoP.x) > fabs(vecBtoP.y)) {
-				//x成分のほうが大きい場合
-				if (vecBtoP.x > 0) {
-					//0以上なら上につける
-					hitBlockOffset.x = 1.0f;
-				}
-				else {
-					//0以下なら下
-					hitBlockOffset.x = -1.0f;
-				}
-			}
-			else {
-				if (vecBtoP.y > 0) {
-					//0以上なら上につける
-					hitBlockOffset.y = 1.0f;
-				}
-				else {
-					//0以下なら下
-					hitBlockOffset.y = -1.0f;
-				}
-			}
+	//		//ブロックに当たった
+	//		//自機から対象へのベクトル作成
+	//		Vector2 vecBtoP = collider->GetHitCollider()->GetPosition() - collider->GetPosition();
+	//		//x成分とy成分の絶対値を比較し、縦につくか横につくか決める
+	//		if (fabs(vecBtoP.x) > fabs(vecBtoP.y)) {
+	//			//x成分のほうが大きい場合
+	//			if (vecBtoP.x > 0) {
+	//				//0以上なら上につける
+	//				hitBlockOffset.x = 1.0f;
+	//			}
+	//			else {
+	//				//0以下なら下
+	//				hitBlockOffset.x = -1.0f;
+	//			}
+	//		}
+	//		else {
+	//			if (vecBtoP.y > 0) {
+	//				//0以上なら上につける
+	//				hitBlockOffset.y = 1.0f;
+	//			}
+	//			else {
+	//				//0以下なら下
+	//				hitBlockOffset.y = -1.0f;
+	//			}
+	//		}
 
-			//衝突したブロック自体のくっつく場所を設定できたので、ピースのブロックすべてに対して
+	//		//衝突したブロック自体のくっつく場所を設定できたので、ピースのブロックすべてに対して
 
-		}
+	//	}
 
-	}
+	//}
 }
 
 void Player::Move()
@@ -146,7 +132,7 @@ void Player::Move()
 	else {
 
 		//前フレームの座標を保存
-		oldPos = sprite->GetPosition();
+		oldPos = playerBlock->GetPosition();
 
 		Vector2 spd;
 		spd = pad->GetLStick() * baseSpd;
@@ -160,11 +146,14 @@ void Player::Move()
 
 		spd.y = -spd.y;
 
-		position = sprite->GetPosition();
+		position = playerBlock->GetPosition();
 
 		position += spd;
 
-		sprite->SetPosition(position);
+		ParentData* parent = playerBlock->GetParent();
+		parent->parentPos = position;
+		
+		playerBlock->SetParent(parent);
 
 	}
 
@@ -194,9 +183,11 @@ void Player::Rotate()
 
 		rotation = beforeRot + Easing::Circ::easeOut(0.0f, childRotation, timerate);
 
+		ParentData* parent = playerBlock->GetParent();
+		parent->parentRot = rotation;
 
 		//回転角を弧度法に変換
-		sprite->SetRotation(rotation);
+		playerBlock->SetParent(parent);
 		rotEaseTime++;
 
 		for (size_t i = 0; i < blocks.size(); i++) {
@@ -208,12 +199,12 @@ void Player::Rotate()
 		//ボタンのトリガーで回転を検知
 		//LBキーで左回転、RBキーで右回転
 		if (pad->GetTriggerButton(PAD_LB) || key->TriggerKey(DIK_J)) {
-			beforeRot = sprite->GetRotation();
+			beforeRot = playerBlock->GetParent()->parentRot;
 			afterRot = beforeRot - 90.0f;
 			rotEaseTime = 0;
 		}
 		else if (pad->GetTriggerButton(PAD_RB) || key->TriggerKey(DIK_K)) {
-			beforeRot = sprite->GetRotation();
+			beforeRot = playerBlock->GetParent()->parentRot;
 			afterRot = beforeRot + 90.0f;
 			rotEaseTime = 0;
 		}
