@@ -1,16 +1,11 @@
 #include "Sound.h"
-#include <cassert>
 
-Microsoft::WRL::ComPtr<IXAudio2> Sound::pXAudio2_ = nullptr;
-std::map<uint16_t, IXAudio2SourceVoice*> Sound::sourceVoices_;
-uint16_t Sound::sourceVoiceCount_ = 0;
+#include <cassert>
 
 Sound* Sound::GetInstance()
 {
-	// インスタンス生成
 	static Sound inst;
 
-	// インスタンスを返す
 	return &inst;
 }
 
@@ -27,12 +22,19 @@ void Sound::Initialize()
 	assert(SUCCEEDED(result));
 }
 
-uint16_t Sound::LoadWave(const char* filename) {
+uint16_t Sound::LoadWave(std::string fileName)
+{
+	if (soundHandles_.count(fileName) > 0) {
+		return soundHandles_[fileName];
+	}
+
+	soundCounter_++;
+
 	// ファイル入力ストリームのインスタンス
 	std::ifstream file;
 
 	// .wavファイルをバイナリモードで開く
-	file.open(filename, std::ios_base::binary);
+	file.open(fileName, std::ios_base::binary);
 
 	// ファイルオープン失敗を検出する
 	assert(file.is_open());
@@ -73,7 +75,7 @@ uint16_t Sound::LoadWave(const char* filename) {
 	{
 		// 読み取り位置をJUNKチャンクの終わりまで進める
 		file.seekg(data.size, std::ios_base::cur);
-		
+
 		// 再読み込み
 		file.read((char*)&data, sizeof(data));
 	}
@@ -91,54 +93,34 @@ uint16_t Sound::LoadWave(const char* filename) {
 
 	// returnする為の音声データ
 	SoundData soundData = {};
-
 	soundData.wfex = format.fmt;
 	soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
 	soundData.bufferSize = data.size;
 
+	// 音声データ保存
+	soundDatas_.emplace(soundCounter_, soundData);
+	soundHandles_.emplace(fileName, soundCounter_);
+
+	return soundCounter_;
+}
+
+void Sound::Play(uint16_t handle)
+{
 	HRESULT result;
 
 	// ソース音声を作成
-	sourceVoices_[sourceVoiceCount_] = nullptr;
-	result = pXAudio2_->CreateSourceVoice(&sourceVoices_[sourceVoiceCount_], &soundData.wfex);
+	IXAudio2SourceVoice* sourceVoices = nullptr;
+	result = pXAudio2_->CreateSourceVoice(&sourceVoices, &soundDatas_[handle].wfex);
 	assert(SUCCEEDED(result));
 
 	// ソース音声にバッファを送信
 	XAUDIO2_BUFFER buf{};
-	buf.pAudioData = soundData.pBuffer;
-	buf.AudioBytes = soundData.bufferSize;
+	buf.pAudioData = soundDatas_[handle].pBuffer;
+	buf.AudioBytes = soundDatas_[handle].bufferSize;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
-	result = sourceVoices_[sourceVoiceCount_]->SubmitSourceBuffer(&buf);
-
-	sourceVoiceCount_++;
-
-	return sourceVoiceCount_ - 1;
-}
-
-void Sound::Play(uint16_t sourceVoiceKey)
-{
-	HRESULT result;
+	result = sourceVoices->SubmitSourceBuffer(&buf);
 
 	// 再生
-	result = sourceVoices_[sourceVoiceKey]->Start(0);
+	result = sourceVoices->Start(0);
 	assert(SUCCEEDED(result));
 }
-
-void Sound::Stop(uint16_t sourceVoiceKey)
-{
-	HRESULT result;
-
-	// 停止
-	result = sourceVoices_[sourceVoiceKey]->Stop(0);
-	assert(SUCCEEDED(result));
-}
-
-void Sound::SetVolume(uint16_t sourceVoiceKey, float volumeValue) {
-	HRESULT result;
-
-	// 音量調節
-	result = sourceVoices_[sourceVoiceKey]->SetVolume(volumeValue);
-	assert(SUCCEEDED(result));
-}
-
-Sound::Sound() {}
