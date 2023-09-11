@@ -3,7 +3,7 @@
 #include<vector>
 #include"Pad.h"
 #include"Key.h"
-#include"CircleCollider.h"
+#include"BoxCollider.h"
 #include"CollisionManager2D.h"
 #include"PlayerBullet.h"
 
@@ -107,7 +107,7 @@ private:
 	//マネージャ
 	CollisionManager2D* colManager = nullptr;
 	//コライダー
-	std::unique_ptr<CircleCollider> collider = nullptr;
+	std::unique_ptr<BoxCollider> collider = nullptr;
 
 };
 

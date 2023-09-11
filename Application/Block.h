@@ -3,6 +3,7 @@
 #include"Sprite.h"
 #include<memory>
 #include"CircleCollider.h"
+#include"BoxCollider.h"
 #include"CollisionManager2D.h"
 #include<list>
 
@@ -85,7 +86,7 @@ private://メンバ変数
 	//マネージャ
 	CollisionManager2D* colManager = nullptr;
 	//コライダー
-	std::unique_ptr<CircleCollider> collider = nullptr;
+	std::unique_ptr<BoxCollider> collider = nullptr;
 
 	Vector2 currentOffset{ 0,0 };
 

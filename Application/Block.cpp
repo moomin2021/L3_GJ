@@ -52,7 +52,11 @@ void Block::Initialize(const BlockData& blockData, ParentData* parent)
 	colManager = CollisionManager2D::GetInstance();
 
 	//コライダーのセット
-	collider = std::make_unique<CircleCollider>(Vector2{ 0,0 }, blockSize.x / 2.0f);
+	Vector2 size = blockSize;
+	//判定は実際の大きさの90％に
+	size *= 0.9f;
+
+	collider = std::make_unique<BoxCollider>(Vector2{ 0,0 }, Vector2(size.x / 2.0f, size.y / 2.0f));
 	//属性つける
 	collider->SetAttribute(COL_BLOCK);
 	collider->SetSprite(sprite.get());

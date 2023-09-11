@@ -23,7 +23,11 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	colManager = CollisionManager2D::GetInstance();
 
 	//コライダーのセット
-	collider = std::make_unique<CircleCollider>(Vector2{ 0,0 }, Block::GetBlockSize().x / 2.0f);
+	Vector2 size = Block::GetBlockSize();
+	//判定は実際の大きさの90％に
+	size *= 0.9f; 
+
+	collider = std::make_unique<BoxCollider>(Vector2{ 0,0 }, Vector2(size.x / 2.0f, size.y / 2.0f));
 	//属性つける
 	collider->SetAttribute(COL_PLAYER);
 	collider->SetSprite(sprite.get());
@@ -163,7 +167,7 @@ void Player::Rotate()
 	//timeRateが1以下なら補間
 	if (timerate <= 1.0f) {
 
-		
+
 
 		rotation = beforeRot + Easing::Circ::easeOut(0.0f, childRotation, timerate);
 
@@ -280,7 +284,7 @@ void Player::UpdateBlocks()
 		//親の座標と回転角を更新し続ける
 		ParentData* parent = blocks[i]->GetParent();
 		parent->parentPos = position;
-	//	parent->parentRot = &rotation;
+		//	parent->parentRot = &rotation;
 		blocks[i]->SetParent(parent);
 		blocks[i]->Update();
 		ImGui::Text("blocks[%d]offset:%1.f,%1.f", i, blocks[i]->GetOffset().x, blocks[i]->GetOffset().y);
