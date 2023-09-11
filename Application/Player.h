@@ -73,7 +73,7 @@ private:
 
 	//ˆÚ“®ŠÖŒW
 	const float baseSpd = 32.0f;
-	int moveCoolTimeMax = 1;
+	int moveCoolTimeMax = 2;
 	int moveCoolTime = moveCoolTimeMax;
 
 
