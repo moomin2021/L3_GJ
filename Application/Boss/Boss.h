@@ -56,6 +56,7 @@ private:
 	uint16_t hBossFront_ = 0;
 	uint16_t hParticle_ = 0;
 	uint16_t hHpBossIn_ = 0;
+	std::vector<uint16_t> hKakeru_ = {};
 
 	// コライダー
 	std::unique_ptr<CircleCollider> collider_ = nullptr;
