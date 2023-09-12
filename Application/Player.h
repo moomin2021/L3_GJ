@@ -65,21 +65,15 @@ private:
 
 	Key* key = nullptr;
 
-	//本体のスプライト
-	std::unique_ptr<Sprite> sprite;
 
 	//座標
 	Vector2 position{0,0};
 	Vector2 oldPos{ 0,0 };
 
-	//テクスチャ
-	uint16_t texIndex = 0;
-
 	//移動関係
 	const float baseSpd = 32.0f;
 	int moveCoolTimeMax = 2;
 	int moveCoolTime = moveCoolTimeMax;
-
 
 	//回転角
 	float rotation = 0;
@@ -107,15 +101,11 @@ private:
 	int debugBlockOffsetX = 0;
 	int debugBlockOffsetY = 0;
 
+	//自分のブロック1
 	Block* playerBlock = nullptr;
 
 	//ブロック配列
 	std::vector < Block* > blocks;
-
-	//マネージャ
-	CollisionManager2D* colManager = nullptr;
-	//コライダー
-	std::unique_ptr<BoxCollider> collider = nullptr;
 
 };
 

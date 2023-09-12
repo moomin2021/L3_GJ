@@ -8,15 +8,17 @@
 //静的メンバ変数の実態
 uint16_t Block::cannonTexture = 0;
 uint16_t Block::blockTexture = 0;
+uint16_t Block::playerTexture= 0;
 Vector2 Block::blockSize = { 0,0 };
 std::vector<std::unique_ptr<Block>> Block::pAllBlock;
 Player* Block::player = nullptr;
 std::vector <std::unique_ptr<Piece>>* Block::pieces;
 
-void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, const Vector2& blockSize)
+void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, uint16_t playerTex, const Vector2& blockSize)
 {
 	cannonTexture = cannonTex;
 	blockTexture = blockTex;
+	playerTexture = playerTex;
 	Block::blockSize = blockSize;
 
 
@@ -68,6 +70,11 @@ void Block::Initialize(const BlockData& blockData, ParentData* parent)
 	collider = std::make_unique<BoxCollider>(Vector2{ 0,0 }, Vector2(size.x / 2.0f, size.y / 2.0f));
 	//属性つける
 	collider->SetAttribute(COL_BLOCK);
+	//識別変数がplayerならプレイヤーに
+	if (blockData == BlockData::Player) {
+		collider->SetAttribute(COL_PLAYER);
+	}
+
 	collider->SetSprite(sprite.get());
 	//マネージャに登録
 	colManager->AddCollider(collider.get());
@@ -89,6 +96,9 @@ void Block::Draw()
 	uint16_t tex = blockTexture;
 	if (blockData == BlockData::None) {
 		tex = cannonTexture;
+	}
+	else if (blockData == BlockData::Player) {
+		tex = playerTexture;
 	}
 	sprite->Draw(tex);
 
@@ -236,7 +246,7 @@ void Block::OnCollison()
 			uint16_t hitBlockTag = collider->GetHitCollider()->GetTag();
 			Block* hitBlock = pAllBlock[hitBlockTag].get();
 			//どのブロックに当たったかでどのピースに当たったかを特定
-			uint16_t pieceTag = hitBlock->parent->parentTag;
+			uint16_t pieceTag = parent->parentTag;
 
 			//親の変更
 			ChangeParent(baseTag, hitBlockTag, pieceTag, hitOffset);
