@@ -35,7 +35,7 @@ public:
 	std::array<PieceData, AllPieceIndex> pieceIndex;
 
 	//ピースの進行速度
-	int moveCoolTimeMax = 4;
+	int moveCoolTimeMax =10 ;
 	int moveCoolTime = moveCoolTimeMax;
 	float baseSpd = 32.0f;
 
