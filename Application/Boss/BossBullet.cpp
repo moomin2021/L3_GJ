@@ -1,17 +1,29 @@
 #include "BossBullet.h"
+#include "CollisionAttribute.h"
 
 uint16_t BossBullet::sHandle_ = 0;
 float BossBullet::sSpeed_ = 0;
+CollisionManager2D* BossBullet::sColMgr2D_ = nullptr;
 
 BossBullet::BossBullet() {}
 
-BossBullet::~BossBullet() {}
+BossBullet::~BossBullet()
+{
+	sColMgr2D_->RemoveCollider(collider_.get());
+}
 
 void BossBullet::Initialize(Vector2 pos)
 {
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->SetSize({ 16.0f, 12.0f });
 	position_ = pos;
+
+#pragma region コライダー
+	collider_ = std::make_unique<BoxCollider>(Vector2{ 0.0f, 0.0f }, Vector2{ 8.0f, 6.0f });
+	collider_->SetAttribute(COL_BOSS_BULLET);
+	collider_->SetSprite(sprite_.get());
+	sColMgr2D_->AddCollider(collider_.get());
+#pragma endregion
 }
 
 void BossBullet::Update()
@@ -35,7 +47,11 @@ void BossBullet::Draw()
 
 void BossBullet::OnCollision()
 {
-
+	if (collider_->GetIsHit()) {
+		if (collider_->GetHitCollider()->GetAttribute() == COL_PLAYER) {
+			isAlive_ = false;
+		}
+	}
 }
 
 void BossBullet::MatUpdate()

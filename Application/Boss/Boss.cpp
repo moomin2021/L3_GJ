@@ -44,8 +44,15 @@ void Boss::Initialize()
 
 	// HPゲージ
 	sHpBossIn_ = std::make_unique<Sprite>();
-	sHpBossIn_->SetPosition({ 1104.0f, 1015.0f });
+	sHpBossIn_->SetPosition({ 1028.0f, 892.0f });
 	sHpBossIn_->SetSize({ 792.0f, 40.0f });
+
+	// HPゲージ何個か表示
+	sKakeru_ = std::make_unique<Sprite>();
+	sKakeru_->SetPosition({ 1820.0f, 930.0f });
+	sKakeru_->SetSize({ 64.0f, 29.0f });
+	sKakeru_->SetAnchorPoint({ 0.5f, 0.5f });
+	sKakeru_->SetRotation(-15.0f);
 #pragma endregion
 
 #pragma region 画像ハンドル
@@ -53,6 +60,10 @@ void Boss::Initialize()
 	hBossFront_ = LoadTexture("Resources/boss_Front.png");
 	hParticle_ = LoadTexture("Resources/particle_enemy.png");
 	hHpBossIn_ = LoadTexture("Resources/hp_boss_in.png");
+	hKakeru_.resize(3);
+	hKakeru_[0] = LoadTexture("Resources/kakeru2.png");
+	hKakeru_[1] = LoadTexture("Resources/kakeru3.png");
+	hKakeru_[2] = LoadTexture("Resources/kakeru4.png");
 #pragma endregion
 
 #pragma region コライダー
@@ -129,7 +140,6 @@ void Boss::Draw()
 	sBossBack0_->Draw(hBossBack_);// ボス裏面0
 	sBossBack1_->Draw(hBossBack_);// ボス裏面1
 	sBossFront_->Draw(hBossFront_);// ボス表面
-	sHpBossIn_->Draw(hHpBossIn_);// HPゲージ
 
 	// 弾
 	for (auto& it : bullets_) {
@@ -145,6 +155,15 @@ void Boss::Draw()
 
 	emitterBack0_->Draw(hParticle_);
 	emitterBack1_->Draw(hParticle_);
+}
+
+void Boss::UIDraw()
+{
+	sHpBossIn_->Draw(hHpBossIn_);// HPゲージ
+
+	if (hp_.size() > 1) {
+		sKakeru_->Draw(hKakeru_[hp_.size() - 2]);
+	}
 }
 
 void Boss::OnCollision()
@@ -172,6 +191,7 @@ void Boss::MatUpdate()
 	sBossBack1_->MatUpdate();// ボス裏面1
 	sBossFront_->MatUpdate();// ボス表面
 	sHpBossIn_->MatUpdate();// HPゲージ
+	sKakeru_->MatUpdate();// HPゲージ何個か表示
 
 	// 弾
 	for (auto& it : bullets_) {
@@ -574,7 +594,8 @@ void Boss::HPUpdate()
 {
 	// HP更新
 	if (hp_.size() > 0) {
-		float sizeX = 792.0f * (hp_[0] / oneGaugeValue_);
+		float rate = static_cast<float>(hp_[0]) / oneGaugeValue_;
+		float sizeX = 792.0f * rate;
 		sizeX = Util::Clamp(sizeX, 792.0f, 0.0f);
 		sHpBossIn_->SetSize({ sizeX, 40.0f });
 	}
@@ -589,6 +610,7 @@ void Boss::DebugImGui()
 {
 	ImGui::Begin("Boss");
 	ImGui::Text("State = %s", stateText_[state_].c_str());
+	if (hp_.size() > 0) ImGui::Text("HP = %d", hp_[0]);
 	ImGui::Text("Position = { %f, %f }", position_.x, position_.y);
 	ImGui::Text("BackPos0 = { %f, %f }", backPos0_.x, backPos0_.y);
 	ImGui::Text("BackPos1 = { %f, %f }", backPos1_.x, backPos1_.y);

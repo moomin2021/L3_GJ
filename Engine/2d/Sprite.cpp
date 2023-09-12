@@ -173,7 +173,7 @@ Sprite::Sprite()
 #pragma endregion
 }
 
-void Sprite::MatUpdate() {
+void Sprite::MatUpdate(bool isCamera) {
 #pragma region ワールド行列計算
 	// 行列初期化
 	matWorld_ = Matrix4Identity();
@@ -181,8 +181,12 @@ void Sprite::MatUpdate() {
 	// Z軸回転
 	matWorld_ *= Matrix4RotateZ(Util::Degree2Radian(rotation_));
 
+	Vector2 cameraPos = { 0.0f, 0.0f };
+
+	if (isCamera) cameraPos = { sCamera_->GetEye().x, sCamera_->GetEye().y };
+
 	// 平行移動
-	matWorld_ *= Matrix4Translate({ position_.x, position_.y, 0.0f });
+	matWorld_ *= Matrix4Translate({ position_.x + cameraPos.x, position_.y + cameraPos.y, 0.0f });
 #pragma endregion
 
 #pragma region 定数バッファの転送

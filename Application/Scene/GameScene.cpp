@@ -61,6 +61,7 @@ void GameScene::Initialize()
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize();
 	PlayerBullet::SetBoss(boss_.get());
+	BossBullet::SetColMgr2D(CollisionManager2D::GetInstance());
 
 	//背景
 	backGroundTexture= Texture::GetInstance()->LoadTexture("Resources/backGround.png");
@@ -71,11 +72,11 @@ void GameScene::Initialize()
 	// UIマネージャー
 	uiMgr_ = std::make_unique<UIManager>();
 	uiMgr_->Initialize();
+	UIManager::SetBoss(boss_.get());
 }
 
 void GameScene::Update()
 {
-
 	// プレイヤー
 	player->Update();
 

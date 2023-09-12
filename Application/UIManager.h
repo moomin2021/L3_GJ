@@ -3,10 +3,15 @@
 
 #include <memory>
 
+class Boss;
+
 class UIManager
 {
 #pragma region メンバ変数
 private:
+	// ボス
+	static Boss* sBoss_;
+
 	// スプライト
 	std::unique_ptr<Sprite> sTitleFrame_ = nullptr;
 	std::unique_ptr<Sprite> sExp_ = nullptr;
@@ -17,7 +22,6 @@ private:
 	std::unique_ptr<Sprite> sHpTextPlayer_ = nullptr;
 	std::unique_ptr<Sprite> sHpBoss_ = nullptr;
 	std::unique_ptr<Sprite> sHpTextBoss_ = nullptr;
-	std::unique_ptr<Sprite> sKakeru2_ = nullptr;
 	std::unique_ptr<Sprite> sNextText_ = nullptr;
 
 	// 画像ハンドル
@@ -30,7 +34,6 @@ private:
 	uint16_t hHpTextPlayer_ = 0;
 	uint16_t hHpBoss_ = 0;
 	uint16_t hHpTextBoss_ = 0;
-	uint16_t hKakeru2_ = 0;
 	uint16_t hNextText_ = 0;
 #pragma endregion
 
@@ -53,5 +56,10 @@ public:
 
 	// 描画処理
 	void Draw();
+#pragma endregion
+
+#pragma region セッター関数
+	// ボスを設定
+	static void SetBoss(Boss* boss) { sBoss_ = boss; }
 #pragma endregion
 };

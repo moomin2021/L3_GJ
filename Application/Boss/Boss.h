@@ -49,12 +49,14 @@ private:
 	std::unique_ptr<Sprite> sBossBack1_ = nullptr;	// ボス裏面1
 	std::unique_ptr<Sprite> sBossFront_ = nullptr;	// ボス前面
 	std::unique_ptr<Sprite> sHpBossIn_ = nullptr;// ボスのHPゲージ
+	std::unique_ptr<Sprite> sKakeru_ = nullptr;// HPゲージの個数表示
 
 	// 画像ハンドル
 	uint16_t hBossBack_ = 0;
 	uint16_t hBossFront_ = 0;
 	uint16_t hParticle_ = 0;
 	uint16_t hHpBossIn_ = 0;
+	std::vector<uint16_t> hKakeru_ = {};
 
 	// コライダー
 	std::unique_ptr<CircleCollider> collider_ = nullptr;
@@ -140,6 +142,9 @@ public:
 
 	// 描画処理
 	void Draw();
+
+	// UI描画
+	void UIDraw();
 
 	// 衝突時処理
 	void OnCollision();

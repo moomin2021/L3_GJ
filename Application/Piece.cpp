@@ -10,6 +10,7 @@ std::vector < std::unique_ptr<Piece>> Piece::pieces;
 int Piece::moveCoolTimeMax = 4;
 int Piece::moveCoolTime = Piece::moveCoolTimeMax;
 float Piece::baseSpd = 32.0f;
+uint16_t Piece::allPieceCount = 0;
 
 void Piece::Initialize()
 {
@@ -19,7 +20,8 @@ void Piece::Initialize()
 	std::unique_ptr<Block> newBlock2 = std::make_unique<Block>();
 	std::unique_ptr<Block> newBlock3 = std::make_unique<Block>();*/
 
-	uint16_t pieceTag = (uint16_t)pieces.size();
+	uint16_t pieceTag = allPieceCount;
+	allPieceCount++;
 
 	ParentData* parent = new ParentData();
 
@@ -62,6 +64,7 @@ void Piece::Initialize()
 	Block* newBlock3 = Block::CreateBlock(BlockData::Cannon, parent);
 	childBlocks.push_back(std::move(newBlock3));
 
+	myTag = pieceTag;
 
 	//rotation = Util::GetRandomInt(0, 3) * 90.0f;
 
@@ -75,7 +78,7 @@ void Piece::Update()
 	//parentPos.x -= baseSpd;
 	//ImGui::Text("pos %f,%f", parentPos.x, parentPos.y);
 
-	//ImGui::Text("piece tag :%d", pieceTag);
+	//ImGui::Text("piece tag :%d", myTag);
 
 	for (size_t i = 0; i < childBlocks.size(); i++) {
 		ParentData* parent = childBlocks[i]->GetParent();
