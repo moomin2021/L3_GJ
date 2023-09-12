@@ -61,6 +61,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 		// ImGui•`‰æˆ—
 		//ImGuiManager::GetInstance()->Draw();
+
+		SceneManager::GetInstance()->Post();
 	}
 
 	return 0;

@@ -4,6 +4,7 @@
 #include "Key.h"
 #include "Camera.h"
 #include "Sprite.h"
+#include "Fade.h"
 
 #include <memory>
 
@@ -14,6 +15,9 @@ private:
 	// インスタンス
 	Pad* pad_ = nullptr;
 	Key* key_ = nullptr;
+
+	// フェード
+	std::unique_ptr<Fade> fade_ = nullptr;
 
 	// カメラ
 	std::unique_ptr<Camera> camera_ = nullptr;

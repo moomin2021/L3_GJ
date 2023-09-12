@@ -1,7 +1,6 @@
 #include "TitleScene.h"
 #include "PipelineManager.h"
 #include "Texture.h"
-#include "SceneManager.h"
 #include "Sound.h"
 
 TitleScene::TitleScene() {}
@@ -45,20 +44,25 @@ void TitleScene::Initialize()
 #pragma endregion
 
 	soundHandle_ = Sound::GetInstance()->LoadWave("Resources/Sound/a.wav");
+
+	fade_ = std::make_unique<Fade>();
+	fade_->Initialize();
 }
 
 void TitleScene::Update()
 {
+	// Aボタンを押したらゲームシーンに切り替える
+	if (pad_->GetTriggerButton(PAD_A) || Key::GetInstance()->TriggerKey(DIK_SPACE)) {
+		fade_->ChangeScene(SCENE::GAME);
+	}
+
+	fade_->Update();
+
 	// 衝突時処理
 	OnCollision();
 
 	// 行列更新処理
 	MatUpdate();
-
-	// Aボタンを押したらゲームシーンに切り替える
-	if (pad_->GetTriggerButton(PAD_A) || Key::GetInstance()->TriggerKey(DIK_SPACE)) {
-		SceneManager::GetInstance()->ChangeScene(SCENE::GAME);
-	}
 }
 
 void TitleScene::Draw()
@@ -70,6 +74,8 @@ void TitleScene::Draw()
 	sTitleFrame_->Draw(hTitleFrame_);// フレーム
 	sTitleLogo_->Draw(hTitleLogo_);// タイトルロゴ
 	sPressA_->Draw(hPressA_);// プレスA
+
+	fade_->Draw();
 }
 
 void TitleScene::OnCollision()
@@ -86,4 +92,5 @@ void TitleScene::MatUpdate()
 	sTitleFrame_->MatUpdate();// フレーム
 	sTitleLogo_->MatUpdate();// タイトルロゴ
 	sPressA_->MatUpdate();// プレスA
+	fade_->MatUpdate();
 }

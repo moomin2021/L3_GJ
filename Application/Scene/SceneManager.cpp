@@ -51,23 +51,10 @@ SceneManager::~SceneManager() {
 
 }
 
-void SceneManager::ChangeScene(int changeSceneNum)
+void SceneManager::ChangeScene(SCENE changeSceneNum)
 {
-	switch (changeSceneNum)
-	{
-	case SCENE::TITLE:
-		nowScene_ = std::make_unique<TitleScene>();
-		nowScene_->Initialize();
-		break;
-	case SCENE::GAME:
-		nowScene_ = std::make_unique<GameScene>();
-		nowScene_->Initialize();
-		break;
-	case SCENE::RESULT:
-		nowScene_ = std::make_unique<ResultScene>();
-		nowScene_->Initialize();
-		break;
-	}
+	isChangeSceme_ = true;
+	nextScene_ = changeSceneNum;
 }
 
 // XVˆ—
@@ -179,4 +166,27 @@ void SceneManager::Draw()
 
 	//	DX12Cmd::GetInstance()->PostDraw();
 	//}
+}
+
+void SceneManager::Post()
+{
+	if (isChangeSceme_ == false) return;
+
+	switch (nextScene_)
+	{
+	case SCENE::TITLE:
+		nowScene_ = std::make_unique<TitleScene>();
+		nowScene_->Initialize();
+		break;
+	case SCENE::GAME:
+		nowScene_ = std::make_unique<GameScene>();
+		nowScene_->Initialize();
+		break;
+	case SCENE::RESULT:
+		nowScene_ = std::make_unique<ResultScene>();
+		nowScene_->Initialize();
+		break;
+	}
+
+	isChangeSceme_ = false;
 }

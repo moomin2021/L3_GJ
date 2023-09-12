@@ -37,6 +37,10 @@ private:
 	// ポストエフェクトの種類
 	PostEffectType postEffectType_;
 
+	bool isChangeSceme_ = false;
+
+	SCENE nextScene_ = TITLE;
+
 	// --メンバ関数-- //
 public:
 	// インスタンス取得
@@ -48,8 +52,10 @@ public:
 	// 描画処理
 	void Draw();
 
+	void Post();
+
 	// シーン切り替え
-	void ChangeScene(int changeSceneNum);
+	void ChangeScene(SCENE changeSceneNum);
 
 private:
 	// コンストラクタ

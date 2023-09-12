@@ -14,6 +14,7 @@
 #include "UIManager.h"
 #include "ParticleEmitter2D.h"
 #include"PieceManager.h"
+#include "Fade.h"
 
 #include <memory>
 
@@ -23,6 +24,9 @@ class GameScene : public BaseScene
 private:
 	// キーボード入力
 	Key* key_ = nullptr;
+
+	// フェード
+	std::unique_ptr<Fade> fade_ = nullptr;
 
 	// カメラ
 	std::unique_ptr<Camera> camera_ = nullptr;

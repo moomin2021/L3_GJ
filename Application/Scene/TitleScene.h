@@ -3,6 +3,7 @@
 #include "Pad.h"
 #include "Camera.h"
 #include "Sprite.h"
+#include "Fade.h"
 
 #include <memory>
 
@@ -12,6 +13,9 @@ class TitleScene : public BaseScene
 private:
 	// インスタンス
 	Pad* pad_ = nullptr;
+
+	// フェード
+	std::unique_ptr<Fade> fade_ = nullptr;
 
 	// カメラ
 	std::unique_ptr<Camera> camera_ = nullptr;

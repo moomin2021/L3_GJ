@@ -82,6 +82,11 @@ void ResultScene::Initialize()
 	hNextRankText_ = LoadTexture("Resources/nextrank_text.png");
 	hResultSelectFrame_ = LoadTexture("Resources/result_select_frame.png");
 #pragma endregion
+
+#pragma region フェード
+	fade_ = std::make_unique<Fade>();
+	fade_->Initialize();
+#pragma endregion
 }
 
 void ResultScene::Update()
@@ -107,8 +112,12 @@ void ResultScene::Update()
 	}
 
 	if (pad_->GetTriggerButton(PAD_A) || key_->TriggerKey(DIK_SPACE)) {
-
+		if (selectNum_ == 0) fade_->ChangeScene(SCENE::GAME);
+		if (selectNum_ == 1) fade_->ChangeScene(SCENE::TITLE);
 	}
+
+	// フェード
+	fade_->Update();
 
 	oldLStickY = pad_->GetLStick().y;
 
@@ -137,6 +146,9 @@ void ResultScene::Draw()
 	sRankText_->Draw(hRankText_);
 	sNextRankText_->Draw(hNextRankText_);
 	sResultSelectFrame_->Draw(hResultSelectFrame_);
+
+	// フェード
+	fade_->Draw();
 }
 
 void ResultScene::OnCollision()
@@ -160,4 +172,7 @@ void ResultScene::MatUpdate()
 	sRankText_->MatUpdate();
 	sNextRankText_->MatUpdate();
 	sResultSelectFrame_->MatUpdate();
+
+	// フェード
+	fade_->MatUpdate();
 }

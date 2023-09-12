@@ -76,6 +76,9 @@ void GameScene::Initialize()
 	uiMgr_ = std::make_unique<UIManager>();
 	uiMgr_->Initialize();
 	UIManager::SetBoss(boss_.get());
+
+	fade_ = std::make_unique<Fade>();
+	fade_->Initialize();
 }
 
 void GameScene::Update()
@@ -93,6 +96,8 @@ void GameScene::Update()
 	//ImGui::Text("all block %d,", (int)Block::GetBlockCount());
 
 	Block::AllBlockDeleteCheck();
+
+	fade_->Update();
 
 	// 衝突時処理
 	OnCollision();
@@ -126,6 +131,8 @@ void GameScene::Draw()
 
 	// UIマネージャー
 	uiMgr_->Draw();
+
+	fade_->Draw();
 }
 
 void GameScene::MatUpdate()
@@ -141,6 +148,9 @@ void GameScene::MatUpdate()
 
 	// UIマネージャー
 	uiMgr_->MatUpdate();
+
+	// フェード
+	fade_->MatUpdate();
 }
 
 void GameScene::OnCollision()
