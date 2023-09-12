@@ -135,7 +135,7 @@ void Player::OnCollision()
 	//}
 
 	for (auto& it : bullets) {
-		it->OnCollision();
+		it->OnCollision(bulletDamage);
 	}
 
 	playerBlock->OnCollison();
@@ -368,6 +368,27 @@ void Player::BlockReset()
 		}
 		blocks.clear();
 
+
+		//レベルの更新
+		//LevelUpdate();
 	}
 
+}
+
+void Player::LevelUpdate()
+{
+	//現在の経験値が必要経験値を超えていたらレベルアップ
+	while (true)
+	{
+		if (currentEXP >= needEXP) {
+			currentEXP -= needEXP;
+			level++;
+		}
+		else {
+			break;
+		}
+	}
+
+	//弾のダメージを更新
+	bulletDamage = level;
 }

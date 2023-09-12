@@ -59,6 +59,9 @@ private:
 	//ブロックリセット
 	void BlockReset();
 
+	//レベルの更新
+	void LevelUpdate();
+
 private:
 
 	Pad* pad = nullptr;
@@ -94,8 +97,10 @@ private:
 	std::list < std::unique_ptr<PlayerBullet>> bullets;
 
 	//レベル関係パラメータ
+	int needEXP = 32;
 	int currentEXP = 0;
 	int level = 1;
+	int bulletDamage = 1;
 
 	//デバッグ用
 	int debugBlockOffsetX = 0;

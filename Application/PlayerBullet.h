@@ -45,7 +45,7 @@ public:
 	void Draw();
 
 	// Õ“Ëˆ—
-	void OnCollision();
+	void OnCollision(uint16_t damage);
 
 	// s—ñXV
 	void MatUpdate();
