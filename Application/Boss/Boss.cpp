@@ -36,10 +36,10 @@ void Boss::Initialize()
 	sBossBack1_->SetSize({ 160.0f, 160.0f });
 	sBossBack1_->SetAnchorPoint({ 0.5f, 0.5f });
 
-	// ボス裏面2
+	// ボス表面
 	sBossFront_ = std::make_unique<Sprite>();
 	sBossFront_->SetPosition(position_);
-	sBossFront_->SetSize({ 128.0f, 128.0f });
+	sBossFront_->SetSize({ 0.0f, 0.0f });
 	sBossFront_->SetAnchorPoint({ 0.5f, 0.5f });
 
 	// HPゲージ
@@ -58,7 +58,8 @@ void Boss::Initialize()
 #pragma region 画像ハンドル
 	hBossBack_ = LoadTexture("Resources/boss_back.png");
 	hBossFront_ = LoadTexture("Resources/boss_Front.png");
-	hParticle_ = LoadTexture("Resources/particle_enemy.png");
+	hParticle0_ = LoadTexture("Resources/particle_enemy.png");
+	hParticle1_ = LoadTexture("Resources/particle_circle_enemy.png");
 	hHpBossIn_ = LoadTexture("Resources/hp_boss_in.png");
 	hKakeru_.resize(3);
 	hKakeru_[0] = LoadTexture("Resources/kakeru2.png");
@@ -94,7 +95,10 @@ void Boss::Initialize()
 #pragma region パーティクルエミッター
 	emitterBack0_ = std::make_unique<ParticleEmitter2D>(120);
 	emitterBack1_ = std::make_unique<ParticleEmitter2D>(120);
+	emitterFront_ = std::make_unique<ParticleEmitter2D>(300);
 #pragma endregion
+
+	actionStartTime_ = Util::GetTimrMSec();
 }
 
 void Boss::Update()
@@ -153,8 +157,9 @@ void Boss::Draw()
 
 	PipelineManager::PreDraw("Particle2D", D3D10_PRIMITIVE_TOPOLOGY_POINTLIST);
 
-	emitterBack0_->Draw(hParticle_);
-	emitterBack1_->Draw(hParticle_);
+	emitterBack0_->Draw(hParticle0_);
+	emitterBack1_->Draw(hParticle0_);
+	emitterFront_->Draw(hParticle1_);
 }
 
 void Boss::UIDraw()
@@ -187,11 +192,11 @@ void Boss::OnCollision()
 
 void Boss::MatUpdate()
 {
-	sBossBack0_->MatUpdate();// ボス裏面0
-	sBossBack1_->MatUpdate();// ボス裏面1
-	sBossFront_->MatUpdate();// ボス表面
-	sHpBossIn_->MatUpdate();// HPゲージ
-	sKakeru_->MatUpdate();// HPゲージ何個か表示
+	sBossBack0_->MatUpdate(true);// ボス裏面0
+	sBossBack1_->MatUpdate(true);// ボス裏面1
+	sBossFront_->MatUpdate(true);// ボス表面
+	sHpBossIn_->MatUpdate(true);// HPゲージ
+	sKakeru_->MatUpdate(true);// HPゲージ何個か表示
 
 	// 弾
 	for (auto& it : bullets_) {
@@ -206,6 +211,7 @@ void Boss::MatUpdate()
 #pragma region パーティクルエミッター
 	emitterBack0_->Update();
 	emitterBack1_->Update();
+	emitterFront_->Update();
 #pragma endregion
 }
 
@@ -226,6 +232,10 @@ void Boss::SubHP(uint16_t value)
 }
 
 void (Boss::* Boss::stateTable[]) () = {
+	&Boss::Opening0,		// オープニング0
+	&Boss::Opening1,		// オープニング1
+	&Boss::Opening2,		// オープニング2
+	&Boss::Closing,			// クロージング
 	&Boss::Wait,			// 待機
 	&Boss::PreMoveShot,		// 移動撃ち前処理
 	&Boss::MoveShot,		// 移動撃ち
@@ -237,6 +247,88 @@ void (Boss::* Boss::stateTable[]) () = {
 	&Boss::Boomerang,		// ブーメラン
 	&Boss::PostBoomerang,	// ブーメラン後処理
 };
+
+void Boss::Opening0()
+{
+	// 行動開始からの経過時間
+	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
+
+	// 経過時間が指定時間以上ならStateを変える
+	if (elapsedTime >= time2Opening0_) {
+		state_ = OPENING1;
+		actionStartTime_ = Util::GetTimrMSec();
+	}
+}
+
+void Boss::Opening1()
+{
+	// 行動開始からの経過時間
+	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
+
+	// 経過時間が指定時間以上ならStateを変える
+	if (elapsedTime >= time2Opening1_) {
+		state_ = OPENING2;
+		actionStartTime_ = Util::GetTimrMSec();
+
+		for (size_t i = 0; i < 180; i++) {
+			Vector2 result = { cosf(Util::Degree2Radian(2.0f * i)), sinf(Util::Degree2Radian(2.0f * i)) };
+			result.normalize();
+			emitterFront_->Add(30, { 0.0f, 0.0f }, result, 1.3f, 32.0f, 64.0f);
+		}
+
+		Camera::SetShake(1.0f, 100.0f);
+	}
+
+	// 経過時間の割合で移動
+	float rate = Util::Clamp(elapsedTime / time2Opening1_, 1.0f, 0.0f);
+
+	static uint16_t counter = 0;
+	static float frag = 0.0f;
+	counter++;
+
+	if (counter % (int)(11.0f - (rate * 10.0f)) == 0) {
+		float rndX = Util::GetRandomFloat(0.0f, 360.0f);
+		float rndY = Util::GetRandomFloat(0.0f, 360.0f);
+		Vector2 result0 = { cosf(Util::Degree2Radian(0.0f + 40.0f * frag)), sinf(Util::Degree2Radian(0.0f + 40.0f * frag)) };
+		Vector2 result1 = { cosf(Util::Degree2Radian(120.0f + 40.0f * frag)), sinf(Util::Degree2Radian(120.0f + 40.0f * frag)) };
+		Vector2 result2 = { cosf(Util::Degree2Radian(240.0f + 40.0f * frag)), sinf(Util::Degree2Radian(240.0f + 40.0f * frag)) };
+		result0.normalize();
+		result1.normalize();
+		result2.normalize();
+		emitterFront_->Add(30, { 0.0f, 0.0f }, result0, 1.15f, 32.0f, 0.0f);
+		emitterFront_->Add(30, { 0.0f, 0.0f }, result1, 1.15f, 32.0f, 0.0f);
+		emitterFront_->Add(30, { 0.0f, 0.0f }, result2, 1.15f, 32.0f, 0.0f);
+		emitterFront_->SetPosition(position_);
+
+		frag += 1.0f;
+		if (frag > 9.0f) frag = 0.0f;
+	}
+}
+
+void Boss::Opening2()
+{
+	// 行動開始からの経過時間
+	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
+
+	// 経過時間が指定時間以上ならStateを変える
+	if (elapsedTime >= time2Opening2_) {
+		state_ = WAIT;
+		actionStartTime_ = Util::GetTimrMSec();
+		sBossFront_->SetSize({ 128.0f, 128.0f });
+	}
+
+	// 経過時間の割合で移動
+	float rate = Util::Clamp(elapsedTime / time2Opening2_, 1.0f, 0.0f);
+
+	float ease = Easing::Quint::easeOut(0.0f, 128.0f, rate);
+
+	sBossFront_->SetSize({ ease, ease });
+}
+
+void Boss::Closing()
+{
+
+}
 
 void Boss::Wait()
 {

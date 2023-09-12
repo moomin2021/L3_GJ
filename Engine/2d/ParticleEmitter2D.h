@@ -33,6 +33,7 @@ private:
 		Vector2 accel = { 0.0f, 0.0f };
 		uint16_t frame = 0;
 		uint16_t num_frame = 0;
+		float speed = 1.0f;
 		float scale = 1.0f;
 		float startScale = 1.0f;
 		float endScale = 0.0f;
@@ -88,6 +89,7 @@ public:
 	/// <param name="velocity"> 速度 </param>
 	/// <param name="accel"> 加速度 </param>
 	void Add(uint16_t life, const Vector2& pos, const Vector2& velocity, const Vector2& accel, float startScale, float endScale);
+	void Add(uint16_t life, const Vector2& pos, const Vector2& velocity, float speed, float startScale, float endScale);
 
 private:
 	// 定数バッファ生成

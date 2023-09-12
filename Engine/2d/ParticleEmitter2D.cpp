@@ -40,7 +40,7 @@ void ParticleEmitter2D::Update()
 		it.frame++;
 
 		// 速度に加速度を加算
-		it.velocity = it.velocity + it.accel;
+		it.velocity = (it.velocity + it.accel) * it.speed;
 
 		// 速度による移動
 		it.position = it.position + it.velocity;
@@ -124,6 +124,21 @@ void ParticleEmitter2D::Add(uint16_t life, const Vector2& pos, const Vector2& ve
 	p.velocity = velocity;
 	p.accel.x = accel.x;
 	p.accel.y = -accel.y;
+	p.startScale = startScale;
+	p.endScale = endScale;
+	p.num_frame = life;
+}
+
+void ParticleEmitter2D::Add(uint16_t life, const Vector2& pos, const Vector2& velocity, float speed, float startScale, float endScale)
+{
+	// リストに要素を追加
+	particles_.emplace_front();
+	// 追加した要素の参照
+	Particle& p = particles_.front();
+	// 値のセット
+	p.position = pos;
+	p.velocity = velocity;
+	p.speed = speed;
 	p.startScale = startScale;
 	p.endScale = endScale;
 	p.num_frame = life;

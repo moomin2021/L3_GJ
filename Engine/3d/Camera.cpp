@@ -6,6 +6,11 @@
 
 using namespace DirectX;
 
+float Camera::shakeTime_ = 0.0f;
+float Camera::shakePower_ = 0.0f;
+bool Camera::isShake_ = false;
+uint64_t Camera::startShake_ = 0;
+
 Camera::Camera()
 {
 	// ウィンドウサイズ取得
@@ -39,8 +44,33 @@ Camera::Camera()
 }
 
 void Camera::Update() {
+	if (isShake_) {
+		float rndX = Util::GetRandomFloat(0.0f, 1.0f) * 2 - 1;
+		float rndY = Util::GetRandomFloat(0.0f, 1.0f) * 2 - 1;
+
+		// 行動開始からの経過時間
+		float elapsedTime = (Util::GetTimrMSec() - startShake_) / 1000.0f;
+
+		float rate = Util::Clamp(elapsedTime / shakeTime_, 1.0f, 0.0f);
+
+		Vector3 result = { (shakePower_ * (1.0f - rate)) * rndX, (shakePower_ * (1.0f - rate)) * rndY, 0.0f };
+		eye_ = result;
+
+		if (elapsedTime >= shakeTime_) {
+			isShake_ = false;
+		}
+	}
+
 	// ビュー行列更新
 	UpdateMatView();
+}
+
+void Camera::SetShake(float time, float power)
+{
+	shakeTime_ = time;
+	shakePower_ = power;
+	isShake_ = true;
+	startShake_ = Util::GetTimrMSec();
 }
 
 void Camera::UpdateMatView()

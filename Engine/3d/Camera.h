@@ -1,6 +1,7 @@
 #pragma once
 #include "Matrix4.h"
 #include "Vector3.h"
+#include <stdint.h>
 
 class Camera {
 #pragma region メンバ変数
@@ -14,6 +15,11 @@ private:
 	Matrix4 matView_ = {};// ビュー変換行列
 	Matrix4 matPerspectivePro_ = {};// 透視投影行列
 	Matrix4 matOrthoGraphicPro_ = {};// 平行投影行列
+
+	static float shakeTime_;
+	static float shakePower_;
+	static bool isShake_;
+	static uint64_t startShake_;
 #pragma endregion
 
 #pragma region メンバ関数
@@ -27,6 +33,9 @@ public:
 	/// 更新処理
 	/// </summary>
 	void Update();
+
+	// シェイク
+	static void SetShake(float time, float power);
 
 private:
 	// ビュー行列更新処理

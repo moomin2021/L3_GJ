@@ -18,6 +18,10 @@ class Boss
 #pragma region 列挙型
 private:
 	enum State {
+		OPENING0,		// オープニング0
+		OPENING1,		// オープニング1
+		OPENING2,		// オープニング2
+		CLOSING,		// クロージング
 		WAIT,			// 待機
 		PRE_MOVE_SHOT,	// 移動撃ち前処理
 		MOVE_SHOT,		// 移動撃ち
@@ -34,6 +38,7 @@ private:
 #pragma region メンバ変数
 private:
 	std::vector<std::string> stateText_ = {
+		"OPENING0", "OPENING1", "OPENING2",
 		"WAIT",
 		"PRE_MOVE_SHOT", "MOVE_SHOT", "POST_MOVE_SHOT",
 		"PRE_SUMMON", "SUMMON", "POST_SUMMON",
@@ -54,7 +59,8 @@ private:
 	// 画像ハンドル
 	uint16_t hBossBack_ = 0;
 	uint16_t hBossFront_ = 0;
-	uint16_t hParticle_ = 0;
+	uint16_t hParticle0_ = 0;
+	uint16_t hParticle1_ = 0;
 	uint16_t hHpBossIn_ = 0;
 	std::vector<uint16_t> hKakeru_ = {};
 
@@ -62,7 +68,7 @@ private:
 	std::unique_ptr<CircleCollider> collider_ = nullptr;
 
 	// 状態
-	State state_ = WAIT;
+	State state_ = OPENING0;
 
 	// HP
 	size_t gaugeNum_ = 4;
@@ -73,10 +79,10 @@ private:
 	bool isAlive_ = true;
 
 	// 座標
-	Vector2 position_ = { 1500.0f, 540.0f };// ボスの座標
-	Vector2 basicPos_ = { 1500.0f, 540.0f };// 基本座標
-	Vector2 backPos0_ = { 1500.0f, 540.0f };// 裏面座標0
-	Vector2 backPos1_ = { 1500.0f, 540.0f };// 裏面座標1
+	Vector2 position_ = { 1500.0f, 480.0f };// ボスの座標
+	Vector2 basicPos_ = { 1500.0f, 480.0f };// 基本座標
+	Vector2 backPos0_ = { 1500.0f, 480.0f };// 裏面座標0
+	Vector2 backPos1_ = { 1500.0f, 480.0f };// 裏面座標1
 
 	// sin関数での移動数値
 	float sinMove_ = 0.0f;	// sin関数に渡す数値
@@ -85,6 +91,7 @@ private:
 	// パーティクルエミッター
 	std::unique_ptr<ParticleEmitter2D> emitterBack0_ = nullptr;
 	std::unique_ptr<ParticleEmitter2D> emitterBack1_ = nullptr;
+	std::unique_ptr<ParticleEmitter2D> emitterFront_ = nullptr;
 
 	// ボス裏面の角度
 	float rotateBossBack0_ = 0.0f;
@@ -112,6 +119,10 @@ private:
 	Vector2 beforeBackPos0_ = { 0.0f, 0.0f };// 裏面0行動前座標
 	Vector2 beforeBackPos1_ = { 0.0f, 0.0f };// 裏面0行動前座標
 	uint64_t actionStartTime_= 0;	// 行動開始時間
+	float time2Opening0_		= 3.0f;// オープンイング0時間
+	float time2Opening1_		= 5.0f;// オープンイング1時間
+	float time2Opening2_		= 1.0f;// オープンイング2時間
+	float timeClosing_			= 10.0f;// オープンイング時間
 	float time2PreMoveShot_		= 3.0f;	// 移動撃ち前時間
 	float time2MoveShot_		= 10.0f;// 移動撃ち時間
 	float time2PostMoveShot_	= 3.0f;	// 移動撃ち後時間
@@ -160,6 +171,10 @@ private:
 	static void (Boss::* stateTable[]) ();
 
 	// 状態別行動
+	void Opening0();			// オープニング0
+	void Opening1();			// オープニング1
+	void Opening2();			// オープニング2
+	void Closing();			// クロージング
 	void Wait();			// 待機
 	void PreMoveShot();		// 移動撃ち前処理
 	void MoveShot();		// 移動撃ち
