@@ -141,6 +141,9 @@ public:
 	// •`‰æˆ—
 	void Draw();
 
+	// UI•`‰æ
+	void UIDraw();
+
 	// Õ“Ëˆ—
 	void OnCollision();
 

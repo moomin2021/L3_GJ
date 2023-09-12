@@ -1,5 +1,8 @@
 #include "UIManager.h"
 #include "Texture.h"
+#include "Boss.h"
+
+Boss* UIManager::sBoss_ = nullptr;
 
 UIManager::UIManager() {}
 
@@ -105,6 +108,7 @@ void UIManager::Draw()
 	sHpPlayerIn_->Draw(hHpPlayerIn_);
 	sHpTextPlayer_->Draw(hHpTextPlayer_);
 	sHpBoss_->Draw(hHpBoss_);
+	sBoss_->UIDraw();
 	sHpTextBoss_->Draw(hHpTextBoss_);
 	sKakeru2_->Draw(hKakeru2_);
 	sNextText_->Draw(hNextText_);
