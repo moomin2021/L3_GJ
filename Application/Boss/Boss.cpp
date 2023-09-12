@@ -41,12 +41,18 @@ void Boss::Initialize()
 	sBossFront_->SetPosition(position_);
 	sBossFront_->SetSize({ 128.0f, 128.0f });
 	sBossFront_->SetAnchorPoint({ 0.5f, 0.5f });
+
+	// HPゲージ
+	sHpBossIn_ = std::make_unique<Sprite>();
+	sHpBossIn_->SetPosition({ 1104.0f, 1015.0f });
+	sHpBossIn_->SetSize({ 792.0f, 40.0f });
 #pragma endregion
 
 #pragma region 画像ハンドル
 	hBossBack_ = LoadTexture("Resources/boss_back.png");
 	hBossFront_ = LoadTexture("Resources/boss_Front.png");
 	hParticle_ = LoadTexture("Resources/particle_enemy.png");
+	hHpBossIn_ = LoadTexture("Resources/hp_boss_in.png");
 #pragma endregion
 
 #pragma region コライダー
@@ -85,6 +91,9 @@ void Boss::Update()
 	// 状態別更新処理
 	(this->*stateTable[state_])();
 
+	// HP更新
+	HPUpdate();
+
 #pragma region 弾の後処理
 	// 弾の生存フラグが[OFF]なら消す
 	for (auto it = bullets_.begin(); it != bullets_.end();) {
@@ -120,6 +129,7 @@ void Boss::Draw()
 	sBossBack0_->Draw(hBossBack_);// ボス裏面0
 	sBossBack1_->Draw(hBossBack_);// ボス裏面1
 	sBossFront_->Draw(hBossFront_);// ボス表面
+	sHpBossIn_->Draw(hHpBossIn_);// HPゲージ
 
 	// 弾
 	for (auto& it : bullets_) {
@@ -161,6 +171,7 @@ void Boss::MatUpdate()
 	sBossBack0_->MatUpdate();// ボス裏面0
 	sBossBack1_->MatUpdate();// ボス裏面1
 	sBossFront_->MatUpdate();// ボス表面
+	sHpBossIn_->MatUpdate();// HPゲージ
 
 	// 弾
 	for (auto& it : bullets_) {
@@ -176,6 +187,22 @@ void Boss::MatUpdate()
 	emitterBack0_->Update();
 	emitterBack1_->Update();
 #pragma endregion
+}
+
+void Boss::SubHP(uint16_t value)
+{
+	if (hp_[0] < value) {
+		value -= hp_[0];
+		hp_.erase(hp_.begin());
+
+		if (hp_.size() > 0) {
+			hp_[0] -= value;
+		}
+	}
+
+	else {
+		hp_[0] -= value;
+	}
 }
 
 void (Boss::* Boss::stateTable[]) () = {
@@ -543,28 +570,43 @@ void Boss::BossBackRotate(float rotate)
 	sBossFront_->SetRotation(rotateBossFront_);
 }
 
+void Boss::HPUpdate()
+{
+	// HP更新
+	if (hp_.size() > 0) {
+		float sizeX = 792.0f * (hp_[0] / oneGaugeValue_);
+		sizeX = Util::Clamp(sizeX, 792.0f, 0.0f);
+		sHpBossIn_->SetSize({ sizeX, 40.0f });
+	}
+
+	else {
+		isAlive_ = false;
+		sHpBossIn_->SetSize({ 0.0f, 40.0f });
+	}
+}
+
 void Boss::DebugImGui()
 {
-	//ImGui::Begin("Boss");
-	//ImGui::Text("State = %s", stateText_[state_].c_str());
-	//ImGui::Text("Position = { %f, %f }", position_.x, position_.y);
-	//ImGui::Text("BackPos0 = { %f, %f }", backPos0_.x, backPos0_.y);
-	//ImGui::Text("BackPos1 = { %f, %f }", backPos1_.x, backPos1_.y);
-	//if (ImGui::Button("Start Sumoon") && state_ == WAIT) {
-	//	state_ = PRE_SUMMON;
-	//	actionStartTime_ = Util::GetTimrMSec();
-	//}
+	ImGui::Begin("Boss");
+	ImGui::Text("State = %s", stateText_[state_].c_str());
+	ImGui::Text("Position = { %f, %f }", position_.x, position_.y);
+	ImGui::Text("BackPos0 = { %f, %f }", backPos0_.x, backPos0_.y);
+	ImGui::Text("BackPos1 = { %f, %f }", backPos1_.x, backPos1_.y);
+	if (ImGui::Button("Start Sumoon") && state_ == WAIT) {
+		state_ = PRE_SUMMON;
+		actionStartTime_ = Util::GetTimrMSec();
+	}
 
-	//if (ImGui::Button("Start MoveShot") && state_ == WAIT) {
-	//	state_ = PRE_MOVE_SHOT;
-	//	actionStartTime_ = Util::GetTimrMSec();
-	//}
+	if (ImGui::Button("Start MoveShot") && state_ == WAIT) {
+		state_ = PRE_MOVE_SHOT;
+		actionStartTime_ = Util::GetTimrMSec();
+	}
 
-	//if (ImGui::Button("Start Boomerang") && state_ == WAIT) {
-	//	state_ = PRE_BOOMERANG;
-	//	actionStartTime_ = Util::GetTimrMSec();
-	//}
-	//ImGui::End();
+	if (ImGui::Button("Start Boomerang") && state_ == WAIT) {
+		state_ = PRE_BOOMERANG;
+		actionStartTime_ = Util::GetTimrMSec();
+	}
+	ImGui::End();
 
 	if (key_->TriggerKey(DIK_8) && state_ == WAIT) {
 		state_ = PRE_SUMMON;
