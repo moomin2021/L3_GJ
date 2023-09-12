@@ -49,6 +49,7 @@ private:
 	std::unique_ptr<Sprite> sBossBack1_ = nullptr;	// ボス裏面1
 	std::unique_ptr<Sprite> sBossFront_ = nullptr;	// ボス前面
 	std::unique_ptr<Sprite> sHpBossIn_ = nullptr;// ボスのHPゲージ
+	std::unique_ptr<Sprite> sKakeru_ = nullptr;// HPゲージの個数表示
 
 	// 画像ハンドル
 	uint16_t hBossBack_ = 0;
