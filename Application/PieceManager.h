@@ -2,6 +2,7 @@
 #include"Piece.h"
 #include"Key.h"
 #include<array>
+#include<queue>
 
 enum PieceIndex {
 	Piece_I,
@@ -24,9 +25,14 @@ public:
 
 	void CreatePiece(const PieceData& data);
 
-	
+	void DrawNextPiece();
 
 public:
+
+	//nextのピース
+	std::queue<PieceData> nextPiece;
+	std::array<std::unique_ptr<Sprite>,4> nextSprites;
+	std::vector<Vector2> spritePos;
 
 	//ピース配列
 	std::vector < std::unique_ptr<Piece>> pieces;
@@ -35,7 +41,7 @@ public:
 	std::array<PieceData, AllPieceIndex> pieceIndex;
 
 	//ピースの進行速度
-	int moveCoolTimeMax =10 ;
+	int moveCoolTimeMax = 10;
 	int moveCoolTime = moveCoolTimeMax;
 	float baseSpd = 32.0f;
 
@@ -45,7 +51,11 @@ public:
 	int pieceSpawnCoolTimeMax = 240;
 	int pieceSpawnCoolTime = pieceSpawnCoolTimeMax;
 
+
+
 private:
+
+	void UpdateNextQuete();
 
 	void PieceSpawn();
 };
