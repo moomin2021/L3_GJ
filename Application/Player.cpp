@@ -3,6 +3,7 @@
 #include"Easing.h"
 #include"Util.h"
 #include"CollisionAttribute.h"
+#include"WinAPI.h"
 
 void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 {
@@ -135,7 +136,7 @@ void Player::OnCollision()
 	//}
 
 	for (auto& it : bullets) {
-		it->OnCollision();
+		it->OnCollision(bulletDamage);
 	}
 
 	playerBlock->OnCollison();
@@ -187,9 +188,22 @@ void Player::Move()
 
 		spd.y = -spd.y;
 
+
+
+
 		position = playerBlock->GetPosition();
 
+
+
 		position += spd;
+
+		//自機の座標の最大値を設定
+		Vector2 size, w;
+		size = Block::GetBlockSize();
+		w = { (float)WinAPI::GetInstance()->GetWidth() ,(float)WinAPI::GetInstance()->GetHeight() };
+		position.x = Util::Clamp(position.x, w.x - size.x / 2.0f, size.x / 2.0f);
+		position.y = Util::Clamp(position.y, 
+			w.y - size.y / 2.0f - (size.y*3.0f), size.y / 2.0f + size.y * 3.0f);
 
 		ParentData* parent = playerBlock->GetParent();
 		parent->parentPos = position;
@@ -342,7 +356,7 @@ void Player::UpdateBlocks()
 		//	parent->parentRot = &rotation;
 		blocks[i]->SetParent(parent);
 		blocks[i]->Update();
-		ImGui::Text("blocks[%d]offset:%1.f,%1.f", i, blocks[i]->GetOffset().x, blocks[i]->GetOffset().y);
+		//ImGui::Text("blocks[%d]offset:%1.f,%1.f", i, blocks[i]->GetOffset().x, blocks[i]->GetOffset().y);
 	}
 }
 
@@ -368,6 +382,27 @@ void Player::BlockReset()
 		}
 		blocks.clear();
 
+
+		//レベルの更新
+		//LevelUpdate();
 	}
 
+}
+
+void Player::LevelUpdate()
+{
+	//現在の経験値が必要経験値を超えていたらレベルアップ
+	while (true)
+	{
+		if (currentEXP >= needEXP) {
+			currentEXP -= needEXP;
+			level++;
+		}
+		else {
+			break;
+		}
+	}
+
+	//弾のダメージを更新
+	bulletDamage = level;
 }

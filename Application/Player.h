@@ -59,6 +59,9 @@ private:
 	//ブロックリセット
 	void BlockReset();
 
+	//レベルの更新
+	void LevelUpdate();
+
 private:
 
 	Pad* pad = nullptr;
@@ -74,6 +77,9 @@ private:
 	const float baseSpd = 32.0f;
 	int moveCoolTimeMax = 2;
 	int moveCoolTime = moveCoolTimeMax;
+
+	//Vector2 moveTileMin{ 0,3 };
+	//Vector2 moveTileMax {}
 
 	//回転角
 	float rotation = 0;
@@ -94,8 +100,10 @@ private:
 	std::list < std::unique_ptr<PlayerBullet>> bullets;
 
 	//レベル関係パラメータ
+	int needEXP = 32;
 	int currentEXP = 0;
 	int level = 1;
+	int bulletDamage = 1;
 
 	//デバッグ用
 	int debugBlockOffsetX = 0;

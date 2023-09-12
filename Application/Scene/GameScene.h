@@ -13,6 +13,7 @@
 #include "Boss.h"
 #include "UIManager.h"
 #include "ParticleEmitter2D.h"
+#include"PieceManager.h"
 
 #include <memory>
 
@@ -32,8 +33,8 @@ private:
 	// ボス
 	std::unique_ptr<Boss> boss_ = nullptr;
 
-	//ピース配列
-	std::vector < std::unique_ptr<Piece>> pieces;
+	//ピース管理クラス
+	std::unique_ptr<PieceManager> psManager = nullptr;
 
 	//背景テクスチャとスプライト
 	uint16_t backGroundTexture = 0;

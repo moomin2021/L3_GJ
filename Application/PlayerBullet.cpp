@@ -56,11 +56,12 @@ void PlayerBullet::Draw()
 	sprite_->Draw(sHandle_);
 }
 
-void PlayerBullet::OnCollision()
+void PlayerBullet::OnCollision(uint16_t damage)
 {
 	if (collider_->GetIsHit()) {
 		if (collider_->GetHitCollider()->GetAttribute() == COL_BOSS) {
-			sBoss_->SubHP(1);
+			//‚±‚±‚Ìvalue‚É’e‚ÌˆÐ—Í‚ð“ü‚ê‚é
+			sBoss_->SubHP(damage);
 			isAlive_ = false;
 		}
 	}
