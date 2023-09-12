@@ -71,6 +71,7 @@ void GameScene::Initialize()
 	// UIマネージャー
 	uiMgr_ = std::make_unique<UIManager>();
 	uiMgr_->Initialize();
+	UIManager::SetBoss(boss_.get());
 }
 
 void GameScene::Update()
