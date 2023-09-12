@@ -3,6 +3,7 @@
 #include"Easing.h"
 #include"Util.h"
 #include"CollisionAttribute.h"
+#include"WinAPI.h"
 
 void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 {
@@ -187,9 +188,22 @@ void Player::Move()
 
 		spd.y = -spd.y;
 
+
+
+
 		position = playerBlock->GetPosition();
 
+
+
 		position += spd;
+
+		//Ž©‹@‚ÌÀ•W‚ÌÅ‘å’l‚ðÝ’è
+		Vector2 size, w;
+		size = Block::GetBlockSize();
+		w = { (float)WinAPI::GetInstance()->GetWidth() ,(float)WinAPI::GetInstance()->GetHeight() };
+		position.x = Util::Clamp(position.x, w.x - size.x / 2.0f, size.x / 2.0f);
+		position.y = Util::Clamp(position.y, 
+			w.y - size.y / 2.0f - (size.y*3.0f), size.y / 2.0f + size.y * 3.0f);
 
 		ParentData* parent = playerBlock->GetParent();
 		parent->parentPos = position;

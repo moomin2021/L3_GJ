@@ -78,6 +78,9 @@ private:
 	int moveCoolTimeMax = 2;
 	int moveCoolTime = moveCoolTimeMax;
 
+	//Vector2 moveTileMin{ 0,3 };
+	//Vector2 moveTileMax {}
+
 	//‰ñ“]Šp
 	float rotation = 0;
 	float beforeRot = 0;
