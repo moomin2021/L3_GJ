@@ -2,6 +2,11 @@
 #include"Block.h"
 #include<vector>
 
+struct PieceData {
+	std::vector<Vector2> offset;
+	std::vector<BlockData> blockData;
+};
+
 class Player;
 
 class Piece
@@ -9,7 +14,7 @@ class Piece
 public:
 
 	//初期化
-	void Initialize();
+	void Initialize(const PieceData& data);
 
 	//更新
 	void Update();
@@ -17,16 +22,11 @@ public:
 	//描画
 	void Draw();
 
-	static void CreatePiece();
-
 	static void ALlPieceUpdate();
 
 	void OnCollision();
 
 public:
-
-	//全ピース
-	static std::vector < std::unique_ptr<Piece>> pieces;
 
 	//進行速度
 	static int moveCoolTimeMax;

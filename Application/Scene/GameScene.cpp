@@ -52,9 +52,12 @@ void GameScene::Initialize()
 	//自機の弾のテクスチャの読み込みとセット
 	PlayerBullet::SetHandle(LoadTexture("Resources/bullet_player.png"));
 
+	psManager = std::make_unique<PieceManager>();
+	psManager->Initialize();
+
 	//プレイヤーとピース配列のセット
 	Block::SetPlayer(player.get());
-	Block::SetPiece(&Piece::pieces);
+	Block::SetPiece(&psManager->pieces);
 
 
 	// ボス
@@ -83,8 +86,11 @@ void GameScene::Update()
 	// ボス
 	boss_->Update();
 
-	Piece::ALlPieceUpdate();
-	ImGui::Text("all block %d,", (int)Block::GetBlockCount());
+//	Piece::ALlPieceUpdate();
+
+	psManager->Update();
+
+	//ImGui::Text("all block %d,", (int)Block::GetBlockCount());
 
 	Block::AllBlockDeleteCheck();
 
@@ -109,8 +115,8 @@ void GameScene::Draw()
 	// プレイヤー
 	player->Draw();
 
-	for (size_t i = 0; i < Piece::pieces.size(); i++) {
-		Piece::pieces[i]->Draw();
+	for (size_t i = 0; i < psManager->pieces.size(); i++) {
+		psManager->pieces[i]->Draw();
 	}
 
 	// ボス
@@ -148,8 +154,8 @@ void GameScene::OnCollision()
 	player->OnCollision();
 
 	//判定
-	for (size_t i = 0; i < Piece::pieces.size(); i++) {
-		Piece::pieces[i]->OnCollision();
+	for (size_t i = 0; i < psManager->pieces.size(); i++) {
+		psManager->pieces[i]->OnCollision();
 	}
 
 }

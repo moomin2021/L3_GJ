@@ -60,6 +60,7 @@ void PlayerBullet::OnCollision()
 {
 	if (collider_->GetIsHit()) {
 		if (collider_->GetHitCollider()->GetAttribute() == COL_BOSS) {
+			//‚±‚±‚Ìvalue‚É’e‚ÌˆÐ—Í‚ð“ü‚ê‚é
 			sBoss_->SubHP(1);
 			isAlive_ = false;
 		}

@@ -5,14 +5,13 @@
 #include"Key.h"
 
 //静的メンバの実態
-std::vector < std::unique_ptr<Piece>> Piece::pieces;
 
 int Piece::moveCoolTimeMax = 4;
 int Piece::moveCoolTime = Piece::moveCoolTimeMax;
 float Piece::baseSpd = 32.0f;
 uint16_t Piece::allPieceCount = 0;
 
-void Piece::Initialize()
+void Piece::Initialize(const PieceData& data)
 {
 	//一旦Tミノのみ作る
 	/*std::unique_ptr<Block> newBlock0 = std::make_unique<Block>();
@@ -23,7 +22,7 @@ void Piece::Initialize()
 	uint16_t pieceTag = allPieceCount;
 	allPieceCount++;
 
-	ParentData* parent = new ParentData();
+	ParentData* parent = nullptr;
 
 	//縦軸のタイルの数
 	int tileVertical = WinAPI::GetInstance()->GetHeight() / (int)Block::GetBlockSize().y;
@@ -35,34 +34,48 @@ void Piece::Initialize()
 	parentPos.x = parentOffset.x * Block::GetBlockSize().x + (Block::GetBlockSize().x / 2.0f);
 	parentPos.y = parentOffset.y * Block::GetBlockSize().y + (Block::GetBlockSize().y / 2.0f);
 
-	parent->parentPos = parentPos;
-	parent->parentRot = rotation;
-	parent->parentTag = pieceTag;
-	parent->tileOffset = { 0,0 };
+	rotation = 0.0f;
 
-	Block* newBlock0 = Block::CreateBlock(BlockData::None, parent);
-	childBlocks.push_back(std::move(newBlock0));
-	parent = new ParentData();
-	parent->parentPos = parentPos;
-	parent->parentRot = rotation;
-	parent->parentTag = pieceTag;
-	parent->tileOffset = { 0,1 };
-	Block* newBlock1 = Block::CreateBlock(BlockData::Cannon, parent);
-	childBlocks.push_back(std::move(newBlock1));
-	parent = new ParentData();
-	parent->parentPos = parentPos;
-	parent->parentRot = rotation;
-	parent->parentTag = pieceTag;
-	parent->tileOffset = { 0,-1 };
-	Block* newBlock2 = Block::CreateBlock(BlockData::None, parent);
-	childBlocks.push_back(std::move(newBlock2));
-	parent = new ParentData();
-	parent->parentPos = parentPos;
-	parent->parentRot = rotation;
-	parent->parentTag = pieceTag;
-	parent->tileOffset = { 1,0 };
-	Block* newBlock3 = Block::CreateBlock(BlockData::Cannon, parent);
-	childBlocks.push_back(std::move(newBlock3));
+	//貰ったデータでピース生成
+	for (size_t i = 0; i < data.offset.size(); i++) {
+		parent = new ParentData();
+		parent->parentPos = parentPos;
+		parent->parentRot = rotation;
+		parent->parentTag = pieceTag;
+		parent->tileOffset = data.offset[i];
+		Block* newBlock = Block::CreateBlock(data.blockData[i], parent);
+		childBlocks.push_back(std::move(newBlock));
+	}
+
+
+	//parent->parentPos = parentPos;
+	//parent->parentRot = rotation;
+	//parent->parentTag = pieceTag;
+	//parent->tileOffset = { 0,0 };
+
+	//Block* newBlock0 = Block::CreateBlock(BlockData::None, parent);
+	//childBlocks.push_back(std::move(newBlock0));
+	//parent = new ParentData();
+	//parent->parentPos = parentPos;
+	//parent->parentRot = rotation;
+	//parent->parentTag = pieceTag;
+	//parent->tileOffset = { 0,1 };
+	//Block* newBlock1 = Block::CreateBlock(BlockData::Cannon, parent);
+	//childBlocks.push_back(std::move(newBlock1));
+	//parent = new ParentData();
+	//parent->parentPos = parentPos;
+	//parent->parentRot = rotation;
+	//parent->parentTag = pieceTag;
+	//parent->tileOffset = { 0,-1 };
+	//Block* newBlock2 = Block::CreateBlock(BlockData::None, parent);
+	//childBlocks.push_back(std::move(newBlock2));
+	//parent = new ParentData();
+	//parent->parentPos = parentPos;
+	//parent->parentRot = rotation;
+	//parent->parentTag = pieceTag;
+	//parent->tileOffset = { 1,0 };
+	//Block* newBlock3 = Block::CreateBlock(BlockData::Cannon, parent);
+	//childBlocks.push_back(std::move(newBlock3));
 
 	myTag = pieceTag;
 
@@ -95,52 +108,44 @@ void Piece::Draw()
 	}
 }
 
-void Piece::CreatePiece()
-{
-
-	std::unique_ptr<Piece> newPiece = std::make_unique<Piece>();
-	newPiece->Initialize();
-	pieces.push_back(std::move(newPiece));
-
-}
 
 void Piece::ALlPieceUpdate()
 {
-	//ピースの更新とボタンで生成
-		//数フレームに1回移動
-	if (moveCoolTime > 0) {
-		moveCoolTime--;
-	}
-	else {
-		moveCoolTime = moveCoolTimeMax;
-		for (size_t i = 0; i < Piece::pieces.size(); i++) {
-			pieces[i]->Update();
-		}
-	}
+	////ピースの更新とボタンで生成
+	//	//数フレームに1回移動
+	//if (moveCoolTime > 0) {
+	//	moveCoolTime--;
+	//}
+	//else {
+	//	moveCoolTime = moveCoolTimeMax;
+	//	for (size_t i = 0; i < Piece::pieces.size(); i++) {
+	//		pieces[i]->Update();
+	//	}
+	//}
 
 
 
-	ImGui::Text("piece size %d", Piece::pieces.size());
+	//ImGui::Text("piece size %d", Piece::pieces.size());
 
-	ImGui::SliderInt("moveCoolTime", &moveCoolTimeMax, 1, 60);
+	//ImGui::SliderInt("moveCoolTime", &moveCoolTimeMax, 1, 60);
 
-	//UとIでクールタイムを増減
-	if (Key::GetInstance()->TriggerKey(DIK_U)) {
-		moveCoolTimeMax--;
-	}
-	else if (Key::GetInstance()->TriggerKey(DIK_I)) {
-		moveCoolTimeMax++;
-	}
+	////UとIでクールタイムを増減
+	//if (Key::GetInstance()->TriggerKey(DIK_U)) {
+	//	moveCoolTimeMax--;
+	//}
+	//else if (Key::GetInstance()->TriggerKey(DIK_I)) {
+	//	moveCoolTimeMax++;
+	//}
 
 
-	if (ImGui::Button("add piece")) {
-		CreatePiece();
-	}
+	//if (ImGui::Button("add piece")) {
+	//	CreatePiece();
+	//}
 
-	//ボタン押下でピース発生
-	if (Key::GetInstance()->TriggerKey(DIK_P)) {
-		CreatePiece();
-	}
+	////ボタン押下でピース発生
+	//if (Key::GetInstance()->TriggerKey(DIK_P)) {
+	//	CreatePiece();
+	//}
 }
 
 void Piece::OnCollision()
