@@ -61,6 +61,7 @@ void GameScene::Initialize()
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize();
 	PlayerBullet::SetBoss(boss_.get());
+	BossBullet::SetColMgr2D(CollisionManager2D::GetInstance());
 
 	//”wŒi
 	backGroundTexture= Texture::GetInstance()->LoadTexture("Resources/backGround.png");
