@@ -41,7 +41,7 @@ private:
 
 	//子ブロック配列
 	std::vector<Block*> childBlocks;
-
+	uint16_t myTag = 0;
 
 
 

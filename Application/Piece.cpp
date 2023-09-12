@@ -62,6 +62,7 @@ void Piece::Initialize()
 	Block* newBlock3 = Block::CreateBlock(BlockData::Cannon, parent);
 	childBlocks.push_back(std::move(newBlock3));
 
+	myTag = pieceTag;
 
 	//rotation = Util::GetRandomInt(0, 3) * 90.0f;
 
@@ -75,7 +76,7 @@ void Piece::Update()
 	//parentPos.x -= baseSpd;
 	//ImGui::Text("pos %f,%f", parentPos.x, parentPos.y);
 
-	//ImGui::Text("piece tag :%d", pieceTag);
+	//ImGui::Text("piece tag :%d", myTag);
 
 	for (size_t i = 0; i < childBlocks.size(); i++) {
 		ParentData* parent = childBlocks[i]->GetParent();
