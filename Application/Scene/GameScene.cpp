@@ -77,7 +77,6 @@ void GameScene::Initialize()
 
 void GameScene::Update()
 {
-
 	// ƒvƒŒƒCƒ„[
 	player->Update();
 
