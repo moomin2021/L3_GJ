@@ -56,7 +56,7 @@ void Boss::Initialize()
 #pragma endregion
 
 #pragma region コライダー
-	collider_ = std::make_unique<CircleCollider>(Vector2{ 0.0f, 0.0f }, 112.0f);
+	collider_ = std::make_unique<CircleCollider>(Vector2{ 0.0f, 0.0f }, 64.0f);
 	collider_->SetAttribute(COL_BOSS);
 	collider_->SetSprite(sBossFront_.get());
 	colMgr2D_->AddCollider(collider_.get());
