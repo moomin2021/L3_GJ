@@ -38,7 +38,7 @@ void GameScene::Initialize()
 
 
 	//ブロッククラス静的初期化
-	Block::StaticInitialize(blockTex, cannonTex, { 32,32 });
+	Block::StaticInitialize(blockTex, cannonTex,playerTex, { 32,32 });
 
 	// プレイヤー
 	Vector2 playerPos = { Block::GetBlockSize().x * 3.0f + (Block::GetBlockSize().x / 2.0f),
