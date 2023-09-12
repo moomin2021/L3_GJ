@@ -22,7 +22,24 @@ void Sound::Initialize()
 	assert(SUCCEEDED(result));
 }
 
-uint16_t Sound::LoadWave(std::string fileName)
+void Sound::Update()
+{
+	for (auto it = isPlaySounds_.begin(); it != isPlaySounds_.end();) {
+		XAUDIO2_VOICE_STATE state;
+		it->second->GetState(&state);
+
+		if (state.BuffersQueued <= 0) {
+			it->second->Stop(0);
+			it = isPlaySounds_.erase(it);
+		}
+
+		else {
+			++it;
+		}
+	}
+}
+
+uint16_t Sound::LoadWave(std::string fileName, float volume)
 {
 	if (soundHandles_.count(fileName) > 0) {
 		return soundHandles_[fileName];
@@ -96,6 +113,7 @@ uint16_t Sound::LoadWave(std::string fileName)
 	soundData.wfex = format.fmt;
 	soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
 	soundData.bufferSize = data.size;
+	soundData.volume = volume;
 
 	// 音声データ保存
 	soundDatas_.emplace(soundCounter_, soundData);
@@ -104,9 +122,19 @@ uint16_t Sound::LoadWave(std::string fileName)
 	return soundCounter_;
 }
 
-void Sound::Play(uint16_t handle)
+void Sound::Play(uint16_t handle, bool isLoop)
 {
 	HRESULT result;
+
+	if (isPlaySounds_.count(handle)) {
+		for (auto it = isPlaySounds_.begin(); it != isPlaySounds_.end();) {
+			if (it->first == handle) {
+				it->second->Stop(0);
+				it = isPlaySounds_.erase(it);
+				break;
+			}
+		}
+	}
 
 	// ソース音声を作成
 	IXAudio2SourceVoice* sourceVoices = nullptr;
@@ -118,9 +146,36 @@ void Sound::Play(uint16_t handle)
 	buf.pAudioData = soundDatas_[handle].pBuffer;
 	buf.AudioBytes = soundDatas_[handle].bufferSize;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
+	if (isLoop) buf.LoopCount = XAUDIO2_LOOP_INFINITE;
 	result = sourceVoices->SubmitSourceBuffer(&buf);
 
 	// 再生
+	result = sourceVoices->SetVolume(soundDatas_[handle].volume);
 	result = sourceVoices->Start(0);
 	assert(SUCCEEDED(result));
+
+	isPlaySounds_.emplace(handle, sourceVoices);
+}
+
+void Sound::Stop(uint16_t handle)
+{
+	for (auto it = isPlaySounds_.begin(); it != isPlaySounds_.end();) {
+		if (it->first == handle) {
+			it->second->Stop(0);
+			it = isPlaySounds_.erase(it);
+			break;
+		}
+	}
+}
+
+void Sound::Release()
+{
+	for (auto& it : isPlaySounds_) {
+		it.second->Stop(0);
+	}
+
+	isPlaySounds_.clear();
+	soundDatas_.clear();
+	soundHandles_.clear();
+	soundCounter_ = 0;
 }

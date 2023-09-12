@@ -50,6 +50,16 @@ void Player::Update()
 	/*sprite->MatUpdate();
 	UpdateBlocks();*/
 
+	// ’e‚Ì¶‘¶ƒtƒ‰ƒO‚ª[OFF]‚È‚çÁ‚·
+	for (auto it = bullets.begin(); it != bullets.end();) {
+		// ’e‚ÌXV
+		(*it)->Update();
+
+		// ’e‚Ì¶‘¶ƒtƒ‰ƒO‚ª[OFF]‚É‚È‚Á‚½‚ç’e‚ğíœ
+		if ((*it)->GetIsAlive() == false) it = bullets.erase(it);
+		else ++it;
+	}
+
 	ImGui::Text("pos %f,%f", position.x, position.y);
 	ImGui::Text("health %d", health);
 	ImGui::Text("Lv.%d : EXP %d", level, currentEXP);
@@ -60,6 +70,11 @@ void Player::MatUpdate()
 {
 	playerBlock->Update();
 	UpdateBlocks();
+
+	// ’e
+	for (auto& it : bullets) {
+		it->MatUpdate();
+	}
 }
 
 void Player::Draw()
@@ -118,6 +133,10 @@ void Player::OnCollision()
 	//	}
 
 	//}
+
+	for (auto& it : bullets) {
+		it->OnCollision();
+	}
 
 	playerBlock->OnCollison();
 }
@@ -295,7 +314,7 @@ void Player::BulletsUpdate()
 {
 	//€‚ñ‚Å‚é’e‚ğÁ‚·
 	bullets.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
-		if (!bullet->IsAlive()) {
+		if (!bullet->GetIsAlive()) {
 			return true;
 		}
 		return false;

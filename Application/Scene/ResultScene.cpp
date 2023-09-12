@@ -19,7 +19,7 @@ void ResultScene::Initialize()
 
 #pragma region スプライト
 	sBackGround_ = std::make_unique<Sprite>();
-	sBackGround_->SetSize({ 1920.0f, 1080.0f });
+	sBackGround_->SetSize({ 1856.0f, 960.0f });
 #pragma endregion
 
 #pragma region 画像ハンドル

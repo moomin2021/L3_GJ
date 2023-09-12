@@ -47,9 +47,10 @@ void GameScene::Initialize()
 
 	player = std::make_unique<Player>();
 	player->Initialize(playerTex,playerPos);
+	PlayerBullet::SetColMgr2D(CollisionManager2D::GetInstance());
 
 	//自機の弾のテクスチャの読み込みとセット
-	PlayerBullet::SetBulletTex(LoadTexture("Resources/bullet_player.png"));
+	PlayerBullet::SetHandle(LoadTexture("Resources/bullet_player.png"));
 
 	//プレイヤーとピース配列のセット
 	Block::SetPlayer(player.get());
@@ -59,6 +60,7 @@ void GameScene::Initialize()
 	// ボス
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize();
+	PlayerBullet::SetBoss(boss_.get());
 
 	//背景
 	backGroundTexture= Texture::GetInstance()->LoadTexture("Resources/backGround.png");

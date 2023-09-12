@@ -5,6 +5,7 @@
 #include <wrl.h>
 #include <map>
 #include <string>
+#include <vector>
 
 // チャンクヘッダ
 struct ChunkHeader {
@@ -29,6 +30,7 @@ struct SoundData {
 	WAVEFORMATEX wfex;	// 波形フォーマット
 	BYTE* pBuffer;		// バッファの先頭アドレス
 	uint32_t bufferSize;// バッファサイズ
+	float volume = 0;
 };
 
 class Sound {
@@ -49,6 +51,9 @@ private:
 	// 音声ハンドルを保存
 	std::map<std::string, uint16_t> soundHandles_ = {};
 
+	// 再生中の音
+	std::map<uint16_t, IXAudio2SourceVoice*> isPlaySounds_ = {};
+
 	// 音声読み込みカウンター
 	uint16_t soundCounter_ = 0;
 #pragma endregion
@@ -61,10 +66,20 @@ public:
 	// 初期化処理
 	void Initialize();
 
+	// 更新処理
+	void Update();
+
 	// サウンド読み込み
-	uint16_t LoadWave(std::string fileName);
+	// volume = 0.0f ~ 1.0f
+	uint16_t LoadWave(std::string fileName, float volume = 1.0f);
 
 	// 再生
-	void Play(uint16_t handle);
+	void Play(uint16_t handle, bool isLoop = false);
+
+	// 停止
+	void Stop(uint16_t handle);
+
+	// 解放
+	void Release();
 #pragma endregion
 };

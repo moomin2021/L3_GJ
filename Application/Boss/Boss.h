@@ -4,10 +4,14 @@
 #include "Enemy0.h"
 #include "ParticleEmitter2D.h"
 #include "Key.h"
+#include "CircleCollider.h"
+#include "CollisionManager2D.h"
 
 #include <memory>
 #include <string>
 #include <vector>
+
+class Player;
 
 class Boss
 {
@@ -38,19 +42,33 @@ private:
 
 	// インスタンス
 	Key* key_ = nullptr;
+	CollisionManager2D* colMgr2D_ = nullptr;
 
 	// スプライト
 	std::unique_ptr<Sprite> sBossBack0_ = nullptr;	// ボス裏面0
 	std::unique_ptr<Sprite> sBossBack1_ = nullptr;	// ボス裏面1
 	std::unique_ptr<Sprite> sBossFront_ = nullptr;	// ボス前面
+	std::unique_ptr<Sprite> sHpBossIn_ = nullptr;// ボスのHPゲージ
 
 	// 画像ハンドル
 	uint16_t hBossBack_ = 0;
 	uint16_t hBossFront_ = 0;
 	uint16_t hParticle_ = 0;
+	uint16_t hHpBossIn_ = 0;
+
+	// コライダー
+	std::unique_ptr<CircleCollider> collider_ = nullptr;
 
 	// 状態
 	State state_ = WAIT;
+
+	// HP
+	size_t gaugeNum_ = 4;
+	std::vector<uint16_t> hp_ = {};
+	uint16_t oneGaugeValue_ = 200;
+
+	// 生存フラグ
+	bool isAlive_ = true;
 
 	// 座標
 	Vector2 position_ = { 1500.0f, 540.0f };// ボスの座標
@@ -129,6 +147,9 @@ public:
 	// 行列更新
 	void MatUpdate();
 
+	// ボスのHP減少
+	void SubHP(uint16_t value);
+
 private:
 	// 状態別更新処理
 	static void (Boss::* stateTable[]) ();
@@ -146,6 +167,9 @@ private:
 	void PostBoomerang();	// ブーメラン後処理
 
 	void BossBackRotate(float rotate);// ボスの裏面回転
+
+	// ボスのHP更新
+	void HPUpdate();
 
 	// ImGuiを使う
 	void DebugImGui();
