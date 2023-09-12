@@ -46,10 +46,6 @@ void UIManager::Initialize()
 	sHpBoss_->SetSize({ 800.0f, 48.0f });
 	sHpBoss_->SetAnchorPoint({ 0.5f, 0.5f });
 
-	sHpBossIn_ = std::make_unique<Sprite>();
-	sHpBossIn_->SetPosition({ 1028.0f, 892.0f });
-	sHpBossIn_->SetSize({ 792.0f, 40.0f });
-
 	sHpTextBoss_ = std::make_unique<Sprite>();
 	sHpTextBoss_->SetPosition({ 1046.0f, 892.0f });
 	sHpTextBoss_->SetSize({ 98.0f, 48.0f });
@@ -78,7 +74,6 @@ void UIManager::Initialize()
 	hHpPlayerIn_ = LoadTexture("Resources/hp_player_in.png");
 	hHpTextPlayer_ = LoadTexture("Resources/hp_text_player.png");
 	hHpBoss_ = LoadTexture("Resources/hp_boss.png");
-	hHpBossIn_ = LoadTexture("Resources/hp_boss_in.png");
 	hHpTextBoss_ = LoadTexture("Resources/hp_text_boss.png");
 	hKakeru2_ = LoadTexture("Resources/kakeru2.png");
 	hNextText_ = LoadTexture("Resources/next_text.png");
@@ -95,7 +90,6 @@ void UIManager::MatUpdate()
 	sHpPlayerIn_->MatUpdate();
 	sHpTextPlayer_->MatUpdate();
 	sHpBoss_->MatUpdate();
-	sHpBossIn_->MatUpdate();
 	sHpTextBoss_->MatUpdate();
 	sKakeru2_->MatUpdate();
 	sNextText_->MatUpdate();
@@ -111,7 +105,6 @@ void UIManager::Draw()
 	sHpPlayerIn_->Draw(hHpPlayerIn_);
 	sHpTextPlayer_->Draw(hHpTextPlayer_);
 	sHpBoss_->Draw(hHpBoss_);
-	sHpBossIn_->Draw(hHpBossIn_);
 	sHpTextBoss_->Draw(hHpTextBoss_);
 	sKakeru2_->Draw(hKakeru2_);
 	sNextText_->Draw(hNextText_);
