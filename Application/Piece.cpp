@@ -10,6 +10,7 @@ std::vector < std::unique_ptr<Piece>> Piece::pieces;
 int Piece::moveCoolTimeMax = 4;
 int Piece::moveCoolTime = Piece::moveCoolTimeMax;
 float Piece::baseSpd = 32.0f;
+uint16_t Piece::allPieceCount = 0;
 
 void Piece::Initialize()
 {
@@ -19,7 +20,8 @@ void Piece::Initialize()
 	std::unique_ptr<Block> newBlock2 = std::make_unique<Block>();
 	std::unique_ptr<Block> newBlock3 = std::make_unique<Block>();*/
 
-	uint16_t pieceTag = (uint16_t)pieces.size();
+	uint16_t pieceTag = allPieceCount;
+	allPieceCount++;
 
 	ParentData* parent = new ParentData();
 
