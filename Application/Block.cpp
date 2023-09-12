@@ -258,11 +258,11 @@ void Block::OnCollison()
 			else {
 				if (vecP.y > 0) {
 					//0à»è„Ç»ÇÁè„Ç…Ç¬ÇØÇÈ
-					hitOffset.y = 1.0f;
+					hitOffset.y = -1.0f;
 				}
 				else {
 					//0à»â∫Ç»ÇÁâ∫
-					hitOffset.y = -1.0f;
+					hitOffset.y = 1.0f;
 				}
 			}
 
