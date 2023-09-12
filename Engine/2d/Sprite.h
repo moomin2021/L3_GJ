@@ -67,7 +67,7 @@ public:
 	Sprite();
 
 	// s—ñXVˆ—
-	void MatUpdate();
+	void MatUpdate(bool isCamera = false);
 
 	/// <summary>
 	/// •`‰æˆ—

@@ -1,5 +1,7 @@
 #pragma once
 #include "Sprite.h"
+#include "BoxCollider.h"
+#include "CollisionManager2D.h"
 
 #include <memory>
 
@@ -13,8 +15,14 @@ private:
 	// 弾の速度
 	static float sSpeed_;
 
+	// 衝突マネージャー2D
+	static CollisionManager2D* sColMgr2D_;
+
 	// スプライト
 	std::unique_ptr<Sprite> sprite_ = nullptr;
+
+	// コライダー
+	std::unique_ptr<BoxCollider> collider_ = nullptr;
 
 	// 座標
 	Vector2 position_ = { 0.0f, 0.0f };
@@ -53,6 +61,9 @@ public:
 
 	// 速度を設定
 	static void SetSpeed(float speed) { sSpeed_ = speed; }
+
+	// 衝突マネージャーを設定
+	static void SetColMgr2D(CollisionManager2D* colMgr2D) { sColMgr2D_ = colMgr2D; }
 #pragma endregion
 
 #pragma region ゲッター関数
