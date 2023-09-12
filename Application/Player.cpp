@@ -137,6 +137,8 @@ void Player::OnCollision()
 	for (auto& it : bullets) {
 		it->OnCollision();
 	}
+
+	playerBlock->OnCollison();
 }
 
 void Player::Move()
@@ -154,7 +156,27 @@ void Player::Move()
 		oldPos = playerBlock->GetPosition();
 
 		Vector2 spd;
-		spd = pad->GetLStick() * baseSpd;
+		spd = pad->GetLStick();
+		//スティックの入力が0.5以上だったらスティックが倒されていることにする
+		if (fabs(spd.x) > 0.5f) {
+			spd.x = 1.0f * (spd.x / (float)fabs(spd.x));
+		}
+		else {
+			spd.x = 0;
+		}
+
+		if (fabs(spd.y) > 0.5f) {
+			spd.y = 1.0f * (spd.y / (float)fabs(spd.y));
+		}
+		else {
+			spd.y = 0;
+		}
+
+		if (spd.length() >= 1.0f) {
+			spd *= baseSpd;
+			moveCoolTime = moveCoolTimeMax;
+		}
+
 
 		if (key->PushKey(DIK_W) || key->PushKey(DIK_A) || key->PushKey(DIK_S) || key->PushKey(DIK_D)) {
 			spd.x = (key->PushKey(DIK_D) - key->PushKey(DIK_A)) * baseSpd;

@@ -81,6 +81,15 @@ Vector2& Vector2::operator/=(float s)
     return *this;
 }
 
+bool Vector2::operator==(const Vector2& v)
+{
+    if (x == v.x && y == v.y) {
+        return true;
+    }
+
+    return false;
+}
+
 // Vector2 ƒNƒ‰ƒX‚É‘®‚³‚È‚¢ŠÖ”ŒR
 // “ñ€‰‰Zq
 const Vector2 operator+(const Vector2& v1, const Vector2& v2)
