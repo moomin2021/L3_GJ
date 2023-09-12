@@ -3,18 +3,22 @@
 #include "Util.h"
 #include "Easing.h"
 #include "PipelineManager.h"
+#include "CollisionAttribute.h"
 
 #include <imgui_impl_DX12.h>
 
 Boss::Boss() {}
 
-Boss::~Boss() {
+Boss::~Boss()
+{
+	colMgr2D_->RemoveCollider(collider_.get());
 }
 
 void Boss::Initialize()
 {
 #pragma region インスタンス取得
 	key_ = Key::GetInstance();
+	colMgr2D_ = CollisionManager2D::GetInstance();
 #pragma endregion
 
 #pragma region スプライト
@@ -43,6 +47,18 @@ void Boss::Initialize()
 	hBossBack_ = LoadTexture("Resources/boss_back.png");
 	hBossFront_ = LoadTexture("Resources/boss_Front.png");
 	hParticle_ = LoadTexture("Resources/particle_enemy.png");
+#pragma endregion
+
+#pragma region コライダー
+	collider_ = std::make_unique<CircleCollider>(Vector2{ 0.0f, 0.0f }, 112.0f);
+	collider_->SetAttribute(COL_BOSS);
+	collider_->SetSprite(sBossFront_.get());
+	colMgr2D_->AddCollider(collider_.get());
+#pragma endregion
+
+#pragma region HP
+	hp_.resize(gaugeNum_);
+	for (size_t i = 0; i < gaugeNum_; i++) hp_[i] = oneGaugeValue_;
 #pragma endregion
 
 #pragma region BossBullet
@@ -123,6 +139,12 @@ void Boss::Draw()
 
 void Boss::OnCollision()
 {
+	sBossFront_->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+	// ボスが衝突したら
+	if (collider_->GetIsHit()) {
+		sBossFront_->SetColor({ 0.02f, 0.87f, 0.94f, 1.0f });
+	}
+
 	// 弾
 	for (auto& it : bullets_) {
 		it->OnCollision();

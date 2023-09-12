@@ -4,6 +4,8 @@
 #include "Enemy0.h"
 #include "ParticleEmitter2D.h"
 #include "Key.h"
+#include "CircleCollider.h"
+#include "CollisionManager2D.h"
 
 #include <memory>
 #include <string>
@@ -38,6 +40,7 @@ private:
 
 	// インスタンス
 	Key* key_ = nullptr;
+	CollisionManager2D* colMgr2D_ = nullptr;
 
 	// スプライト
 	std::unique_ptr<Sprite> sBossBack0_ = nullptr;	// ボス裏面0
@@ -49,8 +52,16 @@ private:
 	uint16_t hBossFront_ = 0;
 	uint16_t hParticle_ = 0;
 
+	// コライダー
+	std::unique_ptr<CircleCollider> collider_ = nullptr;
+
 	// 状態
 	State state_ = WAIT;
+
+	// HP
+	size_t gaugeNum_ = 3;
+	std::vector<uint16_t> hp_ = {};
+	uint16_t oneGaugeValue_ = 100;
 
 	// 座標
 	Vector2 position_ = { 1500.0f, 540.0f };// ボスの座標
