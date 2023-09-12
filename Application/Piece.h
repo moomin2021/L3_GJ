@@ -33,6 +33,8 @@ public:
 	static int moveCoolTime;
 	static float baseSpd;
 
+	static uint16_t allPieceCount;
+
 private:
 
 
