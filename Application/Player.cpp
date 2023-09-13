@@ -108,6 +108,9 @@ void Player::Update()
 	ImGui::Text("pos %f,%f", position.x, position.y);
 	ImGui::Text("health %d", health);
 	ImGui::Text("Lv.%d : EXP %d", level, currentEXP);
+	ImGui::SliderInt("EXP boost rate", &boostRateEXP, 1, 10);
+	ImGui::SliderInt("EXP boost need Block", &countBoostEXP, 4, 32);
+
 
 }
 
@@ -462,6 +465,11 @@ void Player::BlockReset()
 		int blockCount = (int)blocks.size();
 
 		//TODO:形成されている形を検知して加算する経験値に倍率をかける
+		//ブロックの数が経験値倍率の必要数を満たしていたら
+		if (blockCount > countBoostEXP) {
+			blockCount *= boostRateEXP;
+		}
+
 
 		//経験値に加算
 		currentEXP += blockCount;

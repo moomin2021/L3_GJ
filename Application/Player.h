@@ -120,6 +120,9 @@ private:
 	//レベル関係パラメータ
 	int needEXP = 32;
 	int currentEXP = 0;
+	int countBoostEXP = 4;
+	int boostRateEXP = 2;
+
 	int level = 1;
 	int bulletDamage = 1;
 	float expBarMax = 0.0f;
