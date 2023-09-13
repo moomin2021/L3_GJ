@@ -6,11 +6,12 @@
 #include"BoxCollider.h"
 #include"CollisionManager2D.h"
 #include<list>
+#include"ParticleEmitter2D.h"
 
 struct ParentData {
 	Vector2 parentPos{ 0,0 };
 	float parentRot = 0.0f;
-	Vector2 tileOffset{0,0};
+	Vector2 tileOffset{ 0,0 };
 	uint16_t parentTag = 0;
 };
 
@@ -28,7 +29,7 @@ class Piece;
 class Block
 {
 public://静的メンバ関数
-	
+
 	/// <summary>
 	/// 静的初期化
 	/// </summary>
@@ -36,7 +37,7 @@ public://静的メンバ関数
 	/// <param name="blockTex">ブロックのテクスチャ</param>
 	/// <param name="playerTex">プレイヤーのテクスチャ</param>
 	/// <param name="blockSize">ブロックの大きさ</param>
-	static void StaticInitialize(uint16_t cannonTex, uint16_t blockTex,uint16_t playerTex, const Vector2& blockSize);
+	static void StaticInitialize(uint16_t cannonTex, uint16_t blockTex, uint16_t playerTex, const Vector2& blockSize);
 
 	static Vector2 GetBlockSize() { return blockSize; }
 
@@ -48,6 +49,8 @@ public://静的メンバ関数
 	static size_t GetBlockCount() { return pAllBlock.size(); }
 
 	static void AllBlockDeleteCheck();
+
+	static void DrawParticle();
 
 public://メンバ関数
 
@@ -92,11 +95,13 @@ private://静的メンバ変数
 	static Vector2 blockSize;
 	//全てのブロックのﾎﾟｲﾝﾀ
 	static std::vector<std::unique_ptr<Block>> pAllBlock;
-	
+
 	static Player* player;
 	static std::vector < std::unique_ptr<Piece>>* pieces;
 
 	static uint16_t allBlockCount;
+
+	static std::unique_ptr<ParticleEmitter2D> particle;
 
 private://メンバ変数
 
@@ -119,10 +124,12 @@ private://メンバ変数
 
 	bool isAlive = false;
 
+
+
 private: //静的メンバ関数
 
 
 
-	void ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag,uint16_t parentTag,const Vector2& hitOffset);
+	void ChangeParent(uint16_t baseBlockTag, uint16_t hitBlockTag, uint16_t parentTag, const Vector2& hitOffset);
 };
 
