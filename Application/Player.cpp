@@ -32,7 +32,7 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	expBarMax = 632.0f;
 
 	spriteExpFrame = std::make_unique<Sprite>();
-	spriteExpFrame->SetPosition({352.0f, 912.0f });
+	spriteExpFrame->SetPosition({ 352.0f, 912.0f });
 	spriteExpFrame->SetSize({ 640.0f,48.0f });
 	spriteExpFrame->SetAnchorPoint({ 0.5f,0.5f });
 
@@ -56,7 +56,7 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	spriteHpText->SetPosition({ 58.0f, 25.0f });
 	spriteHpText->SetSize({ 98.0f,48.0f });
 	spriteHpText->SetAnchorPoint({ 0.5f,0.5f });
-	spriteHpText->SetRotation( -15.0f);
+	spriteHpText->SetRotation(-15.0f);
 
 	texExpBar = LoadTexture("Resources/exp_in.png");
 	texExpFrame = LoadTexture("Resources/exp.png");
@@ -65,6 +65,15 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	texHpBar = LoadTexture("Resources/hp_player_in.png");
 	texHpFrame = LoadTexture("Resources/hp_player.png");
 	texHpText = LoadTexture("Resources/hp_text_player.png");
+
+
+	//自分のカラーコード f007cd
+	//自分のカラーコード e796da
+	//自分のカラーコード 9d1f91
+	myColor.x = 0x9d / 255.0f;
+	myColor.y = 0x1f / 255.0f;
+	myColor.z = 0x91 / 255.0f;
+	myColor.w = 1.0f;
 
 }
 
@@ -235,7 +244,7 @@ void Player::DrawUI()
 
 void Player::Move()
 {
-	
+
 
 	//パッド入力で移動
 	//数フレームに一回
@@ -305,12 +314,12 @@ void Player::Move()
 		size = Block::GetBlockSize();
 		w = { (float)WinAPI::GetInstance()->GetWidth() ,(float)WinAPI::GetInstance()->GetHeight() };
 		position.x = Util::Clamp(position.x, w.x - size.x / 2.0f, size.x / 2.0f);
-		position.y = Util::Clamp(position.y, 
-			w.y - size.y / 2.0f - (size.y*3.0f), size.y / 2.0f + size.y * 3.0f);
+		position.y = Util::Clamp(position.y,
+			w.y - size.y / 2.0f - (size.y * 3.0f), size.y / 2.0f + size.y * 3.0f);
 
 		ParentData* parent = playerBlock->GetParent();
 		parent->parentPos = position;
-		
+
 		playerBlock->SetParent(parent);
 
 	}
@@ -461,6 +470,7 @@ void Player::UpdateBlocks()
 		//	parent->parentRot = &rotation;
 		blocks[i]->SetParent(parent);
 		blocks[i]->Update();
+		blocks[i]->SetColor(myColor);
 
 		if (blocks[i]->GetCollider()->GetAttribute() == COL_PLAYER) {
 			ImGui::Text("col player");
@@ -532,9 +542,9 @@ void Player::UpdateUI()
 	spriteHpBar->SetSize(size);
 
 	//最大EXPでバーを分割
-	sizeOnce =  expBarMax / (float)needEXP;
+	sizeOnce = expBarMax / (float)needEXP;
 
-size = spriteExpBar->GetSize();
+	size = spriteExpBar->GetSize();
 	size.x = sizeOnce * currentEXP;
 	spriteExpBar->SetSize(size);
 

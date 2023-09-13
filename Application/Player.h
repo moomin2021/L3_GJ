@@ -7,6 +7,7 @@
 #include"CollisionManager2D.h"
 #include"PlayerBullet.h"
 
+
 class Player
 {
 public:
@@ -114,7 +115,7 @@ private:
 	uint16_t texHpFrame = 0;
 	std::unique_ptr<Sprite> spriteHpText = nullptr;
 	uint16_t texHpText = 0;
-	int damageCoolTimeMax = 180;
+	int damageCoolTimeMax = 90;
 	int damageCooltime = 0;
 
 	//射撃用パラメータ
@@ -141,6 +142,9 @@ private:
 	//デバッグ用
 	int debugBlockOffsetX = 0;
 	int debugBlockOffsetY = 0;
+
+	//色
+	float4 myColor;
 
 	//自分のブロック1
 	Block* playerBlock = nullptr;
