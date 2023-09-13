@@ -14,6 +14,7 @@ class ResultScene : public BaseScene
 private:
 	// クリアタイム
 	static float clearTime_;
+	static bool isGameOver_;
 
 	// インスタンス
 	Pad* pad_ = nullptr;
@@ -113,6 +114,8 @@ private:
 #pragma region セッター関数
 public:
 	static void SetClearTime(float clearTime) { clearTime_ = clearTime; }
+
+	static void SetIsGameOver(bool frag) { isGameOver_ = frag; }
 #pragma endregion
 };
 

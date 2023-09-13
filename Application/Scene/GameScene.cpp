@@ -7,6 +7,7 @@
 #include "CollisionAttribute.h"
 #include "ImGuiManager.h"
 #include"WinAPI.h"
+#include "ResultScene.h"
 
 #include <imgui_impl_win32.h>
 #include <imgui_impl_DX12.h>
@@ -104,6 +105,12 @@ void GameScene::Update()
 	// チェンジシーンフラグが[ON]になったら切り替える
 	if (boss_->GetIsChangeScene()) {
 		fade_->ChangeScene(SCENE::RESULT);
+		ResultScene::SetIsGameOver(false);
+	}
+
+	if (player->IsAlive() == false) {
+		fade_->ChangeScene(SCENE::RESULT);
+		ResultScene::SetIsGameOver(true);
 	}
 
 	if (key_->TriggerKey(DIK_B)) {

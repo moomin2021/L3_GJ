@@ -135,6 +135,7 @@ private:
 	float time2Opening0_		= 3.0f;// オープンイング0時間
 	float time2Opening1_		= 5.0f;// オープンイング1時間
 	float time2Opening2_		= 1.0f;// オープンイング2時間
+	float time2PreClosing_		= 2.0f;// クロージング前処理時間
 	float timeClosing0_			= 5.0f;// オープンイング0時間
 	float timeClosing1_			= 0.5f;// オープンイング1時間
 	float time2Wait_			= 3.0f;// 待機時間

@@ -4,6 +4,7 @@
 #include "WinAPI.h"
 
 float ResultScene::clearTime_ = 0;
+bool ResultScene::isGameOver_ = false;
 
 ResultScene::ResultScene() {}
 
@@ -185,6 +186,10 @@ void ResultScene::Initialize()
 	nextRankTimeHandle_[0] = (uint16_t)nextRankTime_ / 60;
 	nextRankTimeHandle_[1] = ((uint16_t)nextRankTime_ % 60) / 10;
 	nextRankTimeHandle_[2] = ((uint16_t)nextRankTime_ % 60) % 10;
+
+	if (isGameOver_) {
+		hResultRank_ = hRank_[4];
+	}
 }
 
 void ResultScene::Update()

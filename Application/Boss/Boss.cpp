@@ -12,6 +12,8 @@ Boss::Boss() {}
 Boss::~Boss()
 {
 	colMgr2D_->RemoveCollider(collider_.get());
+	colMgr2D_->RemoveCollider(colBack0_.get());
+	colMgr2D_->RemoveCollider(colBack1_.get());
 }
 
 void Boss::Initialize()
@@ -258,6 +260,7 @@ void (Boss::* Boss::stateTable[]) () = {
 	&Boss::Opening0,		// オープニング0
 	&Boss::Opening1,		// オープニング1
 	&Boss::Opening2,		// オープニング2
+	&Boss::PreClosing,		// クロージング前処理
 	&Boss::Closing0,		// クロージング0
 	&Boss::Closing1,		// クロージング1
 	&Boss::Wait,			// 待機
@@ -351,6 +354,30 @@ void Boss::Opening2()
 
 void Boss::PreClosing()
 {
+	// ボスの裏面回転
+	BossBackRotate(basicSpd_);
+
+	// 行動開始からの経過時間
+	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
+
+	// 経過時間の割合で移動
+	float rate = Util::Clamp(elapsedTime / time2PreClosing_, 1.0f, 0.0f);
+	backPos0_.x = Easing::Quint::easeOut(beforeBackPos0_.x, basicPos_.x, rate);
+	backPos0_.y = Easing::Quint::easeOut(beforeBackPos0_.y, basicPos_.y, rate);
+	backPos1_.x = Easing::Quint::easeOut(beforeBackPos1_.x, basicPos_.x, rate);
+	backPos1_.y = Easing::Quint::easeOut(beforeBackPos1_.y, basicPos_.y, rate);
+	position_.x = Easing::Quint::easeOut(beforePos_.x, basicPos_.x, rate);
+	position_.y = Easing::Quint::easeOut(beforePos_.y, basicPos_.y, rate);
+
+	// 経過時間が指定時間以上ならStateをSummonにする
+	if (elapsedTime >= time2PreClosing_) {
+		state_ = CLOSING0;
+		actionStartTime_ = Util::GetTimrMSec();
+	}
+
+	sBossBack0_->SetPosition(backPos0_);
+	sBossBack1_->SetPosition(backPos1_);
+	sBossFront_->SetPosition(position_);
 }
 
 void Boss::Closing0()
@@ -470,7 +497,7 @@ void Boss::MoveShot()
 
 #pragma region sin関数で移動処理
 	sinMove_ += sinSpd_;
-	position_.y = (sinf(sinMove_) * 300.0f) + 540.0f;
+	position_.y = (sinf(sinMove_) * 300.0f) + 480.0f;
 	backPos0_ = position_;
 	backPos1_ = position_;
 	sBossBack0_->SetPosition(backPos0_);
@@ -586,8 +613,8 @@ void Boss::Summon()
 
 #pragma region sin関数で移動処理
 	sinMove_ += sinSpd_;
-	backPos0_.y = (sinf(sinMove_) * 300.0f) + 540.0f;;
-	backPos1_.y = (-sinf(sinMove_) * 300.0f) + 540.0f;;
+	backPos0_.y = (sinf(sinMove_) * 300.0f) + 480.0f;;
+	backPos1_.y = (-sinf(sinMove_) * 300.0f) + 480.0f;;
 #pragma endregion
 
 #pragma region 雑魚敵召喚
@@ -675,9 +702,9 @@ void Boss::PreBoomerang()
 
 	// 経過時間の割合で移動
 	backPos0_.x = Easing::Quint::easeOut(basicPos_.x, 1500.0f, rate);
-	backPos0_.y = Easing::Quint::easeOut(basicPos_.y, 840.0f, rate);
+	backPos0_.y = Easing::Quint::easeOut(basicPos_.y, 740.0f, rate);
 	backPos1_.x = Easing::Quint::easeOut(basicPos_.x, 1500.0f, rate);
-	backPos1_.y = Easing::Quint::easeOut(basicPos_.y, 840.0f, rate);
+	backPos1_.y = Easing::Quint::easeOut(basicPos_.y, 740.0f, rate);
 #pragma endregion
 
 #pragma region 裏面回転
@@ -700,8 +727,8 @@ void Boss::Boomerang()
 
 		if (backPos0_.x <= -300.0f) {
 			isBoomerang_ = true;
-			backPos0_.y = 240.0f;
-			backPos1_.y = 240.0f;
+			backPos0_.y = 340.0f;
+			backPos1_.y = 340.0f;
 		}
 	}
 
@@ -804,7 +831,10 @@ void Boss::HPUpdate()
 		isAlive_ = false;
 		sHpBossIn_->SetSize({ 0.0f, 40.0f });
 		actionStartTime_ = Util::GetTimrMSec();
-		state_ = CLOSING0;
+		state_ = PRE_CLOSING;
+		beforeBackPos0_ = sBossBack0_->GetPosition();
+		beforeBackPos1_ = sBossBack1_->GetPosition();
+		beforePos_ = sBossFront_->GetPosition();
 	}
 }
 

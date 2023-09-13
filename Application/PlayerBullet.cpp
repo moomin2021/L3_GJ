@@ -28,7 +28,7 @@ void PlayerBullet::Initialize(const Vector2& pos, const Vector2& velocity)
 	sprite_->SetSize({16.0f, 12.0f});
 
 	// コライダー
-	collider_ = std::make_unique<BoxCollider>(Vector2{ 0.0f, 0.0f }, Vector2{ 8.0f, 6.0f });
+	collider_ = std::make_unique<BoxCollider>(Vector2{ 0.0f, 0.0f }, Vector2{ 10.0f, 6.0f });
 	collider_->SetAttribute(COL_PLAYER_BULLET);
 	collider_->SetSprite(sprite_.get());
 	sColMgr2D_->AddCollider(collider_.get());
@@ -62,6 +62,10 @@ void PlayerBullet::OnCollision(uint16_t damage)
 		if (collider_->GetHitCollider()->GetAttribute() == COL_BOSS) {
 			//ここのvalueに弾の威力を入れる
 			sBoss_->SubHP(damage);
+			isAlive_ = false;
+		}
+
+		else if (collider_->GetHitCollider()->GetAttribute() == COL_ENEMY) {
 			isAlive_ = false;
 		}
 	}
