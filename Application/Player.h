@@ -115,7 +115,7 @@ private:
 	uint16_t texHpFrame = 0;
 	std::unique_ptr<Sprite> spriteHpText = nullptr;
 	uint16_t texHpText = 0;
-	int damageCoolTimeMax = 180;
+	int damageCoolTimeMax = 90;
 	int damageCooltime = 0;
 
 	//射撃用パラメータ
