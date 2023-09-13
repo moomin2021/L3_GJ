@@ -156,7 +156,7 @@ void Player::Update()
 	ImGui::SliderFloat("button size", &sizeButtonA, 32.0f, 96.0f);
 
 	//ブロックに経験値倍率がかかるかでpressAの描画を変える
-	if (blocks.size() >= countBoostEXP - 8) {
+	if (blocks.size() >= countBoostEXP) {
 		isDrawPressA = true;
 		Vector2 buttonPos = playerBlock->GetPosition();
 		buttonPos.x += sizeButtonA;
