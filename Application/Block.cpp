@@ -61,6 +61,8 @@ void Block::AllBlockDeleteCheck()
 
 void Block::DrawParticle()
 {
+	particle->Update();
+
 	//パーティクル
 	PipelineManager::PreDraw("Particle2D", D3D10_PRIMITIVE_TOPOLOGY_POINTLIST);
 
