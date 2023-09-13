@@ -86,6 +86,9 @@ void GameScene::Update()
 	// プレイヤー
 	player->Update();
 
+	//自機が動いたら一度衝突判定をとる
+	OnCollision();
+
 	// ボス
 	boss_->Update();
 

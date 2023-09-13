@@ -140,6 +140,10 @@ void Player::OnCollision()
 	}
 
 	playerBlock->OnCollison();
+
+	for (size_t i = 0; i < blocks.size(); i++) {
+		blocks[i]->OnCollison();
+	}
 }
 
 void Player::Move()
@@ -356,6 +360,11 @@ void Player::UpdateBlocks()
 		//	parent->parentRot = &rotation;
 		blocks[i]->SetParent(parent);
 		blocks[i]->Update();
+
+		if (blocks[i]->GetCollider()->GetAttribute() == COL_PLAYER) {
+			ImGui::Text("col player");
+		}
+
 		//ImGui::Text("blocks[%d]offset:%1.f,%1.f", i, blocks[i]->GetOffset().x, blocks[i]->GetOffset().y);
 	}
 }
