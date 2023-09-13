@@ -89,8 +89,6 @@ void Player::Update()
 	//ブロックリセット
 	BlockReset();
 
-	/*sprite->MatUpdate();
-	UpdateBlocks();*/
 
 	// 弾の生存フラグが[OFF]なら消す
 	for (auto it = bullets.begin(); it != bullets.end();) {
@@ -104,6 +102,11 @@ void Player::Update()
 
 	//UI更新
 	UpdateUI();
+
+	//ダメージのクールタイム管理
+	if (damageCooltime > 0) {
+		damageCooltime--;
+	}
 
 	ImGui::Text("pos %f,%f", position.x, position.y);
 	ImGui::Text("health %d", health);
@@ -135,11 +138,16 @@ void Player::MatUpdate()
 void Player::Draw()
 {
 	//自機描画
-	playerBlock->Draw();
 
-	//ブロックたちの描画
-	for (size_t i = 0; i < blocks.size(); i++) {
-		blocks[i]->Draw();
+	//ダメージのクールタイムでチカチカさせる
+	if (damageCooltime % 6 <= 3) {
+
+		playerBlock->Draw();
+
+		//ブロックたちの描画
+		for (size_t i = 0; i < blocks.size(); i++) {
+			blocks[i]->Draw();
+		}
 	}
 
 	//弾描画
@@ -202,6 +210,13 @@ void Player::OnCollision()
 
 void Player::Damage(uint16_t damageValue)
 {
+	//クールタイムが終わってなければ処理しない
+	if (damageCooltime > 0) {
+		return;
+	}
+
+	damageCooltime = damageCoolTimeMax;
+
 	health -= damageValue;
 	//HPを最大値と0でクランプ
 	health = Util::Clamp(health, healthMax, 0);
