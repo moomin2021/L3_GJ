@@ -354,6 +354,20 @@ void Player::Move()
 			moveCoolTime = moveCoolTimeMax;
 		}
 
+	
+
+		if (key->PushKey(DIK_W) || key->PushKey(DIK_A) || key->PushKey(DIK_S) || key->PushKey(DIK_D)) {
+			spd.x = (key->PushKey(DIK_D) - key->PushKey(DIK_A)) * baseSpd;
+			spd.y = (key->PushKey(DIK_W) - key->PushKey(DIK_S)) * baseSpd;
+			moveCoolTime = moveCoolTimeMax;
+		}
+
+		if (pad->GetPushButton(PAD_UP) || pad->GetPushButton(PAD_DOWN) || pad->GetPushButton(PAD_LEFT) || pad->GetPushButton(PAD_RIGHT)) {
+			spd.x = (pad->GetPushButton(PAD_RIGHT) - pad->GetPushButton(PAD_LEFT)) * baseSpd;
+			spd.y = (pad->GetPushButton(PAD_UP) - pad->GetPushButton(PAD_DOWN)) * baseSpd;
+			moveCoolTime = moveCoolTimeMax;
+		}
+
 		//上下両方動いているとき
 		if (fabs(spd.x) > 1.0f && fabs(spd.y) > 1.0f) {
 			//直前のフレームに上下に動いていたなら左右に
@@ -366,13 +380,6 @@ void Player::Move()
 				spd.y = 0.0f;
 			}
 		}
-
-		if (key->PushKey(DIK_W) || key->PushKey(DIK_A) || key->PushKey(DIK_S) || key->PushKey(DIK_D)) {
-			spd.x = (key->PushKey(DIK_D) - key->PushKey(DIK_A)) * baseSpd;
-			spd.y = (key->PushKey(DIK_W) - key->PushKey(DIK_S)) * baseSpd;
-			moveCoolTime = moveCoolTimeMax;
-		}
-
 
 		spd.y = -spd.y;
 
