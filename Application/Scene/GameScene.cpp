@@ -97,7 +97,7 @@ void GameScene::Update()
 	}
 
 	if (key_->TriggerKey(DIK_B)) {
-		boss_->SubHP(50);
+		boss_->SubHP(100);
 	}
 
 //	Piece::ALlPieceUpdate();
