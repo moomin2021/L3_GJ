@@ -20,18 +20,18 @@ void Enemy0::Initialize(Vector2 pos)
 	// 裏面
 	sBack_ = std::make_unique<Sprite>();
 	sBack_->SetPosition(position_);
-	sBack_->SetSize({ 32.0f, 32.0f });
+	sBack_->SetSize({ 64.0f, 64.0f });
 	sBack_->SetAnchorPoint({ 0.5f, 0.5f });
 
 	// 表面
 	sFront_ = std::make_unique<Sprite>();
 	sFront_->SetPosition(position_);
-	sFront_->SetSize({ 32.0f, 32.0f });
+	sFront_->SetSize({ 64.0f, 64.0f });
 	sFront_->SetAnchorPoint({ 0.5f, 0.5f });
 #pragma endregion
 
 #pragma region コライダー
-	collider_ = std::make_unique<CircleCollider>();
+	collider_ = std::make_unique<CircleCollider>(Vector2{0.0f, 0.0f}, 32.0f);
 	collider_->SetAttribute(COL_ENEMY);
 	collider_->SetSprite(sFront_.get());
 	sColMgr2D_->AddCollider(collider_.get());

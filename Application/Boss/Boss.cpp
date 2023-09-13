@@ -459,8 +459,8 @@ void Boss::Wait()
 	if (elapsedTime >= time2Wait_) {
 		uint16_t rnd = Util::GetRandomInt(0, 2);
 
-		if (rnd == 0) state_ = PRE_MOVE_SHOT;
-		else if (rnd == 1) state_ = PRE_BOOMERANG;
+		if (rnd == 0) state_ = PRE_SUMMON;
+		else if (rnd == 1) state_ = PRE_SUMMON;
 		else if (rnd == 2) state_ = PRE_SUMMON;
 
 		actionStartTime_ = Util::GetTimrMSec();
