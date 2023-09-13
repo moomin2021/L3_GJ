@@ -43,7 +43,7 @@ public:
 
 	bool IsRotate()const { return isRotate; }
 
-	bool IsAlive();
+	bool IsAlive()const { return IsAlive; };
 
 private:
 

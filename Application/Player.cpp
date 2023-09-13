@@ -105,6 +105,8 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	myColor.z = 0x91 / 255.0f;
 	myColor.w = 1.0f;
 
+	isAlive = true;
+
 }
 
 void Player::Update()
@@ -281,8 +283,12 @@ void Player::Damage(uint16_t damageValue)
 	health -= damageValue;
 	//HP‚ðÅ‘å’l‚Æ0‚ÅƒNƒ‰ƒ“ƒv
 	health = Util::Clamp(health, healthMax, 0);
-
 	sound->Play(soundDmg);
+
+	//HP‚ª0‚È‚çŽ€
+	if (health == 0) {
+		isAlive = false;
+	}
 
 }
 

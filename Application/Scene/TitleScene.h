@@ -30,7 +30,7 @@ private:
 	std::unique_ptr<Sprite> sTitleLogo_ = nullptr;
 	std::unique_ptr<Sprite> sStartText_ = nullptr;
 	std::unique_ptr<Sprite> sExitText_ = nullptr;
-	std::unique_ptr<Sprite> sTitleSelectFrame_ = nullptr;;
+	std::unique_ptr<Sprite> sTitleSelectFrame_ = nullptr;
 
 	// 画像ハンドル
 	uint16_t hBackGround_ = 0;
@@ -82,6 +82,10 @@ private:
 
 	// 行列更新処理
 	void MatUpdate();
+
+	//
+	void FlowPieces();
+
 #pragma endregion
 };
 
