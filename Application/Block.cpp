@@ -215,9 +215,11 @@ void Block::OffsetUpdate()
 void Block::OnCollison()
 {
 
-
 	//衝突する
 	if (collider->GetIsHit()) {
+
+		uint16_t hitColAtr = collider->GetHitCollider()->GetAttribute();
+
 		//自分の属性がプレイヤーで衝突対象がブロック
 		if (collider->GetHitCollider()->GetAttribute() == COL_BLOCK && collider->GetAttribute() == COL_PLAYER) {
 
@@ -315,7 +317,7 @@ void Block::OnCollison()
 				}
 			}
 		}
-		else if (collider->GetAttribute() == COL_PLAYER && collider->GetHitCollider()->GetAttribute() == COL_BOSS_BULLET) {
+		else if (collider->GetAttribute() == COL_PLAYER && (hitColAtr == COL_BOSS_BULLET  || hitColAtr == COL_ENEMY || hitColAtr  == COL_BOSS)) {
 			//自属性がﾌﾟﾚｲﾔｰで対象が敵の弾
 			//自機がダメージを受ける
 			player->Damage(1);
