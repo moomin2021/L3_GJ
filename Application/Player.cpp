@@ -182,6 +182,18 @@ void Player::Move()
 			moveCoolTime = moveCoolTimeMax;
 		}
 
+		//上下両方動いているとき
+		if (fabs(spd.x) > 1.0f && fabs(spd.y) > 1.0f) {
+			//直前のフレームに上下に動いていたなら左右に
+			if (isMoveHorizontal) {
+				isMoveHorizontal = false;
+				spd.x = 0.0f;
+			}
+			else {
+				isMoveHorizontal = true;
+				spd.y = 0.0f;
+			}
+		}
 
 		if (key->PushKey(DIK_W) || key->PushKey(DIK_A) || key->PushKey(DIK_S) || key->PushKey(DIK_D)) {
 			spd.x = (key->PushKey(DIK_D) - key->PushKey(DIK_A)) * baseSpd;
@@ -233,7 +245,7 @@ void Player::Rotate()
 	ImGui::Text("timerate %f", timerate);
 	ImGui::Text("rotate %f", rotation);
 
-
+	ImGui::Text("damage %d", bulletDamage);
 
 	//timeRateが1以下なら補間
 	if (timerate <= 1.0f) {
@@ -393,7 +405,7 @@ void Player::BlockReset()
 
 
 		//レベルの更新
-		//LevelUpdate();
+		LevelUpdate();
 	}
 
 }

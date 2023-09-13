@@ -77,6 +77,7 @@ private:
 	const float baseSpd = 32.0f;
 	int moveCoolTimeMax = 2;
 	int moveCoolTime = moveCoolTimeMax;
+	bool isMoveHorizontal = false;
 
 	//Vector2 moveTileMin{ 0,3 };
 	//Vector2 moveTileMax {}
