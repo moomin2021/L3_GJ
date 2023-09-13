@@ -80,6 +80,18 @@ void Boss::Initialize()
 	collider_->SetAttribute(COL_BOSS);
 	collider_->SetSprite(sBossFront_.get());
 	colMgr2D_->AddCollider(collider_.get());
+
+	colBack0_ = std::make_unique<CircleCollider>(Vector2{ 0.0f, 0.0f }, 50.0f);
+	colBack0_->SetAttribute(COL_BOSS);
+	colBack0_->SetSprite(sBossBack0_.get());
+	colMgr2D_->AddCollider(colBack0_.get());
+
+	colBack1_ = std::make_unique<CircleCollider>(Vector2{ 0.0f, 0.0f }, 50.0f);
+	colBack1_->SetAttribute(COL_BOSS);
+	colBack1_->SetSprite(sBossBack1_.get());
+	colMgr2D_->AddCollider(colBack1_.get());
+
+	Enemy0::SetColMgr2D(colMgr2D_);
 #pragma endregion
 
 #pragma region HP

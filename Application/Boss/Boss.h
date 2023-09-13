@@ -76,6 +76,8 @@ private:
 
 	// コライダー
 	std::unique_ptr<CircleCollider> collider_ = nullptr;
+	std::unique_ptr<CircleCollider> colBack0_ = nullptr;
+	std::unique_ptr<CircleCollider> colBack1_ = nullptr;
 
 	// 状態
 	State state_ = OPENING0;
