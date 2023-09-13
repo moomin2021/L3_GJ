@@ -586,7 +586,7 @@ void Player::BlockReset()
 		
 		particle->SetPosition(playerBlock->GetPosition());
 		
-		size_t particleCount = blocks.size() * 8;
+		size_t particleCount = blocks.size() * 4;
 
 		for (size_t i = 0; i < particleCount; i++) {
 
