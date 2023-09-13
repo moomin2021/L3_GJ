@@ -1,5 +1,7 @@
 #pragma once
 #include "Sprite.h"
+#include "CollisionManager2D.h"
+#include "CircleCollider.h"
 
 #include <memory>
 
@@ -10,10 +12,14 @@ private:
 	// 画像ハンドル
 	static uint16_t hBack_;
 	static uint16_t hFront_;
+	static CollisionManager2D* sColMgr2D_;
 
 	// スプライト
 	std::unique_ptr<Sprite> sBack_ = nullptr;// 裏面
 	std::unique_ptr<Sprite> sFront_ = nullptr;// 表面
+
+	// コライダー
+	std::unique_ptr<CircleCollider> collider_ = nullptr;
 
 	// 生存フラグ
 	bool isAlive_ = true;
@@ -61,6 +67,9 @@ public:
 
 	// 表面ハンドルを設定
 	static void SetFrontHandle(uint16_t handle) { hFront_ = handle; }
+
+	// 衝突マネージャー2Dを設定
+	static void SetColMgr2D(CollisionManager2D* colMgr2D) { sColMgr2D_ = colMgr2D; }
 #pragma endregion
 
 #pragma region ゲッター関数
