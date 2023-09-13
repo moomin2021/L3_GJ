@@ -84,6 +84,13 @@ void PieceManager::Update()
 		}
 	}
 
+	//ピースが持つ子ブロック配列が空ならピースを消す
+	for (size_t i = 0; i < pieces.size(); i++) {
+		if (pieces[i]->GetChildCount() == 0) {
+			pieces.erase(pieces.begin() + i);
+		}
+	}
+
 	//ピースの自動スポーン
 	PieceSpawn();
 

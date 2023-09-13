@@ -3,6 +3,7 @@
 #include"Util.h"
 #include<imgui_impl_dx12.h>
 #include"Key.h"
+#include"CollisionAttribute.h"
 
 //静的メンバの実態
 
@@ -98,7 +99,14 @@ void Piece::Update()
 		parent->parentPos = parentPos;
 		childBlocks[i]->SetParent(parent);
 		childBlocks[i]->Update();
+
+		//子ブロックの属性がﾌﾟﾚｲﾔなら消す
+		if (childBlocks[i]->GetCollider()->GetAttribute() == COL_PLAYER) {
+			childBlocks.clear();
+		}
 	}
+
+
 }
 
 void Piece::Draw()
