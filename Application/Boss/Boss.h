@@ -204,5 +204,7 @@ private:
 #pragma region ƒQƒbƒ^[ŠÖ”
 public:
 	bool GetIsChangeScene() { return isChangeScene_; }
+
+	bool GetIsAlive() { return isAlive_; }
 #pragma endregion
 };

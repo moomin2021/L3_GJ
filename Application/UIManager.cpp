@@ -1,6 +1,8 @@
 #include "UIManager.h"
 #include "Texture.h"
 #include "Boss.h"
+#include "Util.h"
+#include "ResultScene.h"
 
 Boss* UIManager::sBoss_ = nullptr;
 
@@ -60,6 +62,29 @@ void UIManager::Initialize()
 	sNextText_->SetSize({ 100.0f, 32.0f });
 	sNextText_->SetAnchorPoint({ 0.5f, 0.5f });
 	sNextText_->SetRotation(-15.0f);
+
+	Vector2 sTimesSize = { 60.0f, 60.0f };
+
+	sTimes_.resize(3);
+	sTimes_[0] = std::make_unique<Sprite>();
+	sTimes_[0]->SetPosition({ 888.0f, 49.0f });
+	sTimes_[0]->SetSize(sTimesSize);
+	sTimes_[0]->SetAnchorPoint({ 0.5f, 0.5f });
+
+	sColon_ = std::make_unique<Sprite>();
+	sColon_->SetPosition({ 928.0f, 49.0f });
+	sColon_->SetSize(sTimesSize - Vector2{ 20.0f, 20.0f });
+	sColon_->SetAnchorPoint({ 0.5f, 0.5f });
+
+	sTimes_[1] = std::make_unique<Sprite>();
+	sTimes_[1]->SetPosition({ 968.0f, 49.0f });
+	sTimes_[1]->SetSize(sTimesSize);
+	sTimes_[1]->SetAnchorPoint({ 0.5f, 0.5f });
+
+	sTimes_[2] = std::make_unique<Sprite>();
+	sTimes_[2]->SetPosition({ 1012.0f, 49.0f });
+	sTimes_[2]->SetSize(sTimesSize);
+	sTimes_[2]->SetAnchorPoint({ 0.5f, 0.5f });
 #pragma endregion
 
 #pragma region 画像ハンドル
@@ -73,7 +98,41 @@ void UIManager::Initialize()
 	hHpBoss_ = LoadTexture("Resources/hp_boss.png");
 	hHpTextBoss_ = LoadTexture("Resources/hp_text_boss.png");
 	hNextText_ = LoadTexture("Resources/next_text.png");
+	hNumbers_.resize(10);
+	hNumbers_[0] = LoadTexture("Resources/number_0.png");
+	hNumbers_[1] = LoadTexture("Resources/number_1.png");
+	hNumbers_[2] = LoadTexture("Resources/number_2.png");
+	hNumbers_[3] = LoadTexture("Resources/number_3.png");
+	hNumbers_[4] = LoadTexture("Resources/number_4.png");
+	hNumbers_[5] = LoadTexture("Resources/number_5.png");
+	hNumbers_[6] = LoadTexture("Resources/number_6.png");
+	hNumbers_[7] = LoadTexture("Resources/number_7.png");
+	hNumbers_[8] = LoadTexture("Resources/number_8.png");
+	hNumbers_[9] = LoadTexture("Resources/number_9.png");
+	hColon_ = LoadTexture("Resources/number_colon.png");
 #pragma endregion
+
+	gameTimes_.resize(3);
+	clearTime_.resize(3);
+	startGameTime_ = Util::GetTimrMSec();
+}
+
+void UIManager::Update()
+{
+	if (isClear_ == false) {
+		// 経過時間を計算
+		float elapsedTime = (Util::GetTimrMSec() - startGameTime_) / 1000.0f;
+
+		gameTimes_[0] = (uint16_t)elapsedTime / 60;
+		gameTimes_[1] = ((uint16_t)elapsedTime % 60) / 10;
+		gameTimes_[2] = ((uint16_t)elapsedTime % 60) % 10;
+
+		if (sBoss_->GetIsAlive() == false) {
+			isClear_ = true;
+			clearTime_ = gameTimes_;
+			ResultScene::SetClearTime(elapsedTime);
+		}
+	}
 }
 
 void UIManager::MatUpdate()
@@ -88,6 +147,8 @@ void UIManager::MatUpdate()
 	sHpBoss_->MatUpdate(true);
 	sHpTextBoss_->MatUpdate(true);
 	sNextText_->MatUpdate(true);
+	for (auto& it : sTimes_) it->MatUpdate();
+	sColon_->MatUpdate();
 }
 
 void UIManager::Draw()
@@ -103,4 +164,8 @@ void UIManager::Draw()
 	sBoss_->UIDraw();
 	sHpTextBoss_->Draw(hHpTextBoss_);
 	sNextText_->Draw(hNextText_);
+	sTimes_[0]->Draw(hNumbers_[gameTimes_[0]]);
+	sTimes_[1]->Draw(hNumbers_[gameTimes_[1]]);
+	sTimes_[2]->Draw(hNumbers_[gameTimes_[2]]);
+	sColon_->Draw(hColon_);
 }

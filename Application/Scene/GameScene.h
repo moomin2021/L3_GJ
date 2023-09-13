@@ -48,14 +48,6 @@ private:
 	// UIマネージャー
 	std::unique_ptr<UIManager> uiMgr_ = nullptr;
 
-	// ゲーム開始時の時間を保存
-	uint64_t startGameTime_ = 0;
-
-	std::vector<std::unique_ptr<Sprite>> sTime_ = {};
-	std::unique_ptr<Sprite> sSpostrophe_ = nullptr;
-
-	std::vector<uint16_t> hNumber_ = {};
-
 	// --メンバ関数-- //
 public:
 	// コンストラクタ
@@ -79,7 +71,5 @@ private:
 
 	// 衝突時処理
 	void OnCollision();
-
-	void GameTime();
 };
 
