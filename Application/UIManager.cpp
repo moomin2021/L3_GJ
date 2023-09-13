@@ -46,6 +46,16 @@ void UIManager::Initialize()
 	sHpTextPlayer_->SetAnchorPoint({ 0.5f, 0.5f });
 	sHpTextPlayer_->SetRotation(-15.0f);
 
+	sLevelTextPlayer_ = std::make_unique<Sprite>();
+	sLevelTextPlayer_->SetPosition({ 744.0f,912.0f });
+	sLevelTextPlayer_->SetSize({ 80.0f,50.0f });
+	sLevelTextPlayer_->SetAnchorPoint({ 0.5f,0.5f });
+
+	sLevelNumberPlayer_ = std::make_unique<Sprite>();
+	sLevelNumberPlayer_->SetPosition({ 816.0f,912.0f });
+	sLevelNumberPlayer_->SetSize({ 56.0f,56.0f });
+	sLevelNumberPlayer_->SetAnchorPoint({ 0.5f,0.5f });
+
 	sHpBoss_ = std::make_unique<Sprite>();
 	sHpBoss_->SetPosition({ 1424.0f, 912.0f });
 	sHpBoss_->SetSize({ 800.0f, 48.0f });
@@ -95,6 +105,7 @@ void UIManager::Initialize()
 	hHpPlayer_ = LoadTexture("Resources/hp_player.png");
 	hHpPlayerIn_ = LoadTexture("Resources/hp_player_in.png");
 	hHpTextPlayer_ = LoadTexture("Resources/hp_text_player.png");
+	hLevelTextPlayer_ = LoadTexture("Resources/level_shadow.png");
 	hHpBoss_ = LoadTexture("Resources/hp_boss.png");
 	hHpTextBoss_ = LoadTexture("Resources/hp_text_boss.png");
 	hNextText_ = LoadTexture("Resources/next_text.png");
@@ -144,9 +155,12 @@ void UIManager::MatUpdate()
 	sHpPlayer_->MatUpdate(true);
 	sHpPlayerIn_->MatUpdate(true);
 	sHpTextPlayer_->MatUpdate(true);
+	sLevelTextPlayer_->MatUpdate(true);
+	sLevelNumberPlayer_->MatUpdate(true);
 	sHpBoss_->MatUpdate(true);
 	sHpTextBoss_->MatUpdate(true);
 	sNextText_->MatUpdate(true);
+	
 	for (auto& it : sTimes_) it->MatUpdate();
 	sColon_->MatUpdate();
 }
@@ -159,7 +173,8 @@ void UIManager::Draw()
 	sExpText_->Draw(hExpText_);
 	//sHpPlayer_->Draw(hHpPlayer_);
 	//sHpPlayerIn_->Draw(hHpPlayerIn_);
-	sHpTextPlayer_->Draw(hHpTextPlayer_);
+	//sHpTextPlayer_->Draw(hHpTextPlayer_);
+	sLevelTextPlayer_->Draw(hLevelTextPlayer_);
 	sHpBoss_->Draw(hHpBoss_);
 	sBoss_->UIDraw();
 	sHpTextBoss_->Draw(hHpTextBoss_);
@@ -168,4 +183,11 @@ void UIManager::Draw()
 	sTimes_[1]->Draw(hNumbers_[gameTimes_[1]]);
 	sTimes_[2]->Draw(hNumbers_[gameTimes_[2]]);
 	sColon_->Draw(hColon_);
+}
+
+void UIManager::DrawPlayerLevel(int playerLevel)
+{
+	int n = Util::Clamp(playerLevel, 9, 0);
+
+	sLevelNumberPlayer_->Draw(hNumbers_[n]);
 }

@@ -38,6 +38,8 @@ public:
 
 	void DrawUI();
 
+	int GetLevel()const { return level; }
+
 private:
 
 	//ˆÚ“®

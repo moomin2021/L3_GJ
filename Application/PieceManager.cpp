@@ -34,7 +34,7 @@ void PieceManager::Initialize()
 	pieceIndex[Piece_T].blockData = { c,n,n,c };
 	pieceIndex[Piece_T].previewTexture = LoadTexture("Resources/piece_t.png");
 	pieceIndex[Piece_T].textureSize = { 60,40 };
-	pieceIndex[Piece_Z].offset = { {-1,1,},{0,1},{0,0},{0,1} };
+	pieceIndex[Piece_Z].offset = { {-1,1,},{0,1},{0,0},{1,0} };
 	pieceIndex[Piece_Z].blockData = { c,n,n,c };
 	pieceIndex[Piece_Z].previewTexture = LoadTexture("Resources/piece_z.png");
 	pieceIndex[Piece_Z].textureSize = { 60,40 };

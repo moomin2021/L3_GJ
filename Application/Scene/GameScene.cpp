@@ -148,6 +148,7 @@ void GameScene::Draw()
 
 	//Ž©‹@UI•`‰æ
 	player->DrawUI();
+	uiMgr_->DrawPlayerLevel(player->GetLevel());
 
 	fade_->Draw();
 
