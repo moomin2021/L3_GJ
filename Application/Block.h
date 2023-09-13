@@ -81,6 +81,8 @@ public://メンバ関数
 
 	void SetAlive(bool alive) { isAlive = alive; }
 
+	void SetColor(const float4 c) { color = c; }
+
 	BoxCollider* GetCollider()const { return collider.get(); }
 
 private://静的メンバ変数
@@ -106,6 +108,8 @@ private://メンバ変数
 	Vector2 currentOffset{ 0,0 };
 
 	Vector2 oldPos{ 0,0 };
+
+	float4 color = { 1,1,1,1 };
 
 	std::unique_ptr<Sprite> sprite = nullptr;
 	BlockData blockData = BlockData::None;
