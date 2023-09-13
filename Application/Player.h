@@ -40,6 +40,8 @@ public:
 
 	int GetLevel()const { return level; }
 
+	bool IsRotate()const { return isRotate; }
+
 private:
 
 	//移動
@@ -96,6 +98,7 @@ private:
 	float beforeRot = 0;
 	float afterRot = 0;
 	float childRotation = 0;
+	bool isRotate = false;
 
 	//回転のイージング用パラメータ
 	const float easeTimeMax = 15;

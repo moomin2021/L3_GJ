@@ -102,7 +102,7 @@ void Piece::Update()
 		childBlocks[i]->Update();
 
 		//子ブロックの属性がﾌﾟﾚｲﾔなら消す
-		if (childBlocks[i]->GetCollider()->GetAttribute() == COL_PLAYER) {
+		if (childBlocks[i]->GetCollider()->GetAttribute() == COL_PLAYER || childBlocks[i]->GetCollider()->GetAttribute() == COL_BREAK) {
 			childBlocks.clear();
 		}
 	}
