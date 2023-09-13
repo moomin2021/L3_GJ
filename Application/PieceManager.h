@@ -30,9 +30,9 @@ public:
 public:
 
 	//nextのピース
-	std::queue<PieceData> nextPiece;
+	std::vector<PieceData> nextPiece;
 	std::array<std::unique_ptr<Sprite>,4> nextSprites;
-	std::vector<Vector2> spritePos;
+	std::array<Vector2,4> spritePos;
 
 	//ピース配列
 	std::vector < std::unique_ptr<Piece>> pieces;

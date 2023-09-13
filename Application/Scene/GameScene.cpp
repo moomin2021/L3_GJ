@@ -133,6 +133,9 @@ void GameScene::Draw()
 	uiMgr_->Draw();
 
 	fade_->Draw();
+
+	//next•`‰æ
+	psManager->DrawNextPiece();
 }
 
 void GameScene::MatUpdate()
