@@ -19,6 +19,14 @@ void Boss::Initialize()
 #pragma region インスタンス取得
 	key_ = Key::GetInstance();
 	colMgr2D_ = CollisionManager2D::GetInstance();
+	sound_ = Sound::GetInstance();
+#pragma endregion
+
+#pragma region サウンドハンドル
+	bulletSound_ = sound_->LoadWave("Resources/Sound/bullet.wav", 0.01f);
+	damageSound_ = sound_->LoadWave("Resources/Sound/damage.wav", 0.01f);
+	summonSound_ = sound_->LoadWave("Resources/Sound/summon.wav", 0.01f);
+	deadSound_ = sound_->LoadWave("Resources/Sound/dead.wav", 0.01f);
 #pragma endregion
 
 #pragma region スプライト
@@ -177,6 +185,7 @@ void Boss::OnCollision()
 	// ボスが衝突したら
 	if (collider_->GetIsHit()) {
 		sBossFront_->SetColor({ 0.02f, 0.87f, 0.94f, 1.0f });
+		sound_->Play(damageSound_);
 	}
 
 	// 弾
@@ -347,6 +356,8 @@ void Boss::Closing0()
 		}
 
 		Camera::SetShake(1.0f, 100.0f);
+
+		sound_->Play(deadSound_);
 	}
 
 	// 経過時間の割合で移動
@@ -449,6 +460,7 @@ void Boss::MoveShot()
 		// 弾を生成
 		bullets_.emplace_back(std::make_unique<BossBullet>());
 		bullets_.back()->Initialize(sBossFront_->GetPosition());
+		sound_->Play(bulletSound_);
 	}
 #pragma endregion
 
@@ -562,6 +574,7 @@ void Boss::Summon()
 		enemys_.back()->Initialize(backPos0_);
 		enemys_.emplace_back(std::make_unique<Enemy0>());
 		enemys_.back()->Initialize(backPos1_);
+		sound_->Play(summonSound_);
 	}
 #pragma endregion
 
