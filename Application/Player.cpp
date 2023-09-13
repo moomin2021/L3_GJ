@@ -507,7 +507,7 @@ void Player::BlockReset()
 
 		//TODO:形成されている形を検知して加算する経験値に倍率をかける
 		//ブロックの数が経験値倍率の必要数を満たしていたら
-		if (blockCount > countBoostEXP) {
+		if (blockCount >= countBoostEXP) {
 			blockCount *= boostRateEXP;
 		}
 
