@@ -4,6 +4,7 @@
 #include"Util.h"
 #include"CollisionAttribute.h"
 #include"WinAPI.h"
+#include"Sound.h"
 
 void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 {
@@ -66,6 +67,14 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	texHpFrame = LoadTexture("Resources/hp_player.png");
 	texHpText = LoadTexture("Resources/hp_text_player.png");
 
+	sound = Sound::GetInstance();
+
+	//音読み込み
+	soundRot = sound->LoadWave("Resources/Sound/rotate.wav",0.5f);
+	soundAtk = sound->LoadWave("Resources/Sound/bullet.wav", 0.01f);
+	soundDmg = sound->LoadWave("Resources/Sound/damage.wav", 0.01f);
+	soundStick = sound->LoadWave("Resources/Sound/stick.wav", 0.01f);
+	soundEXP = sound->LoadWave("Resources/Sound/exp.wav", 0.01f);
 
 	//自分のカラーコード f007cd
 	//自分のカラーコード e796da
@@ -369,11 +378,16 @@ void Player::Rotate()
 			beforeRot = playerBlock->GetParent()->parentRot;
 			afterRot = beforeRot - 90.0f;
 			rotEaseTime = 0;
+
+			//音
+			sound->Play(soundRot);
 		}
 		else if (pad->GetTriggerButton(PAD_RB) || key->TriggerKey(DIK_K)) {
 			beforeRot = playerBlock->GetParent()->parentRot;
 			afterRot = beforeRot + 90.0f;
 			rotEaseTime = 0;
+
+			sound->Play(soundRot);
 		}
 
 		////子の回転の大きさ

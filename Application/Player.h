@@ -6,7 +6,7 @@
 #include"BoxCollider.h"
 #include"CollisionManager2D.h"
 #include"PlayerBullet.h"
-
+#include"Sound.h"
 
 class Player
 {
@@ -42,6 +42,8 @@ public:
 	int GetLevel()const { return level; }
 
 	bool IsRotate()const { return isRotate; }
+
+	bool IsAlive();
 
 private:
 
@@ -80,6 +82,7 @@ private:
 
 	Key* key = nullptr;
 
+	Sound* sound = nullptr;
 
 	//座標
 	Vector2 position{0,0};
@@ -117,6 +120,7 @@ private:
 	uint16_t texHpText = 0;
 	int damageCoolTimeMax = 180;
 	int damageCooltime = 0;
+	bool isAlive = false;
 
 	//射撃用パラメータ
 	int shotCooltimeMax = 30;
@@ -142,6 +146,12 @@ private:
 	//デバッグ用
 	int debugBlockOffsetX = 0;
 	int debugBlockOffsetY = 0;
+
+	uint16_t soundRot = 0;
+	uint16_t soundAtk = 0;
+	uint16_t soundDmg = 0;
+	uint16_t soundStick = 0;
+	uint16_t soundEXP = 0;
 
 	//色
 	float4 myColor;
