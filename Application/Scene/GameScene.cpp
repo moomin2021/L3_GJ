@@ -16,12 +16,22 @@ GameScene::GameScene() :
 {
 }
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() {
+	sound_->Stop(gameBGM_);
+}
 
 void GameScene::Initialize()
 {
 	// キーボード入力インスタンス取得
 	key_ = Key::GetInstance();
+	sound_ = Sound::GetInstance();
+
+#pragma region サウンド
+	gameBGM_ = sound_->LoadWave("Resources/Sound/game_bgm.wav", 0.01f);
+
+	// BGMを鳴らす
+	sound_->Play(gameBGM_, true);
+#pragma endregion
 
 	// カメラ
 	camera_ = std::make_unique<Camera>();

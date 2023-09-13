@@ -11,6 +11,7 @@ void TitleScene::Initialize()
 {
 #pragma region インスタンス取得
 	pad_ = Pad::GetInstance();
+	key_ = Key::GetInstance();
 #pragma endregion
 
 #pragma region カメラ
@@ -30,17 +31,29 @@ void TitleScene::Initialize()
 	sTitleLogo_->SetSize({ 1360.0f, 350.0f });
 	sTitleLogo_->SetAnchorPoint({ 0.5f, 0.5f });
 
-	sPressA_ = std::make_unique<Sprite>();
-	sPressA_->SetPosition({ 928.0f, 750.0f });
-	sPressA_->SetSize({314.0f, 64.0f});
-	sPressA_->SetAnchorPoint({ 0.5f, 0.5f });
+	sStartText_ = std::make_unique<Sprite>();
+	sStartText_->SetPosition({ 628.0f, 740.0f });
+	sStartText_->SetSize({ 198.0f, 63.0f });
+	sStartText_->SetAnchorPoint({ 0.5f, 0.5f });
+
+	sExitText_ = std::make_unique<Sprite>();
+	sExitText_->SetPosition({ 1228.0f, 740.0f });
+	sExitText_->SetSize({ 155.0f, 69.0f });
+	sExitText_->SetAnchorPoint({ 0.5f, 0.5f });
+
+	sTitleSelectFrame_ = std::make_unique<Sprite>();
+	sTitleSelectFrame_->SetPosition({ 628.0f, 740.0f });
+	sTitleSelectFrame_->SetSize({ 257.0f, 107.0f });
+	sTitleSelectFrame_->SetAnchorPoint({ 0.5f, 0.5f });
 #pragma endregion
 
 #pragma region 画像ハンドル
 	hBackGround_ = LoadTexture("Resources/background.png");
 	hTitleFrame_ = LoadTexture("Resources/title_frame.png");
 	hTitleLogo_ = LoadTexture("Resources/title_logo.png");
-	hPressA_ = LoadTexture("Resources/pressA.png");
+	hStartText_ = LoadTexture("Resources/start_text.png");
+	hExitText_ = LoadTexture("Resources/exit_text.png");
+	hTitleSelectFrame_ = LoadTexture("Resources/title_select_frame.png");
 #pragma endregion
 
 	soundHandle_ = Sound::GetInstance()->LoadWave("Resources/Sound/a.wav");
@@ -55,6 +68,35 @@ void TitleScene::Update()
 	if (pad_->GetTriggerButton(PAD_A) || Key::GetInstance()->TriggerKey(DIK_SPACE)) {
 		fade_->ChangeScene(SCENE::GAME);
 	}
+
+	if (key_->TriggerKey(DIK_D)) {
+		selectNum_++;
+		if (selectNum_ > 1) selectNum_ = 0;
+	}
+
+	if (key_->TriggerKey(DIK_A)) {
+		selectNum_--;
+		if (selectNum_ < 0) selectNum_ = 1;
+	}
+
+	if (pad_->GetLStick().x <= -0.6f && oldLStickX > -0.6f) {
+		selectNum_++;
+		if (selectNum_ > 1) selectNum_ = 0;
+	}
+
+	if (pad_->GetLStick().x >= 0.6f && oldLStickX < 0.6f) {
+		selectNum_--;
+		if (selectNum_ < 0) selectNum_ = 1;
+	}
+
+	if (pad_->GetTriggerButton(PAD_A) || key_->TriggerKey(DIK_SPACE)) {
+		if (selectNum_ == 0) fade_->ChangeScene(SCENE::GAME);
+		if (selectNum_ == 1) SceneManager::GetInstance()->SetIsEnd(true);
+	}
+
+	oldLStickX = pad_->GetLStick().x;
+
+	sTitleSelectFrame_->SetPosition(selectPos_[selectNum_]);
 
 	fade_->Update();
 
@@ -73,7 +115,9 @@ void TitleScene::Draw()
 	sBackGround_->Draw(hBackGround_);// 背景
 	sTitleFrame_->Draw(hTitleFrame_);// フレーム
 	sTitleLogo_->Draw(hTitleLogo_);// タイトルロゴ
-	sPressA_->Draw(hPressA_);// プレスA
+	sStartText_->Draw(hStartText_);// スタートテキスト
+	sExitText_->Draw(hExitText_);// Exitテキスト
+	sTitleSelectFrame_->Draw(hTitleSelectFrame_);
 
 	fade_->Draw();
 }
@@ -91,6 +135,8 @@ void TitleScene::MatUpdate()
 	sBackGround_->MatUpdate();// 背景
 	sTitleFrame_->MatUpdate();// フレーム
 	sTitleLogo_->MatUpdate();// タイトルロゴ
-	sPressA_->MatUpdate();// プレスA
+	sStartText_->MatUpdate();
+	sExitText_->MatUpdate();
+	sTitleSelectFrame_->MatUpdate();
 	fade_->MatUpdate();
 }

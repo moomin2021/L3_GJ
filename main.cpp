@@ -35,6 +35,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// --終了メッセージが来ていたらループ終了-- //
 		if (WinAPI::GetInstance()->IsEndMessage() == true) break;
 
+		if (SceneManager::GetInstance()->GetIsEnd()) break;
+
 		// キーボード入力更新処理
 		Key::GetInstance()->Update();
 
