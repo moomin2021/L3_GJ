@@ -29,7 +29,7 @@ private:
 
 	// ランク別秒数
 	std::vector<float> rankTime_ = {
-		10.0f, 15.0f, 20.0f, 25.0f
+		150.0f, 180.0f, .210f, 240.0f
 	};
 
 	// フェード
