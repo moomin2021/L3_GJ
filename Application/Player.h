@@ -36,6 +36,8 @@ public:
 
 	float GetRotation()const { return rotation; }
 
+	void DrawUI();
+
 private:
 
 	//移動
@@ -98,6 +100,12 @@ private:
 	//HP関係
 	int healthMax = 10;
 	int health = healthMax;
+	std::unique_ptr<Sprite> spriteHpBar = nullptr;
+	uint16_t texHpBar = 0;
+	std::unique_ptr<Sprite> spriteHpFrame = nullptr;
+	uint16_t texHpFrame = 0;
+	std::unique_ptr<Sprite> spriteHpText = nullptr;
+	uint16_t texHpText = 0;
 
 	//射撃用パラメータ
 	int shotCooltimeMax = 30;
@@ -109,6 +117,12 @@ private:
 	int currentEXP = 0;
 	int level = 1;
 	int bulletDamage = 1;
+	std::unique_ptr<Sprite> spriteExpBar = nullptr;
+	uint16_t texExpBar = 0;
+	std::unique_ptr<Sprite> spriteExpFrame = nullptr;
+	uint16_t texExpFrame = 0;
+	std::unique_ptr<Sprite> spriteExpText = nullptr;
+	uint16_t texExpText = 0;
 
 	//デバッグ用
 	int debugBlockOffsetX = 0;
