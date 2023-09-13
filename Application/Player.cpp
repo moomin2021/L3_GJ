@@ -25,6 +25,47 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	//体力関係の初期化
 	health = healthMax;
 
+	//各種UIの初期化
+	spriteExpBar = std::make_unique<Sprite>();
+	spriteExpBar->SetPosition({ 36.0f, 892.0f });
+	spriteExpBar->SetSize({ 632.0f,40.0f });
+	expBarMax = 632.0f;
+
+	spriteExpFrame = std::make_unique<Sprite>();
+	spriteExpFrame->SetPosition({352.0f, 912.0f });
+	spriteExpFrame->SetSize({ 640.0f,48.0f });
+	spriteExpFrame->SetAnchorPoint({ 0.5f,0.5f });
+
+	spriteExpText = std::make_unique<Sprite>();
+	spriteExpText->SetPosition({ 68.0f, 892.0f });
+	spriteExpText->SetSize({ 120.0f,48.0f });
+	spriteExpText->SetAnchorPoint({ 0.5f,0.5f });
+	spriteExpText->SetRotation(-15.0f);
+
+	spriteHpBar = std::make_unique<Sprite>();
+	spriteHpBar->SetPosition({ 36.0f, 25.0f });
+	spriteHpBar->SetSize({ 504.0f,40.0f });
+	hpBarMax = 504.0f;
+
+	spriteHpFrame = std::make_unique<Sprite>();
+	spriteHpFrame->SetPosition({ 288.0f, 45.0f });
+	spriteHpFrame->SetSize({ 512.0f,48.0f });
+	spriteHpFrame->SetAnchorPoint({ 0.5f,0.5f });
+
+	spriteHpText = std::make_unique<Sprite>();
+	spriteHpText->SetPosition({ 58.0f, 25.0f });
+	spriteHpText->SetSize({ 98.0f,48.0f });
+	spriteHpText->SetAnchorPoint({ 0.5f,0.5f });
+	spriteHpText->SetRotation( -15.0f);
+
+	texExpBar = LoadTexture("Resources/exp_in.png");
+	texExpFrame = LoadTexture("Resources/exp.png");
+	texExpText = LoadTexture("Resources/exp_text.png");
+
+	texHpBar = LoadTexture("Resources/hp_player_in.png");
+	texHpFrame = LoadTexture("Resources/hp_player.png");
+	texHpText = LoadTexture("Resources/hp_text_player.png");
+
 }
 
 void Player::Update()
@@ -61,6 +102,9 @@ void Player::Update()
 		else ++it;
 	}
 
+	//UI更新
+	UpdateUI();
+
 	ImGui::Text("pos %f,%f", position.x, position.y);
 	ImGui::Text("health %d", health);
 	ImGui::Text("Lv.%d : EXP %d", level, currentEXP);
@@ -76,6 +120,13 @@ void Player::MatUpdate()
 	for (auto& it : bullets) {
 		it->MatUpdate();
 	}
+
+	spriteExpBar->MatUpdate(true);
+	spriteExpFrame->MatUpdate(true);
+	spriteExpText->MatUpdate(true);
+	spriteHpBar->MatUpdate(true);
+	spriteHpFrame->MatUpdate(true);
+	spriteHpText->MatUpdate(true);
 }
 
 void Player::Draw()
@@ -151,6 +202,17 @@ void Player::Damage(uint16_t damageValue)
 	health -= damageValue;
 	//HPを最大値と0でクランプ
 	health = Util::Clamp(health, healthMax, 0);
+}
+
+void Player::DrawUI()
+{
+	spriteExpFrame->Draw(texExpFrame);
+	spriteExpBar->Draw(texExpBar);
+	spriteExpText->Draw(texExpText);
+	spriteHpFrame->Draw(texHpFrame);
+	spriteHpBar->Draw(texHpBar);
+	spriteHpText->Draw(texHpText);
+
 }
 
 void Player::Move()
@@ -433,4 +495,22 @@ void Player::LevelUpdate()
 
 	//弾のダメージを更新
 	bulletDamage = level;
+}
+
+void Player::UpdateUI()
+{
+	//最大HPでバーを分割
+	float sizeOnce = hpBarMax / (float)healthMax;
+
+	Vector2 size = spriteHpBar->GetSize();
+	size.x = sizeOnce * health;
+	spriteHpBar->SetSize(size);
+
+	//最大EXPでバーを分割
+	sizeOnce =  expBarMax / (float)needEXP;
+
+size = spriteExpBar->GetSize();
+	size.x = sizeOnce * currentEXP;
+	spriteExpBar->SetSize(size);
+
 }

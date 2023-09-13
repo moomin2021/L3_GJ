@@ -173,6 +173,9 @@ void GameScene::Draw()
 	// UIマネージャー
 	uiMgr_->Draw();
 
+	//自機UI描画
+	player->DrawUI();
+
 	// タイム
 	for (size_t i = 0; i < 3; i++) {
 		sTime_[i]->Draw();
