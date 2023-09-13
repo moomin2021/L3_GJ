@@ -144,6 +144,7 @@ void GameScene::Draw()
 	// ƒvƒŒƒCƒ„[
 	player->Draw();
 
+	PipelineManager::PreDraw("Sprite");
 	for (size_t i = 0; i < psManager->pieces.size(); i++) {
 		psManager->pieces[i]->Draw();
 	}

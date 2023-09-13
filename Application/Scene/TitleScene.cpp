@@ -149,3 +149,7 @@ void TitleScene::MatUpdate()
 	sTitleSelectFrame_->MatUpdate();
 	fade_->MatUpdate();
 }
+
+void TitleScene::FlowPieces()
+{
+}

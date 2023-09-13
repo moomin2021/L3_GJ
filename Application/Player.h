@@ -7,6 +7,7 @@
 #include"CollisionManager2D.h"
 #include"PlayerBullet.h"
 #include"Sound.h"
+#include"ParticleEmitter2D.h"
 
 class Player
 {
@@ -162,6 +163,9 @@ private:
 	uint16_t soundEXP = 0;
 
 	int addSoundCount = 0;
+
+	//2Dエミッター
+	std::unique_ptr<ParticleEmitter2D> particle = nullptr;
 
 	//色
 	float4 myColor;
