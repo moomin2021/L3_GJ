@@ -67,6 +67,8 @@ private:
 	//ƒŒƒxƒ‹‚ÌXV
 	void LevelUpdate();
 
+	void UpdateUI();
+
 private:
 
 	Pad* pad = nullptr;
@@ -100,6 +102,7 @@ private:
 	//HPŠÖŒW
 	int healthMax = 10;
 	int health = healthMax;
+	float hpBarMax = 0.0f;
 	std::unique_ptr<Sprite> spriteHpBar = nullptr;
 	uint16_t texHpBar = 0;
 	std::unique_ptr<Sprite> spriteHpFrame = nullptr;
@@ -117,6 +120,7 @@ private:
 	int currentEXP = 0;
 	int level = 1;
 	int bulletDamage = 1;
+	float expBarMax = 0.0f;
 	std::unique_ptr<Sprite> spriteExpBar = nullptr;
 	uint16_t texExpBar = 0;
 	std::unique_ptr<Sprite> spriteExpFrame = nullptr;

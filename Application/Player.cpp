@@ -29,7 +29,7 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	spriteExpBar = std::make_unique<Sprite>();
 	spriteExpBar->SetPosition({ 36.0f, 892.0f });
 	spriteExpBar->SetSize({ 632.0f,40.0f });
-
+	expBarMax = 632.0f;
 
 	spriteExpFrame = std::make_unique<Sprite>();
 	spriteExpFrame->SetPosition({352.0f, 912.0f });
@@ -45,6 +45,7 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	spriteHpBar = std::make_unique<Sprite>();
 	spriteHpBar->SetPosition({ 36.0f, 25.0f });
 	spriteHpBar->SetSize({ 504.0f,40.0f });
+	hpBarMax = 504.0f;
 
 	spriteHpFrame = std::make_unique<Sprite>();
 	spriteHpFrame->SetPosition({ 288.0f, 45.0f });
@@ -100,6 +101,9 @@ void Player::Update()
 		if ((*it)->GetIsAlive() == false) it = bullets.erase(it);
 		else ++it;
 	}
+
+	//UI更新
+	UpdateUI();
 
 	ImGui::Text("pos %f,%f", position.x, position.y);
 	ImGui::Text("health %d", health);
@@ -491,4 +495,22 @@ void Player::LevelUpdate()
 
 	//弾のダメージを更新
 	bulletDamage = level;
+}
+
+void Player::UpdateUI()
+{
+	//最大HPでバーを分割
+	float sizeOnce = hpBarMax / (float)healthMax;
+
+	Vector2 size = spriteHpBar->GetSize();
+	size.x = sizeOnce * health;
+	spriteHpBar->SetSize(size);
+
+	//最大EXPでバーを分割
+	sizeOnce =  expBarMax / (float)needEXP;
+
+size = spriteExpBar->GetSize();
+	size.x = sizeOnce * currentEXP;
+	spriteExpBar->SetSize(size);
+
 }
