@@ -169,7 +169,13 @@ void ResultScene::Initialize()
 	for (size_t i = 0; i < 4; i++) {
 		if (rankTime_[i] >= clearTime_) {
 			
-			if (i != 0) nextRankTime_ = clearTime_ - rankTime_[i - 1];
+			if (i == 0) {
+				nextRankTime_ = 0.0;
+			}
+
+			else {
+				nextRankTime_ = clearTime_ - rankTime_[i - 1];
+			}
 			hResultRank_ = hRank_[i];
 			break;
 		}
