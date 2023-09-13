@@ -31,7 +31,7 @@ void GameScene::Initialize()
 	gameBGM_ = sound_->LoadWave("Resources/Sound/game_bgm.wav", 0.01f);
 
 	// BGM‚ð–Â‚ç‚·
-	//sound_->Play(gameBGM_, true);
+	sound_->Play(gameBGM_, true);
 #pragma endregion
 
 	// ƒJƒƒ‰
@@ -113,9 +113,9 @@ void GameScene::Update()
 		ResultScene::SetIsGameOver(true);
 	}
 
-	if (key_->TriggerKey(DIK_B)) {
-		boss_->SubHP(100);
-	}
+	//if (key_->TriggerKey(DIK_B)) {
+	//	boss_->SubHP(100);
+	//}
 
 //	Piece::ALlPieceUpdate();
 
