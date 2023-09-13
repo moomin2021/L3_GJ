@@ -22,7 +22,7 @@ void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, uint16_t pla
 	playerTexture = playerTex;
 	Block::blockSize = blockSize;
 
-
+	pAllBlock.clear();
 }
 
 Block* Block::CreateBlock(const BlockData& blockData, ParentData* parent)
@@ -46,6 +46,8 @@ void Block::SetPiece(std::vector<std::unique_ptr<Piece>>* pieces)
 
 void Block::AllBlockDeleteCheck()
 {
+	ImGui::Text("block count %d", pAllBlock.size());
+
 	for (size_t i = 0; i < pAllBlock.size(); i++) {
 		if (!pAllBlock[i]->isAlive) {
 			pAllBlock.erase(pAllBlock.begin() + i);
@@ -112,6 +114,8 @@ void Block::Update()
 	if (!parent) {
 		return;
 	}
+
+
 
 	Vector2 pos = parent->parentPos;
 
@@ -242,14 +246,8 @@ void Block::OnCollison()
 				}
 			}
 
-
-
-
-
 			//衝突オフセット計算
-
 			Vector2 blockPos, playerPos, hitOffset{ 0,0 };
-
 			//自機の座標が前フレームと同じ(自機が動いていない)なら敵の座標がold
 			if (oldPos == collider->GetPosition()) {
 				//ブロックに速度を加算することで疑似的にoldpos扱いにする
@@ -261,7 +259,6 @@ void Block::OnCollison()
 				blockPos = collider->GetHitCollider()->GetPosition();
 				playerPos = oldPos;
 			}
-
 
 			//プレイヤーから自分へのベクトル(プレイヤからみてどこにくっつくか判定するため)
 			Vector2 vecP = blockPos - playerPos;
@@ -287,17 +284,10 @@ void Block::OnCollison()
 					hitOffset.y = 1.0f;
 				}
 			}
-
-
-
-
+			
 			//全ブロック走査
 			for (size_t i = 0; i < pAllBlock.size(); i++) {
 				//ブロックの親タグが同一なもののみ親を変える
-
-
-
-
 				if (pAllBlock[i]->parent->parentTag == pieceTag && pAllBlock[i]->collider->GetAttribute() != COL_PLAYER) {
 
 
@@ -313,20 +303,13 @@ void Block::OnCollison()
 					player->AddBlock(pAllBlock[i].get());
 				}
 			}
-
-
-
-
-
-
-
-
-
-
-
-			//親の変更
-			//ChangeParent(baseTag, hitBlockTag, pieceTag, hitOffset);
 		}
+		else if (collider->GetAttribute() == COL_PLAYER && collider->GetHitCollider()->GetAttribute() == COL_BOSS_BULLET) {
+			//自属性がﾌﾟﾚｲﾔｰで対象が敵の弾
+			
+		}
+		
+
 	}
 }
 
