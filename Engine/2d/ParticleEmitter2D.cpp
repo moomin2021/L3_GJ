@@ -121,7 +121,8 @@ void ParticleEmitter2D::Add(uint16_t life, const Vector2& pos, const Vector2& ve
 	Particle& p = particles_.front();
 	// 値のセット
 	p.position = pos;
-	p.velocity = velocity;
+	p.velocity.x = velocity.x;
+	p.velocity.y = -velocity.y;
 	p.accel.x = accel.x;
 	p.accel.y = -accel.y;
 	p.startScale = startScale;

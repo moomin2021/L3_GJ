@@ -638,6 +638,19 @@ void Player::LevelUpdate()
 		if (currentEXP >= needEXP) {
 			currentEXP -= needEXP;
 			level++;
+
+			Vector2 expBarPos = spriteExpFrame->GetPosition();
+			Vector2 pos = expBarPos;
+		//	pos.x += spriteExpFrame->GetSize().x / 2.0f;
+			particle->SetPosition(pos);
+
+			//レベルアップエフェクト
+			for (size_t i = 0; i < 64; i++) {
+				Vector2 vel, acc;
+				vel = { Util::GetRandomFloat(-4.0f,4.0f),32.0f };
+				acc = {0.0f,Util::GetRandomFloat(-2.0f,0.0f) };
+				particle->Add(30, {Util::GetRandomFloat(-spriteExpFrame->GetSize().x / 2.0f, spriteExpFrame->GetSize().x / 2.0f),0}, vel, acc, Util::GetRandomFloat(16.0f, 48.0f), 0.0f);
+			}
 		}
 		else {
 			break;
