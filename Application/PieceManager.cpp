@@ -99,12 +99,12 @@ void PieceManager::Update()
 	//ImGui::SliderInt("moveCoolTime", &moveCoolTimeMax, 1, 60);
 
 	//UとIでクールタイムを増減
-	if (Key::GetInstance()->TriggerKey(DIK_U)) {
-		moveCoolTimeMax--;
-	}
-	else if (Key::GetInstance()->TriggerKey(DIK_I)) {
-		moveCoolTimeMax++;
-	}
+	//if (Key::GetInstance()->TriggerKey(DIK_U)) {
+	//	moveCoolTimeMax--;
+	//}
+	//else if (Key::GetInstance()->TriggerKey(DIK_I)) {
+	//	moveCoolTimeMax++;
+	//}
 
 
 	if (ImGui::Button("add piece")) {
@@ -112,9 +112,9 @@ void PieceManager::Update()
 	}
 
 	//ボタン押下でピース発生
-	if (Key::GetInstance()->TriggerKey(DIK_P)) {
-		CreatePiece(pieceIndex[Piece_T]);
-	}
+	//if (Key::GetInstance()->TriggerKey(DIK_P)) {
+	//	CreatePiece(pieceIndex[Piece_T]);
+	//}
 
 }
 
