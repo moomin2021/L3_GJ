@@ -349,6 +349,10 @@ void Boss::Opening2()
 	sBossFront_->SetSize({ ease, ease });
 }
 
+void Boss::PreClosing()
+{
+}
+
 void Boss::Closing0()
 {
 	BossBackRotate(10.0f);
@@ -420,6 +424,20 @@ void Boss::Wait()
 {
 	// ボスの裏面回転
 	BossBackRotate(basicSpd_);
+
+	// 行動開始からの経過時間
+	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
+
+	// 経過時間が指定時間以上ならStateを変える
+	if (elapsedTime >= time2Wait_) {
+		uint16_t rnd = Util::GetRandomInt(0, 2);
+
+		if (rnd == 0) state_ = PRE_MOVE_SHOT;
+		else if (rnd == 1) state_ = PRE_BOOMERANG;
+		else if (rnd == 2) state_ = PRE_SUMMON;
+
+		actionStartTime_ = Util::GetTimrMSec();
+	}
 }
 
 void Boss::PreMoveShot()
