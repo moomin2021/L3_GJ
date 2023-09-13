@@ -156,6 +156,9 @@ void Block::Update()
 	sprite->SetPosition(pos);
 	//親の回転をブロックの回転に適用
 	sprite->SetRotation(parent->parentRot);
+
+	//色を適用
+	sprite->SetColor(color);
 	sprite->MatUpdate();
 
 	//.ImGui::Text("attribute %d", collider->GetAttribute());

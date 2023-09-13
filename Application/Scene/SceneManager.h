@@ -41,6 +41,8 @@ private:
 
 	SCENE nextScene_ = TITLE;
 
+	bool isEnd_ = false;
+
 	// --メンバ関数-- //
 public:
 	// インスタンス取得
@@ -57,6 +59,9 @@ public:
 	// シーン切り替え
 	void ChangeScene(SCENE changeSceneNum);
 
+	bool GetIsEnd() { return isEnd_; }
+
+	void SetIsEnd(bool frag) { isEnd_ = frag; }
 private:
 	// コンストラクタ
 	SceneManager();

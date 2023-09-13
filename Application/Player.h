@@ -7,6 +7,7 @@
 #include"CollisionManager2D.h"
 #include"PlayerBullet.h"
 
+
 class Player
 {
 public:
@@ -141,6 +142,9 @@ private:
 	//デバッグ用
 	int debugBlockOffsetX = 0;
 	int debugBlockOffsetY = 0;
+
+	//色
+	float4 myColor;
 
 	//自分のブロック1
 	Block* playerBlock = nullptr;
