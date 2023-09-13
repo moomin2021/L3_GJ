@@ -81,6 +81,8 @@ public://ƒƒ“ƒoŠÖ”
 
 	void SetAlive(bool alive) { isAlive = alive; }
 
+	BoxCollider* GetCollider()const { return collider.get(); }
+
 private://Ã“Iƒƒ“ƒo•Ï”
 	static uint16_t cannonTexture;
 	static uint16_t blockTexture;

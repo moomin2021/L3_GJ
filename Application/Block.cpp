@@ -205,6 +205,8 @@ void Block::OffsetUpdate()
 
 void Block::OnCollison()
 {
+
+
 	//衝突する
 	if (collider->GetIsHit()) {
 		//自分の属性がプレイヤーで衝突対象がブロック

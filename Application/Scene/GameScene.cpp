@@ -89,6 +89,15 @@ void GameScene::Update()
 	// ボス
 	boss_->Update();
 
+	// チェンジシーンフラグが[ON]になったら切り替える
+	if (boss_->GetIsChangeScene()) {
+		fade_->ChangeScene(SCENE::RESULT);
+	}
+
+	if (key_->TriggerKey(DIK_B)) {
+		boss_->SubHP(50);
+	}
+
 //	Piece::ALlPieceUpdate();
 
 	psManager->Update();
