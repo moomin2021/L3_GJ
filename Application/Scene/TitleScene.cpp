@@ -36,12 +36,12 @@ void TitleScene::Initialize()
 
 	sStartText_ = std::make_unique<Sprite>();
 	sStartText_->SetPosition({ 628.0f, 740.0f });
-	sStartText_->SetSize({ 198.0f, 63.0f });
+	sStartText_->SetSize({ 198.0f, 62.0f });
 	sStartText_->SetAnchorPoint({ 0.5f, 0.5f });
 
 	sExitText_ = std::make_unique<Sprite>();
 	sExitText_->SetPosition({ 1228.0f, 740.0f });
-	sExitText_->SetSize({ 155.0f, 69.0f });
+	sExitText_->SetSize({ 155.0f, 68.0f });
 	sExitText_->SetAnchorPoint({ 0.5f, 0.5f });
 
 	sTitleSelectFrame_ = std::make_unique<Sprite>();
@@ -60,7 +60,9 @@ void TitleScene::Initialize()
 #pragma endregion
 
 #pragma region サウンドハンドル
-	sTitleBGM_ = sound_->LoadWave("Resources/Sound/title_bgm.wav");
+	sTitleBGM_ = sound_->LoadWave("Resources/Sound/title_bgm.wav", 0.01f);
+	selectMoveSE_ = sound_->LoadWave("Resources/Sound/select.wav", 0.01f);
+	selectSE_ = sound_->LoadWave("Resources/Sound/decision.wav", 0.01f);
 	sound_->Play(sTitleBGM_);
 #pragma endregion
 
@@ -71,34 +73,34 @@ void TitleScene::Initialize()
 
 void TitleScene::Update()
 {
-	// Aボタンを押したらゲームシーンに切り替える
-	if (pad_->GetTriggerButton(PAD_A) || Key::GetInstance()->TriggerKey(DIK_SPACE)) {
-		fade_->ChangeScene(SCENE::GAME);
-	}
-
 	if (key_->TriggerKey(DIK_D)) {
 		selectNum_++;
 		if (selectNum_ > 1) selectNum_ = 0;
+		sound_->Play(selectMoveSE_);
 	}
 
 	if (key_->TriggerKey(DIK_A)) {
 		selectNum_--;
 		if (selectNum_ < 0) selectNum_ = 1;
+		sound_->Play(selectMoveSE_);
 	}
 
 	if (pad_->GetLStick().x <= -0.6f && oldLStickX > -0.6f) {
 		selectNum_++;
 		if (selectNum_ > 1) selectNum_ = 0;
+		sound_->Play(selectMoveSE_);
 	}
 
 	if (pad_->GetLStick().x >= 0.6f && oldLStickX < 0.6f) {
 		selectNum_--;
 		if (selectNum_ < 0) selectNum_ = 1;
+		sound_->Play(selectMoveSE_);
 	}
 
 	if (pad_->GetTriggerButton(PAD_A) || key_->TriggerKey(DIK_SPACE)) {
 		if (selectNum_ == 0) fade_->ChangeScene(SCENE::GAME);
 		if (selectNum_ == 1) SceneManager::GetInstance()->SetIsEnd(true);
+		sound_->Play(selectSE_);
 	}
 
 	oldLStickX = pad_->GetLStick().x;
