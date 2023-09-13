@@ -153,6 +153,8 @@ private:
 	uint16_t soundStick = 0;
 	uint16_t soundEXP = 0;
 
+	int addSoundCount = 0;
+
 	//F
 	float4 myColor;
 

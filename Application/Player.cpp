@@ -70,11 +70,11 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	sound = Sound::GetInstance();
 
 	//音読み込み
-	soundRot = sound->LoadWave("Resources/Sound/rotate.wav",0.5f);
+	soundRot = sound->LoadWave("Resources/Sound/rotate.wav",0.10f);
 	soundAtk = sound->LoadWave("Resources/Sound/bullet.wav", 0.01f);
-	soundDmg = sound->LoadWave("Resources/Sound/damage.wav", 0.01f);
-	soundStick = sound->LoadWave("Resources/Sound/stick.wav", 0.01f);
-	soundEXP = sound->LoadWave("Resources/Sound/exp.wav", 0.01f);
+	soundDmg = sound->LoadWave("Resources/Sound/damage.wav", 0.1f);
+	soundStick = sound->LoadWave("Resources/Sound/stick.wav", 0.05f);
+	soundEXP = sound->LoadWave("Resources/Sound/exp.wav", 0.05f);
 
 	//自分のカラーコード f007cd
 	//自分のカラーコード e796da
@@ -234,10 +234,12 @@ void Player::Damage(uint16_t damageValue)
 	}
 
 	damageCooltime = damageCoolTimeMax;
-
 	health -= damageValue;
 	//HPを最大値と0でクランプ
 	health = Util::Clamp(health, healthMax, 0);
+
+	sound->Play(soundDmg);
+
 }
 
 void Player::DrawUI()
@@ -411,6 +413,8 @@ void Player::Attack()
 		shotCooltime--;
 	}
 	else {
+		bool isSound = false;
+
 		//0以下ならクールタイムリセット、IDがcannonのブロックからのみ攻撃を行う
 		for (size_t i = 0; i < blocks.size(); i++) {
 			if (blocks[i]->GetBlockData() == BlockData::Cannon) {
@@ -421,7 +425,12 @@ void Player::Attack()
 				newBullet->Initialize(pos, vel);
 
 				bullets.push_back(std::move(newBullet));
+				isSound = true;
 			}
+		}
+
+		if (isSound) {
+			sound->Play(soundAtk);
 		}
 
 		shotCooltime = shotCooltimeMax;
@@ -471,6 +480,12 @@ void Player::BulletsUpdate()
 
 void Player::AddBlock(Block* block)
 {
+	addSoundCount++;
+	if (addSoundCount == 4) {
+		addSoundCount = 0;
+		sound->Play(soundStick);
+	}
+
 	//配列に挿入
 	blocks.push_back(block);
 }
@@ -502,8 +517,15 @@ void Player::BlockReset()
 {
 	//Aボタントリガーでリセット
 	if (pad->GetTriggerButton(BUTTON::PAD_A) || key->TriggerKey(DIK_SPACE)) {
+
+
+
 		//配列にあるブロックの数を保存
 		int blockCount = (int)blocks.size();
+
+		if (blockCount == 0) {
+			return;
+		}
 
 		//TODO:形成されている形を検知して加算する経験値に倍率をかける
 		//ブロックの数が経験値倍率の必要数を満たしていたら
@@ -521,6 +543,7 @@ void Player::BlockReset()
 		}
 		blocks.clear();
 
+		sound->Play(soundEXP);
 
 		//レベルの更新
 		LevelUpdate();
