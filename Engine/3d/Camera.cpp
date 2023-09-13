@@ -57,6 +57,7 @@ void Camera::Update() {
 		eye_ = result;
 
 		if (elapsedTime >= shakeTime_) {
+			eye_ = { 0.0f, 0.0f, 0.0f };
 			isShake_ = false;
 		}
 	}

@@ -81,6 +81,8 @@ public://メンバ関数
 
 	void SetAlive(bool alive) { isAlive = alive; }
 
+	BoxCollider* GetCollider()const { return collider.get(); }
+
 private://静的メンバ変数
 	static uint16_t cannonTexture;
 	static uint16_t blockTexture;
@@ -91,6 +93,8 @@ private://静的メンバ変数
 	
 	static Player* player;
 	static std::vector < std::unique_ptr<Piece>>* pieces;
+
+	static uint16_t allBlockCount;
 
 private://メンバ変数
 

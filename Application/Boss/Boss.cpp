@@ -337,7 +337,7 @@ void Boss::Closing0()
 
 	// 経過時間が指定時間以上ならStateを変える
 	if (elapsedTime >= timeClosing0_) {
-		state_ = OPENING2;
+		state_ = CLOSING1;
 		actionStartTime_ = Util::GetTimrMSec();
 
 		for (size_t i = 0; i < 180; i++) {
@@ -382,9 +382,7 @@ void Boss::Closing1()
 
 	// 経過時間が指定時間以上ならStateを変える
 	if (elapsedTime >= timeClosing1_) {
-		state_ = WAIT;
-		actionStartTime_ = Util::GetTimrMSec();
-		sBossFront_->SetSize({ 128.0f, 128.0f });
+		isChangeScene_ = true;
 	}
 
 	// 経過時間の割合で移動
