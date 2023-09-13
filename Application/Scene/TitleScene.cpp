@@ -66,6 +66,7 @@ void TitleScene::Initialize()
 
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
+
 }
 
 void TitleScene::Update()
