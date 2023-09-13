@@ -59,6 +59,13 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	spriteHpText->SetAnchorPoint({ 0.5f,0.5f });
 	spriteHpText->SetRotation(-15.0f);
 
+
+	timerDrawRotUI = timerDrawRotUIMax;
+	spriteRotUI = std::make_unique<Sprite>();
+	spriteRotUI->SetPosition(playerBlock->GetPosition());
+	spriteRotUI->SetSize({ 58.0f,36.0f });
+	spriteRotUI->SetAnchorPoint({ 0.5f,1.0f });
+
 	texExpBar = LoadTexture("Resources/exp_in.png");
 	texExpFrame = LoadTexture("Resources/exp.png");
 	texExpText = LoadTexture("Resources/exp_text.png");
@@ -66,6 +73,8 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	texHpBar = LoadTexture("Resources/hp_player_in.png");
 	texHpFrame = LoadTexture("Resources/hp_player.png");
 	texHpText = LoadTexture("Resources/hp_text_player.png");
+
+	texRotUI = LoadTexture("Resources/player_tutorial.png");
 
 	sound = Sound::GetInstance();
 
@@ -126,6 +135,13 @@ void Player::Update()
 		damageCooltime--;
 	}
 
+	//チュートリアルUIの描画タイマー
+	if (timerDrawRotUI > 0) {
+		timerDrawRotUI--;
+		spriteRotUI->SetPosition({ playerBlock->GetPosition() });
+	}
+
+
 	ImGui::Text("pos %f,%f", position.x, position.y);
 	ImGui::Text("health %d", health);
 	ImGui::Text("Lv.%d : EXP %d", level, currentEXP);
@@ -151,6 +167,7 @@ void Player::MatUpdate()
 	spriteHpBar->MatUpdate(true);
 	spriteHpFrame->MatUpdate(true);
 	spriteHpText->MatUpdate(true);
+	spriteRotUI->MatUpdate(true);
 }
 
 void Player::Draw()
@@ -250,7 +267,9 @@ void Player::DrawUI()
 	spriteHpFrame->Draw(texHpFrame);
 	spriteHpBar->Draw(texHpBar);
 	spriteHpText->Draw(texHpText);
-
+	if (timerDrawRotUI > 0) {
+		spriteRotUI->Draw(texRotUI);
+	}
 }
 
 void Player::Move()

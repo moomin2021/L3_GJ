@@ -103,6 +103,10 @@ private:
 	float afterRot = 0;
 	float childRotation = 0;
 	bool isRotate = false;
+	std::unique_ptr<Sprite> spriteRotUI = nullptr;
+	uint16_t texRotUI = 0;
+	int timerDrawRotUIMax = 60 * 60;
+	int timerDrawRotUI = timerDrawRotUIMax;
 
 	//回転のイージング用パラメータ
 	const float easeTimeMax = 15;
