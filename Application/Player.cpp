@@ -322,7 +322,7 @@ void Player::Rotate()
 	//timeRate‚ª1ˆÈ‰º‚È‚ç•âŠÔ
 	if (timerate <= 1.0f) {
 
-
+		isRotate = true;
 
 		rotation = beforeRot + Easing::Circ::easeOut(0.0f, childRotation, timerate);
 
@@ -358,6 +358,8 @@ void Player::Rotate()
 		for (size_t i = 0; i < blocks.size(); i++) {
 			blocks[i]->OffsetUpdate();
 		}
+
+		isRotate = false;
 	}
 
 	//Šp“x‚ª0~360‚É‚È‚é‚æ‚¤‚É’²®
