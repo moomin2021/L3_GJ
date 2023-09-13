@@ -29,7 +29,7 @@ SceneManager::SceneManager() :
 	bloomPostEffect_(nullptr),
 
 	// ポストエフェクトの種類
-	postEffectType_(PostEffectType::NORMAL)
+	postEffectType_(PostEffectType::BLOOM)
 #pragma endregion
 {
 	// インスタンス取得
