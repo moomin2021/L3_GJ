@@ -10,7 +10,7 @@ void PieceManager::Initialize()
 	BlockData n = BlockData::None;
 	BlockData c = BlockData::Cannon;
 
-	pieceIndex[Piece_I].offset = { {0,-1,},{0,0},{0,1},{0,2} };
+	pieceIndex[Piece_I].offset = { {-1,0,},{0,0},{1,0},{2,0} };
 	pieceIndex[Piece_I].blockData = { n,n,c,c };
 	pieceIndex[Piece_I].previewTexture = LoadTexture("Resources/piece_i.png");
 	pieceIndex[Piece_I].textureSize = { 80,20 };

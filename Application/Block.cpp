@@ -306,7 +306,8 @@ void Block::OnCollison()
 		}
 		else if (collider->GetAttribute() == COL_PLAYER && collider->GetHitCollider()->GetAttribute() == COL_BOSS_BULLET) {
 			//Ž©‘®«‚ªÌßÚ²Ô°‚Å‘ÎÛ‚ª“G‚Ì’e
-			
+			//Ž©‹@‚ªƒ_ƒ[ƒW‚ðŽó‚¯‚é
+			player->Damage(1);
 		}
 		
 

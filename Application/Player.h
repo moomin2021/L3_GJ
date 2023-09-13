@@ -26,6 +26,9 @@ public:
 	//当たり判定コールバック
 	void OnCollision();
 
+	//ダメージを受ける
+	void Damage(uint16_t damageValue);
+
 	//ブロックの追加
 	void AddBlock(Block* block);
 
@@ -92,6 +95,7 @@ private:
 	const float easeTimeMax = 15;
 	float rotEaseTime = easeTimeMax;
 
+	//HP関係
 	int healthMax = 10;
 	int health = healthMax;
 

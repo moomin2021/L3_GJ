@@ -146,6 +146,13 @@ void Player::OnCollision()
 	}
 }
 
+void Player::Damage(uint16_t damageValue)
+{
+	health -= damageValue;
+	//HP‚ğÅ‘å’l‚Æ0‚ÅƒNƒ‰ƒ“ƒv
+	health = Util::Clamp(health, healthMax, 0);
+}
+
 void Player::Move()
 {
 	
