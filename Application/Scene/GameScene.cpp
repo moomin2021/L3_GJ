@@ -31,7 +31,7 @@ void GameScene::Initialize()
 	gameBGM_ = sound_->LoadWave("Resources/Sound/game_bgm.wav", 0.01f);
 
 	// BGM‚ğ–Â‚ç‚·
-	sound_->Play(gameBGM_, true);
+	//sound_->Play(gameBGM_, true);
 #pragma endregion
 
 	// ƒJƒƒ‰
