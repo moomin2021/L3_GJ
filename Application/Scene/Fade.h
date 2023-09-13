@@ -43,4 +43,9 @@ public:
 	// シーン切り替え
 	void ChangeScene(SCENE sceneNum);
 #pragma endregion
+
+#pragma region ゲッター関数
+	// フェードフラグを取得
+	bool GetIsFade() { return isFade_; }
+#pragma endregion
 };

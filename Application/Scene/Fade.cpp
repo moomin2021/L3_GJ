@@ -67,6 +67,8 @@ void Fade::MatUpdate()
 
 void Fade::ChangeScene(SCENE sceneNum)
 {
+	if (isFade_) return;
+
 	isFade_ = true;
 	isFadeOut_ = true;
 	nextScene_ = sceneNum;
