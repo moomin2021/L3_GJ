@@ -15,7 +15,7 @@ BossBullet::~BossBullet()
 void BossBullet::Initialize(Vector2 pos)
 {
 	sprite_ = std::make_unique<Sprite>();
-	sprite_->SetSize({ 16.0f, 12.0f });
+	sprite_->SetSize({ 24.0f, 18.0f });
 	position_ = pos;
 
 #pragma region コライダー
