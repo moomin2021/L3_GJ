@@ -15,6 +15,7 @@
 #include "ParticleEmitter2D.h"
 #include"PieceManager.h"
 #include "Fade.h"
+#include "Sound.h"
 
 #include <memory>
 
@@ -24,6 +25,10 @@ class GameScene : public BaseScene
 private:
 	// キーボード入力
 	Key* key_ = nullptr;
+	Sound* sound_ = nullptr;
+
+	// サウンドハンドル
+	uint16_t gameBGM_ = 0;
 
 	// フェード
 	std::unique_ptr<Fade> fade_ = nullptr;
