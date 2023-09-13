@@ -94,9 +94,9 @@ void PieceManager::Update()
 	//ピースの自動スポーン
 	PieceSpawn();
 
-	ImGui::Text("piece size %d", pieces.size());
+	//ImGui::Text("piece size %d", pieces.size());
 
-	ImGui::SliderInt("moveCoolTime", &moveCoolTimeMax, 1, 60);
+	//ImGui::SliderInt("moveCoolTime", &moveCoolTimeMax, 1, 60);
 
 	//UとIでクールタイムを増減
 	if (Key::GetInstance()->TriggerKey(DIK_U)) {
@@ -145,7 +145,7 @@ void PieceManager::UpdateNextQuete()
 
 void PieceManager::PieceSpawn()
 {
-	ImGui::SliderInt("piece cooltime", &pieceSpawnCoolTimeMax, 1, 60);
+	//ImGui::SliderInt("piece cooltime", &pieceSpawnCoolTimeMax, 1, 60);
 
 
 	if (pieceSpawnCoolTime > 0) {

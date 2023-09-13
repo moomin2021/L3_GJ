@@ -158,7 +158,7 @@ void Player::Update()
 		spriteRotUI->SetPosition({ playerBlock->GetPosition() });
 	}
 
-	ImGui::SliderFloat("button size", &sizeButtonA, 32.0f, 96.0f);
+	//ImGui::SliderFloat("button size", &sizeButtonA, 32.0f, 96.0f);
 
 	//ブロックに経験値倍率がかかるかでpressAの描画を変える
 	if (blocks.size() >= countBoostEXP) {
@@ -173,11 +173,11 @@ void Player::Update()
 		isDrawPressA = false;
 	}
 
-	ImGui::Text("pos %f,%f", position.x, position.y);
-	ImGui::Text("health %d", health);
-	ImGui::Text("Lv.%d : EXP %d", level, currentEXP);
-	ImGui::SliderInt("EXP boost rate", &boostRateEXP, 1, 10);
-	ImGui::SliderInt("EXP boost need Block", &countBoostEXP, 4, 32);
+	//ImGui::Text("pos %f,%f", position.x, position.y);
+	//ImGui::Text("health %d", health);
+	//ImGui::Text("Lv.%d : EXP %d", level, currentEXP);
+	//ImGui::SliderInt("EXP boost rate", &boostRateEXP, 1, 10);
+	//ImGui::SliderInt("EXP boost need Block", &countBoostEXP, 4, 32);
 
 
 }
@@ -407,7 +407,7 @@ void Player::Move()
 
 	}
 
-	ImGui::SliderInt("move cooltime", &moveCoolTimeMax, 1, 15);
+	//ImGui::SliderInt("move cooltime", &moveCoolTimeMax, 1, 15);
 }
 
 void Player::Rotate()
@@ -420,12 +420,12 @@ void Player::Rotate()
 	//timerateの上下限設定
 	//timerate = Util::Clamp(timerate, 1.0f, 0.0f);
 
-	ImGui::Text("rotEaseTime %f", rotEaseTime);
-	ImGui::Text("easeTimeMax %f", easeTimeMax);
-	ImGui::Text("timerate %f", timerate);
-	ImGui::Text("rotate %f", rotation);
+	//ImGui::Text("rotEaseTime %f", rotEaseTime);
+	//ImGui::Text("easeTimeMax %f", easeTimeMax);
+	//ImGui::Text("timerate %f", timerate);
+	//ImGui::Text("rotate %f", rotation);
 
-	ImGui::Text("damage %d", bulletDamage);
+	//ImGui::Text("damage %d", bulletDamage);
 
 	//timeRateが1以下なら補間
 	if (timerate <= 1.0f) {
@@ -513,10 +513,10 @@ void Player::Attack()
 void Player::AddBlock()
 {
 
-	ImGui::Begin("add block");
+	//ImGui::Begin("add block");
 
-	ImGui::SliderInt("offsetX", &debugBlockOffsetX, -5, 5);
-	ImGui::SliderInt("offsetY", &debugBlockOffsetY, -5, 5);
+	//ImGui::SliderInt("offsetX", &debugBlockOffsetX, -5, 5);
+	//ImGui::SliderInt("offsetY", &debugBlockOffsetY, -5, 5);
 
 	if (ImGui::Button("add")) {
 		//設定されているブロックのオフセットを使ってブロック生成、自機と紐つける
@@ -530,7 +530,7 @@ void Player::AddBlock()
 		blocks.push_back(newBlock);
 	}
 
-	ImGui::End();
+	//ImGui::End();
 
 }
 
@@ -574,9 +574,9 @@ void Player::UpdateBlocks()
 		blocks[i]->Update();
 		blocks[i]->SetColor(myColor);
 
-		if (blocks[i]->GetCollider()->GetAttribute() == COL_PLAYER) {
-			ImGui::Text("col player");
-		}
+		//if (blocks[i]->GetCollider()->GetAttribute() == COL_PLAYER) {
+		//	ImGui::Text("col player");
+		//}
 
 		//ImGui::Text("blocks[%d]offset:%1.f,%1.f", i, blocks[i]->GetOffset().x, blocks[i]->GetOffset().y);
 	}

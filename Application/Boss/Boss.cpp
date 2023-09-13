@@ -156,7 +156,7 @@ void Boss::Update()
 #pragma endregion
 
 	// デバック用
-	DebugImGui();
+	//DebugImGui();
 }
 
 void Boss::Draw()

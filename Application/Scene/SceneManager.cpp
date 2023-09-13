@@ -132,7 +132,7 @@ void SceneManager::Draw()
 		bloomPostEffect_->Draw();
 
 		ImGuiManager::GetInstance()->End();
-		ImGuiManager::GetInstance()->Draw();
+		//ImGuiManager::GetInstance()->Draw();
 
 		// --•`‰æŒãˆ—-- //
 		DX12Cmd::GetInstance()->PostDraw();
