@@ -118,9 +118,9 @@ private:
 	std::list < std::unique_ptr<PlayerBullet>> bullets;
 
 	//レベル関係パラメータ
-	int needEXP = 32;
+	int needEXP = 40;
 	int currentEXP = 0;
-	int countBoostEXP = 4;
+	int countBoostEXP = 20;
 	int boostRateEXP = 2;
 
 	int level = 1;
