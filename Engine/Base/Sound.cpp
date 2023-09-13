@@ -159,7 +159,7 @@ void Sound::Play(uint16_t handle, bool isLoop)
 
 void Sound::Stop(uint16_t handle)
 {
-	for (auto it = isPlaySounds_.begin(); it != isPlaySounds_.end();) {
+	for (auto it = isPlaySounds_.begin(); it != isPlaySounds_.end();it++) {
 		if (it->first == handle) {
 			it->second->Stop(0);
 			it = isPlaySounds_.erase(it);

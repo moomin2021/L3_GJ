@@ -10,6 +10,7 @@ ResultScene::ResultScene() {}
 
 ResultScene::~ResultScene() {
 	sound_->Stop(resultBGM_);
+	sound_->Release();
 }
 
 void ResultScene::Initialize()
