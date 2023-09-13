@@ -6,6 +6,7 @@
 #include "Key.h"
 #include "CircleCollider.h"
 #include "CollisionManager2D.h"
+#include "Sound.h"
 
 #include <memory>
 #include <string>
@@ -50,6 +51,13 @@ private:
 	// インスタンス
 	Key* key_ = nullptr;
 	CollisionManager2D* colMgr2D_ = nullptr;
+	Sound* sound_ = nullptr;
+
+	// サウンドハンドル
+	uint16_t bulletSound_ = 0;
+	uint16_t damageSound_ = 0;
+	uint16_t summonSound_ = 0;
+	uint16_t deadSound_ = 0;
 
 	// スプライト
 	std::unique_ptr<Sprite> sBossBack0_ = nullptr;	// ボス裏面0
