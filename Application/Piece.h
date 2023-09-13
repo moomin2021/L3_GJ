@@ -6,6 +6,7 @@ struct PieceData {
 	std::vector<Vector2> offset;
 	std::vector<BlockData> blockData;
 	uint16_t previewTexture = 0;
+	Vector2 textureSize{ 0,0 };
 };
 
 class Player;
