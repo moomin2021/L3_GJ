@@ -92,9 +92,9 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	sound = Sound::GetInstance();
 
 	//‰¹“Ç‚Ýž‚Ý
-	soundRot = sound->LoadWave("Resources/Sound/rotate.wav", 0.10f);
+	soundRot = sound->LoadWave("Resources/Sound/rotate.wav", 0.04f);
 	soundAtk = sound->LoadWave("Resources/Sound/bullet.wav", 0.01f);
-	soundDmg = sound->LoadWave("Resources/Sound/damage.wav", 0.1f);
+	soundDmg = sound->LoadWave("Resources/Sound/damage.wav", 0.03f);
 	soundStick = sound->LoadWave("Resources/Sound/stick.wav", 0.05f);
 	soundEXP = sound->LoadWave("Resources/Sound/exp.wav", 0.05f);
 

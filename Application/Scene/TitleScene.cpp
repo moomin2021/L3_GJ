@@ -63,7 +63,7 @@ void TitleScene::Initialize()
 	sTitleBGM_ = sound_->LoadWave("Resources/Sound/title_bgm.wav", 0.01f);
 	selectMoveSE_ = sound_->LoadWave("Resources/Sound/select.wav", 0.01f);
 	selectSE_ = sound_->LoadWave("Resources/Sound/decision.wav", 0.01f);
-	//sound_->Play(sTitleBGM_, true);
+	sound_->Play(sTitleBGM_, true);
 #pragma endregion
 
 	fade_ = std::make_unique<Fade>();

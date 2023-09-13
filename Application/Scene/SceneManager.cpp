@@ -60,9 +60,9 @@ void SceneManager::ChangeScene(SCENE changeSceneNum)
 // XVˆ—
 void SceneManager::Update() {
 
-	if (key_->TriggerKey(DIK_1)) postEffectType_ = PostEffectType::NORMAL;
-	if (key_->TriggerKey(DIK_2)) postEffectType_ = PostEffectType::BLUR;
-	if (key_->TriggerKey(DIK_3)) postEffectType_ = PostEffectType::BLOOM;
+	//if (key_->TriggerKey(DIK_1)) postEffectType_ = PostEffectType::NORMAL;
+	//if (key_->TriggerKey(DIK_2)) postEffectType_ = PostEffectType::BLUR;
+	//if (key_->TriggerKey(DIK_3)) postEffectType_ = PostEffectType::BLOOM;
 
 	//if (key_->TriggerKey(DIK_1)) ChangeScene(SCENE1);
 	//if (key_->TriggerKey(DIK_2)) ChangeScene(SCENE2);
