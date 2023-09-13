@@ -206,8 +206,8 @@ void Player::Draw()
 {
 	//自機描画
 
-	//ダメージのクールタイムでチカチカさせる
-	if (damageCooltime % 6 <= 3) {
+	//ダメージのクールタイムでチカチカさせる。生きてるなら描画
+	if (damageCooltime % 6 <= 3 && isAlive) {
 
 		playerBlock->Draw();
 
