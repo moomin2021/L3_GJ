@@ -138,6 +138,8 @@ private:
 
 	bool isBoomerang_ = false;
 
+	bool isChangeScene_ = false;
+
 #pragma endregion
 
 #pragma region メンバ関数
@@ -197,5 +199,10 @@ private:
 
 	// ImGuiを使う
 	void DebugImGui();
+#pragma endregion
+
+#pragma region ゲッター関数
+public:
+	bool GetIsChangeScene() { return isChangeScene_; }
 #pragma endregion
 };
