@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "Fade.h"
 #include "Key.h"
+#include "Sound.h"
 
 #include <memory>
 
@@ -15,6 +16,7 @@ private:
 	// インスタンス
 	Pad* pad_ = nullptr;
 	Key* key_ = nullptr;
+	Sound* sound_ = nullptr;
 
 	// フェード
 	std::unique_ptr<Fade> fade_ = nullptr;
@@ -38,7 +40,10 @@ private:
 	uint16_t hExitText_ = 0;
 	uint16_t hTitleSelectFrame_ = 0;
 
-	uint16_t soundHandle_ = 0;
+	// サウンドハンドル
+	uint16_t sTitleBGM_ = 0;
+	uint16_t selectSE_ = 0;
+	uint16_t selectMoveSE_ = 0;
 
 	// 選択時座標
 	std::vector<Vector2> selectPos_ = {

@@ -5,13 +5,16 @@
 
 TitleScene::TitleScene() {}
 
-TitleScene::~TitleScene() {}
+TitleScene::~TitleScene() {
+	sound_->Stop(sTitleBGM_);
+}
 
 void TitleScene::Initialize()
 {
 #pragma region インスタンス取得
 	pad_ = Pad::GetInstance();
 	key_ = Key::GetInstance();
+	sound_ = Sound::GetInstance();
 #pragma endregion
 
 #pragma region カメラ
@@ -56,7 +59,10 @@ void TitleScene::Initialize()
 	hTitleSelectFrame_ = LoadTexture("Resources/title_select_frame.png");
 #pragma endregion
 
-	soundHandle_ = Sound::GetInstance()->LoadWave("Resources/Sound/a.wav");
+#pragma region サウンドハンドル
+	sTitleBGM_ = sound_->LoadWave("Resources/Sound/title_bgm.wav");
+	sound_->Play(sTitleBGM_);
+#pragma endregion
 
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
