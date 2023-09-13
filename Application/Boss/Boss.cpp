@@ -455,7 +455,7 @@ void Boss::Wait()
 	// 行動開始からの経過時間
 	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
 
-	// 経過時間が指定時間以上ならStateを変える
+	// 経過時間が指定時間以上ならStateを
 	if (elapsedTime >= time2Wait_) {
 		uint16_t rnd = Util::GetRandomInt(0, 2);
 
