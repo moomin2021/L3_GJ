@@ -31,7 +31,7 @@ void ResultScene::Initialize()
 	resultBGM_ = sound_->LoadWave("Resources/Sound/result_bgm.wav", 0.01f);
 	selectMoveSE_ = sound_->LoadWave("Resources/Sound/select.wav", 0.01f);
 	selectSE_ = sound_->LoadWave("Resources/Sound/decision.wav", 0.01f);
-	//sound_->Play(resultBGM_, true);
+	sound_->Play(resultBGM_, true);
 #pragma endregion
 
 #pragma region スプライト
