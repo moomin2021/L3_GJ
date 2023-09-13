@@ -38,6 +38,10 @@ public:
 
 	void DrawUI();
 
+	int GetLevel()const { return level; }
+
+	bool IsRotate()const { return isRotate; }
+
 private:
 
 	//移動
@@ -94,6 +98,7 @@ private:
 	float beforeRot = 0;
 	float afterRot = 0;
 	float childRotation = 0;
+	bool isRotate = false;
 
 	//回転のイージング用パラメータ
 	const float easeTimeMax = 15;
@@ -109,6 +114,8 @@ private:
 	uint16_t texHpFrame = 0;
 	std::unique_ptr<Sprite> spriteHpText = nullptr;
 	uint16_t texHpText = 0;
+	int damageCoolTimeMax = 180;
+	int damageCooltime = 0;
 
 	//射撃用パラメータ
 	int shotCooltimeMax = 30;
@@ -116,8 +123,11 @@ private:
 	std::list < std::unique_ptr<PlayerBullet>> bullets;
 
 	//レベル関係パラメータ
-	int needEXP = 32;
+	int needEXP = 40;
 	int currentEXP = 0;
+	int countBoostEXP = 20;
+	int boostRateEXP = 2;
+
 	int level = 1;
 	int bulletDamage = 1;
 	float expBarMax = 0.0f;

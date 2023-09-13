@@ -89,8 +89,6 @@ void Player::Update()
 	//ブロックリセット
 	BlockReset();
 
-	/*sprite->MatUpdate();
-	UpdateBlocks();*/
 
 	// 弾の生存フラグが[OFF]なら消す
 	for (auto it = bullets.begin(); it != bullets.end();) {
@@ -105,9 +103,17 @@ void Player::Update()
 	//UI更新
 	UpdateUI();
 
+	//ダメージのクールタイム管理
+	if (damageCooltime > 0) {
+		damageCooltime--;
+	}
+
 	ImGui::Text("pos %f,%f", position.x, position.y);
 	ImGui::Text("health %d", health);
 	ImGui::Text("Lv.%d : EXP %d", level, currentEXP);
+	ImGui::SliderInt("EXP boost rate", &boostRateEXP, 1, 10);
+	ImGui::SliderInt("EXP boost need Block", &countBoostEXP, 4, 32);
+
 
 }
 
@@ -132,11 +138,16 @@ void Player::MatUpdate()
 void Player::Draw()
 {
 	//自機描画
-	playerBlock->Draw();
 
-	//ブロックたちの描画
-	for (size_t i = 0; i < blocks.size(); i++) {
-		blocks[i]->Draw();
+	//ダメージのクールタイムでチカチカさせる
+	if (damageCooltime % 6 <= 3) {
+
+		playerBlock->Draw();
+
+		//ブロックたちの描画
+		for (size_t i = 0; i < blocks.size(); i++) {
+			blocks[i]->Draw();
+		}
 	}
 
 	//弾描画
@@ -199,6 +210,13 @@ void Player::OnCollision()
 
 void Player::Damage(uint16_t damageValue)
 {
+	//クールタイムが終わってなければ処理しない
+	if (damageCooltime > 0) {
+		return;
+	}
+
+	damageCooltime = damageCoolTimeMax;
+
 	health -= damageValue;
 	//HPを最大値と0でクランプ
 	health = Util::Clamp(health, healthMax, 0);
@@ -319,7 +337,7 @@ void Player::Rotate()
 	//timeRateが1以下なら補間
 	if (timerate <= 1.0f) {
 
-
+		isRotate = true;
 
 		rotation = beforeRot + Easing::Circ::easeOut(0.0f, childRotation, timerate);
 
@@ -355,6 +373,8 @@ void Player::Rotate()
 		for (size_t i = 0; i < blocks.size(); i++) {
 			blocks[i]->OffsetUpdate();
 		}
+
+		isRotate = false;
 	}
 
 	//角度が0~360になるように調整
@@ -462,6 +482,11 @@ void Player::BlockReset()
 		int blockCount = (int)blocks.size();
 
 		//TODO:形成されている形を検知して加算する経験値に倍率をかける
+		//ブロックの数が経験値倍率の必要数を満たしていたら
+		if (blockCount > countBoostEXP) {
+			blockCount *= boostRateEXP;
+		}
+
 
 		//経験値に加算
 		currentEXP += blockCount;

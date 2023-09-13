@@ -284,7 +284,7 @@ void Block::OnCollison()
 					hitOffset.y = 1.0f;
 				}
 			}
-			
+
 			//全ブロック走査
 			for (size_t i = 0; i < pAllBlock.size(); i++) {
 				//ブロックの親タグが同一なもののみ親を変える
@@ -297,10 +297,18 @@ void Block::OnCollison()
 					//親を衝突したブロックに変更、オフセットの設定、属性の変更
 					pAllBlock[i]->parent->tileOffset = newOffset;
 					//*pAllBlock[i]->parent->parentRot = 0.0f;
-					pAllBlock[i]->collider->SetAttribute(COL_PLAYER);
 
-					//親の配列にぶちこむ
-					player->AddBlock(pAllBlock[i].get());
+					//自機が回転中ならコライダーを破壊設定に
+					if (player->IsRotate()) {
+						pAllBlock[i]->collider->SetAttribute(COL_BREAK);
+					}
+					else {
+
+						pAllBlock[i]->collider->SetAttribute(COL_PLAYER);
+
+						//親の配列にぶちこむ
+						player->AddBlock(pAllBlock[i].get());
+					}
 				}
 			}
 		}
@@ -309,7 +317,7 @@ void Block::OnCollison()
 			//自機がダメージを受ける
 			player->Damage(1);
 		}
-		
+
 
 	}
 }

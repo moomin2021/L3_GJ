@@ -107,7 +107,7 @@ void GameScene::Update()
 	}
 
 	if (key_->TriggerKey(DIK_B)) {
-		boss_->SubHP(50);
+		boss_->SubHP(100);
 	}
 
 //	Piece::ALlPieceUpdate();
@@ -158,6 +158,7 @@ void GameScene::Draw()
 
 	//Ž©‹@UI•`‰æ
 	player->DrawUI();
+	uiMgr_->DrawPlayerLevel(player->GetLevel());
 
 	fade_->Draw();
 
