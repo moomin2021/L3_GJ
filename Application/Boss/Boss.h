@@ -75,7 +75,7 @@ private:
 	// HP
 	size_t gaugeNum_ = 4;
 	std::vector<uint16_t> hp_ = {};
-	uint16_t oneGaugeValue_ = 500;
+	uint16_t oneGaugeValue_ = 600;
 
 	// ¶‘¶ƒtƒ‰ƒO
 	bool isAlive_ = true;

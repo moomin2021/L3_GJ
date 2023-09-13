@@ -154,11 +154,11 @@ void UIManager::MatUpdate()
 void UIManager::Draw()
 {
 	sTitleFrame_->Draw(hTitleFrame_);
-	sExp_->Draw(hExp_);
-	sExpIn_->Draw(hExpIn_);
+	//sExp_->Draw(hExp_);
+	//sExpIn_->Draw(hExpIn_);
 	sExpText_->Draw(hExpText_);
-	sHpPlayer_->Draw(hHpPlayer_);
-	sHpPlayerIn_->Draw(hHpPlayerIn_);
+	//sHpPlayer_->Draw(hHpPlayer_);
+	//sHpPlayerIn_->Draw(hHpPlayerIn_);
 	sHpTextPlayer_->Draw(hHpTextPlayer_);
 	sHpBoss_->Draw(hHpBoss_);
 	sBoss_->UIDraw();

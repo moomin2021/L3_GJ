@@ -85,6 +85,9 @@ void GameScene::Update()
 	// プレイヤー
 	player->Update();
 
+	//自機が動いたら一度衝突判定をとる
+	OnCollision();
+
 	// ボス
 	boss_->Update();
 
@@ -142,6 +145,9 @@ void GameScene::Draw()
 
 	// UIマネージャー
 	uiMgr_->Draw();
+
+	//自機UI描画
+	player->DrawUI();
 
 	fade_->Draw();
 

@@ -13,6 +13,7 @@ Vector2 Block::blockSize = { 0,0 };
 std::vector<std::unique_ptr<Block>> Block::pAllBlock;
 Player* Block::player = nullptr;
 std::vector <std::unique_ptr<Piece>>* Block::pieces;
+uint16_t Block::allBlockCount = 0;
 
 void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, uint16_t playerTex, const Vector2& blockSize)
 {
@@ -21,7 +22,7 @@ void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, uint16_t pla
 	playerTexture = playerTex;
 	Block::blockSize = blockSize;
 
-
+	pAllBlock.clear();
 }
 
 Block* Block::CreateBlock(const BlockData& blockData, ParentData* parent)
@@ -45,6 +46,8 @@ void Block::SetPiece(std::vector<std::unique_ptr<Piece>>* pieces)
 
 void Block::AllBlockDeleteCheck()
 {
+	ImGui::Text("block count %d", pAllBlock.size());
+
 	for (size_t i = 0; i < pAllBlock.size(); i++) {
 		if (!pAllBlock[i]->isAlive) {
 			pAllBlock.erase(pAllBlock.begin() + i);
@@ -80,12 +83,13 @@ void Block::Initialize(const BlockData& blockData, ParentData* parent)
 	colManager->AddCollider(collider.get());
 
 	//ブロック識別タグの設定
-	uint16_t blockTag = (uint16_t)pAllBlock.size();
+	uint16_t blockTag = allBlockCount;
 
 	colliderTag = blockTag;
 	collider->SetTag(colliderTag);
 
 	isAlive = true;
+	allBlockCount++;
 }
 
 
@@ -110,6 +114,8 @@ void Block::Update()
 	if (!parent) {
 		return;
 	}
+
+
 
 	Vector2 pos = parent->parentPos;
 
@@ -216,20 +222,32 @@ void Block::OnCollison()
 			uint16_t baseTag = collider->GetTag();
 			//ブロック総リストからどのブロックに当たったか特定
 			uint16_t hitBlockTag = collider->GetHitCollider()->GetTag();
-			Block* hitBlock = pAllBlock[hitBlockTag].get();
-			//どのブロックに当たったかでどのピースに当たったかを特定
-			uint16_t pieceTag = hitBlock->parent->parentTag;
+			//当たったピースのタグ
+			uint16_t pieceTag = 0;
 
 			//自分のオフセット
-			Vector2 baseOffset = pAllBlock[baseTag]->parent->tileOffset;
+			Vector2 baseOffset = { 0,0 };
 			//当たったブロックのオフセット
-			Vector2 hitBlockOffset = pAllBlock[hitBlockTag]->parent->tileOffset;
+			Vector2 hitBlockOffset = { 0,0 };
 
+			for (size_t i = 0; i < pAllBlock.size(); i++) {
+
+				//当たったブロックのタグからどのブロックに当たったか特定
+				if (hitBlockTag == pAllBlock[i]->colliderTag) {
+					//タグが同一のブロックを当たったブロックに
+					Block* hitBlock = pAllBlock[i].get();
+					//どのブロックに当たったかでどのピースに当たったかを特定
+					pieceTag = hitBlock->parent->parentTag;
+					//当たったブロックのオフセットを取得
+					hitBlockOffset = hitBlock->parent->tileOffset;
+				}
+				else if (baseTag == pAllBlock[i]->colliderTag) {
+					baseOffset = pAllBlock[i]->parent->tileOffset;
+				}
+			}
 
 			//衝突オフセット計算
-
 			Vector2 blockPos, playerPos, hitOffset{ 0,0 };
-
 			//自機の座標が前フレームと同じ(自機が動いていない)なら敵の座標がold
 			if (oldPos == collider->GetPosition()) {
 				//ブロックに速度を加算することで疑似的にoldpos扱いにする
@@ -242,7 +260,6 @@ void Block::OnCollison()
 				playerPos = oldPos;
 			}
 
-			
 			//プレイヤーから自分へのベクトル(プレイヤからみてどこにくっつくか判定するため)
 			Vector2 vecP = blockPos - playerPos;
 			//x成分とy成分の絶対値を比較し、縦につくか横につくか決める
@@ -267,13 +284,13 @@ void Block::OnCollison()
 					hitOffset.y = 1.0f;
 				}
 			}
-
+			
 			//全ブロック走査
 			for (size_t i = 0; i < pAllBlock.size(); i++) {
 				//ブロックの親タグが同一なもののみ親を変える
 				if (pAllBlock[i]->parent->parentTag == pieceTag && pAllBlock[i]->collider->GetAttribute() != COL_PLAYER) {
-					
-					
+
+
 					//ブロックの新しいオフセットを計算
 					Vector2 newOffset = hitOffset + baseOffset + (pAllBlock[i]->parent->tileOffset - hitBlockOffset);
 
@@ -286,20 +303,14 @@ void Block::OnCollison()
 					player->AddBlock(pAllBlock[i].get());
 				}
 			}
-
-
-
-
-	
-
-	
-
-
-
-
-			//親の変更
-			//ChangeParent(baseTag, hitBlockTag, pieceTag, hitOffset);
 		}
+		else if (collider->GetAttribute() == COL_PLAYER && collider->GetHitCollider()->GetAttribute() == COL_BOSS_BULLET) {
+			//自属性がﾌﾟﾚｲﾔｰで対象が敵の弾
+			//自機がダメージを受ける
+			player->Damage(1);
+		}
+		
+
 	}
 }
 

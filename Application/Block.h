@@ -94,6 +94,8 @@ private://静的メンバ変数
 	static Player* player;
 	static std::vector < std::unique_ptr<Piece>>* pieces;
 
+	static uint16_t allBlockCount;
+
 private://メンバ変数
 
 	//マネージャ

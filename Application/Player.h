@@ -26,12 +26,17 @@ public:
 	//当たり判定コールバック
 	void OnCollision();
 
+	//ダメージを受ける
+	void Damage(uint16_t damageValue);
+
 	//ブロックの追加
 	void AddBlock(Block* block);
 
 	Vector2 GetPosition()const { return position; }
 
 	float GetRotation()const { return rotation; }
+
+	void DrawUI();
 
 private:
 
@@ -62,6 +67,8 @@ private:
 	//レベルの更新
 	void LevelUpdate();
 
+	void UpdateUI();
+
 private:
 
 	Pad* pad = nullptr;
@@ -77,6 +84,7 @@ private:
 	const float baseSpd = 32.0f;
 	int moveCoolTimeMax = 2;
 	int moveCoolTime = moveCoolTimeMax;
+	bool isMoveHorizontal = false;
 
 	//Vector2 moveTileMin{ 0,3 };
 	//Vector2 moveTileMax {}
@@ -91,8 +99,16 @@ private:
 	const float easeTimeMax = 15;
 	float rotEaseTime = easeTimeMax;
 
+	//HP関係
 	int healthMax = 10;
 	int health = healthMax;
+	float hpBarMax = 0.0f;
+	std::unique_ptr<Sprite> spriteHpBar = nullptr;
+	uint16_t texHpBar = 0;
+	std::unique_ptr<Sprite> spriteHpFrame = nullptr;
+	uint16_t texHpFrame = 0;
+	std::unique_ptr<Sprite> spriteHpText = nullptr;
+	uint16_t texHpText = 0;
 
 	//射撃用パラメータ
 	int shotCooltimeMax = 30;
@@ -104,6 +120,13 @@ private:
 	int currentEXP = 0;
 	int level = 1;
 	int bulletDamage = 1;
+	float expBarMax = 0.0f;
+	std::unique_ptr<Sprite> spriteExpBar = nullptr;
+	uint16_t texExpBar = 0;
+	std::unique_ptr<Sprite> spriteExpFrame = nullptr;
+	uint16_t texExpFrame = 0;
+	std::unique_ptr<Sprite> spriteExpText = nullptr;
+	uint16_t texExpText = 0;
 
 	//デバッグ用
 	int debugBlockOffsetX = 0;
