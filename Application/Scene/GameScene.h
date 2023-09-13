@@ -48,7 +48,6 @@ private:
 	//背景テクスチャとスプライト
 	uint16_t backGroundTexture = 0;
 	std::unique_ptr<Sprite> backGroundSprite = nullptr;
-	uint16_t particleHandle_ = 0;
 
 	// UIマネージャー
 	std::unique_ptr<UIManager> uiMgr_ = nullptr;

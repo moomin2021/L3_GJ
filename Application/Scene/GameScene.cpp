@@ -44,8 +44,6 @@ void GameScene::Initialize()
 	uint16_t blockTex = Texture::GetInstance()->LoadTexture("Resources/piece.png");
 	uint16_t cannonTex = Texture::GetInstance()->LoadTexture("Resources/piece_cannon.png");
 	uint16_t playerTex = Texture::GetInstance()->LoadTexture("Resources/player.png");
-	particleHandle_ = LoadTexture("Resources/effect2.png");
-
 
 	//ブロッククラス静的初期化
 	Block::StaticInitialize(blockTex, cannonTex,playerTex, { 32,32 });
