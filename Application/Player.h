@@ -114,7 +114,7 @@ private:
 	float rotEaseTime = easeTimeMax;
 
 	//HPŠÖŒW
-	int healthMax = 10;
+	int healthMax = 8;
 	int health = healthMax;
 	float hpBarMax = 0.0f;
 	std::unique_ptr<Sprite> spriteHpBar = nullptr;
