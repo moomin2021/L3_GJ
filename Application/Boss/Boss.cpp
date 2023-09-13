@@ -26,7 +26,7 @@ void Boss::Initialize()
 
 #pragma region サウンドハンドル
 	bulletSound_ = sound_->LoadWave("Resources/Sound/bullet.wav", 0.01f);
-	damageSound_ = sound_->LoadWave("Resources/Sound/damage.wav", 0.015f);
+	damageSound_ = sound_->LoadWave("Resources/Sound/damage.wav", 0.03f);
 	summonSound_ = sound_->LoadWave("Resources/Sound/summon.wav", 0.01f);
 	deadSound_ = sound_->LoadWave("Resources/Sound/dead.wav", 0.01f);
 #pragma endregion
