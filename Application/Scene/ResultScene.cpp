@@ -8,7 +8,9 @@ bool ResultScene::isGameOver_ = false;
 
 ResultScene::ResultScene() {}
 
-ResultScene::~ResultScene() {}
+ResultScene::~ResultScene() {
+	sound_->Stop(resultBGM_);
+}
 
 void ResultScene::Initialize()
 {
@@ -203,13 +205,13 @@ void ResultScene::Initialize()
 void ResultScene::Update()
 {
 	if (fade_->GetIsFade() == false) {
-		if (key_->TriggerKey(DIK_S)) {
+		if (key_->TriggerKey(DIK_S) || pad_->GetTriggerButton(PAD_DOWN)) {
 			selectNum_++;
 			if (selectNum_ > 1) selectNum_ = 0;
 			sound_->Play(selectMoveSE_);
 		}
 
-		if (key_->TriggerKey(DIK_W)) {
+		if (key_->TriggerKey(DIK_W) || pad_->GetTriggerButton(PAD_UP)) {
 			selectNum_--;
 			if (selectNum_ < 0) selectNum_ = 1;
 			sound_->Play(selectMoveSE_);

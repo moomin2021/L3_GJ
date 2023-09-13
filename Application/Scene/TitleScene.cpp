@@ -74,13 +74,13 @@ void TitleScene::Initialize()
 void TitleScene::Update()
 {
 	if (fade_->GetIsFade() == false) {
-		if (key_->TriggerKey(DIK_D)) {
+		if (key_->TriggerKey(DIK_D) || pad_->GetTriggerButton(PAD_RIGHT)) {
 			selectNum_++;
 			if (selectNum_ > 1) selectNum_ = 0;
 			sound_->Play(selectMoveSE_);
 		}
 
-		if (key_->TriggerKey(DIK_A)) {
+		if (key_->TriggerKey(DIK_A) || pad_->GetTriggerButton(PAD_LEFT)) {
 			selectNum_--;
 			if (selectNum_ < 0) selectNum_ = 1;
 			sound_->Play(selectMoveSE_);
