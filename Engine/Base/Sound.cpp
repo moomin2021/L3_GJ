@@ -127,7 +127,7 @@ void Sound::Play(uint16_t handle, bool isLoop)
 	HRESULT result;
 
 	if (isPlaySounds_.count(handle) > 0) {
-		for (auto it = isPlaySounds_.begin(); it != isPlaySounds_.end();) {
+		for (auto it = isPlaySounds_.begin(); it != isPlaySounds_.end();it++) {
 			if (it->first == handle) {
 				it->second->Stop(0);
 				it = isPlaySounds_.erase(it);
