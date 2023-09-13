@@ -73,34 +73,36 @@ void TitleScene::Initialize()
 
 void TitleScene::Update()
 {
-	if (key_->TriggerKey(DIK_D)) {
-		selectNum_++;
-		if (selectNum_ > 1) selectNum_ = 0;
-		sound_->Play(selectMoveSE_);
-	}
+	if (fade_->GetIsFade() == false) {
+		if (key_->TriggerKey(DIK_D)) {
+			selectNum_++;
+			if (selectNum_ > 1) selectNum_ = 0;
+			sound_->Play(selectMoveSE_);
+		}
 
-	if (key_->TriggerKey(DIK_A)) {
-		selectNum_--;
-		if (selectNum_ < 0) selectNum_ = 1;
-		sound_->Play(selectMoveSE_);
-	}
+		if (key_->TriggerKey(DIK_A)) {
+			selectNum_--;
+			if (selectNum_ < 0) selectNum_ = 1;
+			sound_->Play(selectMoveSE_);
+		}
 
-	if (pad_->GetLStick().x <= -0.6f && oldLStickX > -0.6f) {
-		selectNum_++;
-		if (selectNum_ > 1) selectNum_ = 0;
-		sound_->Play(selectMoveSE_);
-	}
+		if (pad_->GetLStick().x <= -0.6f && oldLStickX > -0.6f) {
+			selectNum_++;
+			if (selectNum_ > 1) selectNum_ = 0;
+			sound_->Play(selectMoveSE_);
+		}
 
-	if (pad_->GetLStick().x >= 0.6f && oldLStickX < 0.6f) {
-		selectNum_--;
-		if (selectNum_ < 0) selectNum_ = 1;
-		sound_->Play(selectMoveSE_);
-	}
+		if (pad_->GetLStick().x >= 0.6f && oldLStickX < 0.6f) {
+			selectNum_--;
+			if (selectNum_ < 0) selectNum_ = 1;
+			sound_->Play(selectMoveSE_);
+		}
 
-	if (pad_->GetTriggerButton(PAD_A) || key_->TriggerKey(DIK_SPACE)) {
-		if (selectNum_ == 0) fade_->ChangeScene(SCENE::GAME);
-		if (selectNum_ == 1) SceneManager::GetInstance()->SetIsEnd(true);
-		sound_->Play(selectSE_);
+		if (pad_->GetTriggerButton(PAD_A) || key_->TriggerKey(DIK_SPACE)) {
+			if (selectNum_ == 0) fade_->ChangeScene(SCENE::GAME);
+			if (selectNum_ == 1) SceneManager::GetInstance()->SetIsEnd(true);
+			sound_->Play(selectSE_);
+		}
 	}
 
 	oldLStickX = pad_->GetLStick().x;

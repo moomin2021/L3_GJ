@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Sprite.h"
 #include "Fade.h"
+#include "Sound.h"
 
 #include <memory>
 
@@ -19,6 +20,12 @@ private:
 	// インスタンス
 	Pad* pad_ = nullptr;
 	Key* key_ = nullptr;
+	Sound* sound_ = nullptr;
+
+	// サウンド
+	uint16_t resultBGM_ = 0;
+	uint16_t selectSE_ = 0;
+	uint16_t selectMoveSE_ = 0;
 
 	// ランク別秒数
 	std::vector<float> rankTime_ = {

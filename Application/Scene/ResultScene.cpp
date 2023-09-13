@@ -17,11 +17,19 @@ void ResultScene::Initialize()
 #pragma region インスタンス取得
 	pad_ = Pad::GetInstance();
 	key_ = Key::GetInstance();
+	sound_ = Sound::GetInstance();
 #pragma endregion
 
 #pragma region カメラ
 	camera_ = std::make_unique<Camera>();
 	Sprite::SetCamera(camera_.get());
+#pragma endregion
+
+#pragma region サウンドハンドル
+	resultBGM_ = sound_->LoadWave("Resources/Sound/result_bgm.wav", 0.01f);
+	selectMoveSE_ = sound_->LoadWave("Resources/Sound/select.wav", 0.01f);
+	selectSE_ = sound_->LoadWave("Resources/Sound/decision.wav", 0.01f);
+	sound_->Play(resultBGM_, true);
 #pragma endregion
 
 #pragma region スプライト
@@ -194,29 +202,36 @@ void ResultScene::Initialize()
 
 void ResultScene::Update()
 {
-	if (key_->TriggerKey(DIK_S)) {
-		selectNum_++;
-		if (selectNum_ > 1) selectNum_ = 0;
-	}
+	if (fade_->GetIsFade() == false) {
+		if (key_->TriggerKey(DIK_S)) {
+			selectNum_++;
+			if (selectNum_ > 1) selectNum_ = 0;
+			sound_->Play(selectMoveSE_);
+		}
 
-	if (key_->TriggerKey(DIK_W)) {
-		selectNum_--;
-		if (selectNum_ < 0) selectNum_ = 1;
-	}
+		if (key_->TriggerKey(DIK_W)) {
+			selectNum_--;
+			if (selectNum_ < 0) selectNum_ = 1;
+			sound_->Play(selectMoveSE_);
+		}
 
-	if (pad_->GetLStick().y <= -0.6f && oldLStickY > -0.6f) {
-		selectNum_++;
-		if (selectNum_ > 1) selectNum_ = 0;
-	}
+		if (pad_->GetLStick().y <= -0.6f && oldLStickY > -0.6f) {
+			selectNum_++;
+			if (selectNum_ > 1) selectNum_ = 0;
+			sound_->Play(selectMoveSE_);
+		}
 
-	if (pad_->GetLStick().y >= 0.6f && oldLStickY < 0.6f) {
-		selectNum_--;
-		if (selectNum_ < 0) selectNum_ = 1;
-	}
+		if (pad_->GetLStick().y >= 0.6f && oldLStickY < 0.6f) {
+			selectNum_--;
+			if (selectNum_ < 0) selectNum_ = 1;
+			sound_->Play(selectMoveSE_);
+		}
 
-	if (pad_->GetTriggerButton(PAD_A) || key_->TriggerKey(DIK_SPACE)) {
-		if (selectNum_ == 0) fade_->ChangeScene(SCENE::GAME);
-		if (selectNum_ == 1) fade_->ChangeScene(SCENE::TITLE);
+		if (pad_->GetTriggerButton(PAD_A) || key_->TriggerKey(DIK_SPACE)) {
+			if (selectNum_ == 0) fade_->ChangeScene(SCENE::GAME);
+			if (selectNum_ == 1) fade_->ChangeScene(SCENE::TITLE);
+			sound_->Play(selectSE_);
+		}
 	}
 
 	// フェード
