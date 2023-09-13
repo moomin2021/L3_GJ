@@ -23,6 +23,8 @@ private:
 	std::unique_ptr<Sprite> sHpBoss_ = nullptr;
 	std::unique_ptr<Sprite> sHpTextBoss_ = nullptr;
 	std::unique_ptr<Sprite> sNextText_ = nullptr;
+	std::vector<std::unique_ptr<Sprite>> sTimes_ = {};
+	std::unique_ptr<Sprite> sColon_ = nullptr;
 
 	// 画像ハンドル
 	uint16_t hTitleFrame_ = 0;
@@ -35,6 +37,16 @@ private:
 	uint16_t hHpBoss_ = 0;
 	uint16_t hHpTextBoss_ = 0;
 	uint16_t hNextText_ = 0;
+	std::vector<uint16_t> hNumbers_ = {};
+	uint16_t hColon_ = 0;
+
+	// ゲーム経過時間
+	uint64_t startGameTime_ = 0;
+	std::vector<uint16_t> gameTimes_ = {};
+	std::vector<uint16_t> clearTime_ = {};
+
+	// クリアフラグ
+	bool isClear_ = false;
 #pragma endregion
 
 #pragma region メンバ関数

@@ -12,9 +12,17 @@ class ResultScene : public BaseScene
 {
 #pragma region メンバ変数
 private:
+	// クリアタイム
+	static float clearTime_;
+
 	// インスタンス
 	Pad* pad_ = nullptr;
 	Key* key_ = nullptr;
+
+	// ランク別秒数
+	std::vector<float> rankTime_ = {
+		10.0f, 15.0f, 20.0f, 25.0f
+	};
 
 	// フェード
 	std::unique_ptr<Fade> fade_ = nullptr;
@@ -33,6 +41,11 @@ private:
 	std::unique_ptr<Sprite> sRankText_ = nullptr;
 	std::unique_ptr<Sprite> sNextRankText_ = nullptr;
 	std::unique_ptr<Sprite> sResultSelectFrame_ = nullptr;
+	std::vector<std::unique_ptr<Sprite>> sClearTime_ = {};
+	std::unique_ptr<Sprite> sColon_ = nullptr;
+	std::unique_ptr<Sprite> sRank_ = nullptr;
+	std::vector<std::unique_ptr<Sprite>> sNextRankTime_ = {};
+	std::unique_ptr<Sprite> sNextRankTimeColon_ = nullptr;
 
 	// 画像ハンドル
 	uint16_t hBackGround_ = 0;
@@ -45,6 +58,10 @@ private:
 	uint16_t hRankText_ = 0;
 	uint16_t hNextRankText_ = 0;
 	uint16_t hResultSelectFrame_ = 0;
+	std::vector<uint16_t> hNumbers_ = {};
+	uint16_t hColon_ = 0;
+	std::vector<uint16_t> hRank_ = {};
+	uint16_t hResultRank_ = 0;
 
 	// 選択時座標
 	std::vector<Vector2> selectPos_ = {
@@ -57,6 +74,14 @@ private:
 
 	// LスティックY座標保存
 	float oldLStickY = 0.0f;
+
+	// クリアタイムハンドル
+	std::vector<uint16_t> clearTimeHandle_ = {};
+
+	std::vector<uint16_t> nextRankTimeHandle_ = {};
+
+	// 次のランクまでのタイム
+	float nextRankTime_ = 0.0f;
 
 #pragma endregion
 
@@ -83,6 +108,11 @@ private:
 
 	// 行列更新処理
 	void MatUpdate();
+#pragma endregion
+
+#pragma region セッター関数
+public:
+	static void SetClearTime(float clearTime) { clearTime_ = clearTime; }
 #pragma endregion
 };
 
