@@ -829,6 +829,9 @@ void Boss::HPUpdate()
 
 	else {
 		isAlive_ = false;
+		colBack0_->SetAttribute(0);
+		colBack1_->SetAttribute(0);
+		collider_->SetAttribute(0);
 		sHpBossIn_->SetSize({ 0.0f, 40.0f });
 		actionStartTime_ = Util::GetTimrMSec();
 		state_ = PRE_CLOSING;
