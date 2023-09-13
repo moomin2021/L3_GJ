@@ -27,6 +27,9 @@ void CollisionManager2D::CheckAllCollision()
 			// 属性が合わなければ除外
 			if (!((*itA)->attribute_ & (*itB)->attribute_)) continue;
 
+			// 属性が全く同じなら除外
+			if ((*itA)->attribute_ == (*itB)->attribute_) continue;
+
 			// ともに矩形
 			if ((*itA)->GetShapeType() == SHAPE_BOX && (*itB)->GetShapeType() == SHAPE_BOX) {
 				// 衝突判定の引数のために球に変換

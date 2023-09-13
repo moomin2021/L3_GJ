@@ -217,6 +217,8 @@ void Boss::MatUpdate()
 
 void Boss::SubHP(uint16_t value)
 {
+	if (hp_.size() <= 0) return;
+
 	if (hp_[0] < value) {
 		value -= hp_[0];
 		hp_.erase(hp_.begin());
@@ -235,7 +237,8 @@ void (Boss::* Boss::stateTable[]) () = {
 	&Boss::Opening0,		// オープニング0
 	&Boss::Opening1,		// オープニング1
 	&Boss::Opening2,		// オープニング2
-	&Boss::Closing,			// クロージング
+	&Boss::Closing0,		// クロージング0
+	&Boss::Closing1,		// クロージング1
 	&Boss::Wait,			// 待機
 	&Boss::PreMoveShot,		// 移動撃ち前処理
 	&Boss::MoveShot,		// 移動撃ち
@@ -325,9 +328,71 @@ void Boss::Opening2()
 	sBossFront_->SetSize({ ease, ease });
 }
 
-void Boss::Closing()
+void Boss::Closing0()
 {
+	BossBackRotate(10.0f);
 
+	// 行動開始からの経過時間
+	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
+
+	// 経過時間が指定時間以上ならStateを変える
+	if (elapsedTime >= timeClosing0_) {
+		state_ = OPENING2;
+		actionStartTime_ = Util::GetTimrMSec();
+
+		for (size_t i = 0; i < 180; i++) {
+			Vector2 result = { cosf(Util::Degree2Radian(2.0f * i)), sinf(Util::Degree2Radian(2.0f * i)) };
+			result.normalize();
+			emitterFront_->Add(30, { 0.0f, 0.0f }, result, 1.3f, 32.0f, 64.0f);
+		}
+
+		Camera::SetShake(1.0f, 100.0f);
+	}
+
+	// 経過時間の割合で移動
+	float rate = Util::Clamp(elapsedTime / timeClosing0_, 1.0f, 0.0f);
+
+	static uint16_t counter = 0;
+	static float frag = 0.0f;
+	counter++;
+
+	if (counter % (int)(11.0f - (rate * 10.0f)) == 0) {
+		float rndX = Util::GetRandomFloat(0.0f, 360.0f);
+		float rndY = Util::GetRandomFloat(0.0f, 360.0f);
+		Vector2 result0 = { cosf(Util::Degree2Radian(0.0f + 40.0f * frag)), sinf(Util::Degree2Radian(0.0f + 40.0f * frag)) };
+		Vector2 result1 = { cosf(Util::Degree2Radian(120.0f + 40.0f * frag)), sinf(Util::Degree2Radian(120.0f + 40.0f * frag)) };
+		Vector2 result2 = { cosf(Util::Degree2Radian(240.0f + 40.0f * frag)), sinf(Util::Degree2Radian(240.0f + 40.0f * frag)) };
+		result0.normalize();
+		result1.normalize();
+		result2.normalize();
+		emitterFront_->Add(30, { 0.0f, 0.0f }, result0, 1.15f, 32.0f, 0.0f);
+		emitterFront_->Add(30, { 0.0f, 0.0f }, result1, 1.15f, 32.0f, 0.0f);
+		emitterFront_->Add(30, { 0.0f, 0.0f }, result2, 1.15f, 32.0f, 0.0f);
+		emitterFront_->SetPosition(position_);
+
+		frag += 1.0f;
+		if (frag > 9.0f) frag = 0.0f;
+	}
+}
+
+void Boss::Closing1()
+{
+	// 行動開始からの経過時間
+	float elapsedTime = (Util::GetTimrMSec() - actionStartTime_) / 1000.0f;
+
+	// 経過時間が指定時間以上ならStateを変える
+	if (elapsedTime >= timeClosing1_) {
+		state_ = WAIT;
+		actionStartTime_ = Util::GetTimrMSec();
+		sBossFront_->SetSize({ 128.0f, 128.0f });
+	}
+
+	// 経過時間の割合で移動
+	float rate = Util::Clamp(elapsedTime / timeClosing1_, 1.0f, 0.0f);
+
+	float ease = Easing::Quint::easeOut(128.0f, 0.0f, rate);
+
+	sBossFront_->SetSize({ ease, ease });
 }
 
 void Boss::Wait()
@@ -684,6 +749,8 @@ void Boss::BossBackRotate(float rotate)
 
 void Boss::HPUpdate()
 {
+	if (isAlive_ == false) return;
+
 	// HP更新
 	if (hp_.size() > 0) {
 		float rate = static_cast<float>(hp_[0]) / oneGaugeValue_;
@@ -695,6 +762,8 @@ void Boss::HPUpdate()
 	else {
 		isAlive_ = false;
 		sHpBossIn_->SetSize({ 0.0f, 40.0f });
+		actionStartTime_ = Util::GetTimrMSec();
+		state_ = CLOSING0;
 	}
 }
 

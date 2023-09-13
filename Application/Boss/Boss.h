@@ -21,7 +21,8 @@ private:
 		OPENING0,		// オープニング0
 		OPENING1,		// オープニング1
 		OPENING2,		// オープニング2
-		CLOSING,		// クロージング
+		CLOSING0,		// クロージング0
+		CLOSING1,		// クロージング1
 		WAIT,			// 待機
 		PRE_MOVE_SHOT,	// 移動撃ち前処理
 		MOVE_SHOT,		// 移動撃ち
@@ -39,6 +40,7 @@ private:
 private:
 	std::vector<std::string> stateText_ = {
 		"OPENING0", "OPENING1", "OPENING2",
+		"CLOSING0", "CLOSING1",
 		"WAIT",
 		"PRE_MOVE_SHOT", "MOVE_SHOT", "POST_MOVE_SHOT",
 		"PRE_SUMMON", "SUMMON", "POST_SUMMON",
@@ -122,7 +124,8 @@ private:
 	float time2Opening0_		= 3.0f;// オープンイング0時間
 	float time2Opening1_		= 5.0f;// オープンイング1時間
 	float time2Opening2_		= 1.0f;// オープンイング2時間
-	float timeClosing_			= 10.0f;// オープンイング時間
+	float timeClosing0_			= 5.0f;// オープンイング0時間
+	float timeClosing1_			= 0.5f;// オープンイング1時間
 	float time2PreMoveShot_		= 3.0f;	// 移動撃ち前時間
 	float time2MoveShot_		= 10.0f;// 移動撃ち時間
 	float time2PostMoveShot_	= 3.0f;	// 移動撃ち後時間
@@ -171,10 +174,11 @@ private:
 	static void (Boss::* stateTable[]) ();
 
 	// 状態別行動
-	void Opening0();			// オープニング0
-	void Opening1();			// オープニング1
-	void Opening2();			// オープニング2
-	void Closing();			// クロージング
+	void Opening0();		// オープニング0
+	void Opening1();		// オープニング1
+	void Opening2();		// オープニング2
+	void Closing0();		// クロージング0
+	void Closing1();		// クロージング1
 	void Wait();			// 待機
 	void PreMoveShot();		// 移動撃ち前処理
 	void MoveShot();		// 移動撃ち

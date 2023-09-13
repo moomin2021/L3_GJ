@@ -79,15 +79,15 @@ void UIManager::Initialize()
 void UIManager::MatUpdate()
 {
 	sTitleFrame_->MatUpdate();
-	sExp_->MatUpdate();
-	sExpIn_->MatUpdate();
-	sExpText_->MatUpdate();
-	sHpPlayer_->MatUpdate();
-	sHpPlayerIn_->MatUpdate();
-	sHpTextPlayer_->MatUpdate();
-	sHpBoss_->MatUpdate();
-	sHpTextBoss_->MatUpdate();
-	sNextText_->MatUpdate();
+	sExp_->MatUpdate(true);
+	sExpIn_->MatUpdate(true);
+	sExpText_->MatUpdate(true);
+	sHpPlayer_->MatUpdate(true);
+	sHpPlayerIn_->MatUpdate(true);
+	sHpTextPlayer_->MatUpdate(true);
+	sHpBoss_->MatUpdate(true);
+	sHpTextBoss_->MatUpdate(true);
+	sNextText_->MatUpdate(true);
 }
 
 void UIManager::Draw()
