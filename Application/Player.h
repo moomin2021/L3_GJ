@@ -146,6 +146,10 @@ private:
 	uint16_t texExpFrame = 0;
 	std::unique_ptr<Sprite> spriteExpText = nullptr;
 	uint16_t texExpText = 0;
+	bool isDrawPressA = false;
+	std::unique_ptr<Sprite> spritePressA = nullptr;
+	uint16_t texPressA = 0;
+	float sizeButtonA = 48.0f;
 
 	//デバッグ用
 	int debugBlockOffsetX = 0;

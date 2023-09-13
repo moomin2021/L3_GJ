@@ -66,6 +66,16 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	spriteRotUI->SetSize({ 58.0f,36.0f });
 	spriteRotUI->SetAnchorPoint({ 0.5f,1.0f });
 
+	spritePressA = std::make_unique<Sprite>();
+	spritePressA->SetPosition(playerBlock->GetPosition());
+	spritePressA->SetSize({ 48.0f ,48.0f });
+	spritePressA->SetAnchorPoint({ 0.5f,0.5f });
+
+	float a = 0.75f;
+
+	float4 aButtonColor = { a,a ,a ,1.0f };
+	spritePressA->SetColor(aButtonColor);
+
 	texExpBar = LoadTexture("Resources/exp_in.png");
 	texExpFrame = LoadTexture("Resources/exp.png");
 	texExpText = LoadTexture("Resources/exp_text.png");
@@ -75,6 +85,8 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	texHpText = LoadTexture("Resources/hp_text_player.png");
 
 	texRotUI = LoadTexture("Resources/player_tutorial.png");
+
+	texPressA = LoadTexture("Resources/button_a.png");
 
 	sound = Sound::GetInstance();
 
@@ -137,10 +149,24 @@ void Player::Update()
 
 	//チュートリアルUIの描画タイマー
 	if (timerDrawRotUI > 0) {
-		timerDrawRotUI--;
+	//	timerDrawRotUI--;
 		spriteRotUI->SetPosition({ playerBlock->GetPosition() });
 	}
 
+	ImGui::SliderFloat("button size", &sizeButtonA, 32.0f, 96.0f);
+
+	//ブロックに経験値倍率がかかるかでpressAの描画を変える
+	if (blocks.size() >= countBoostEXP - 8) {
+		isDrawPressA = true;
+		Vector2 buttonPos = playerBlock->GetPosition();
+		buttonPos.x += sizeButtonA;
+		buttonPos.y += sizeButtonA;
+		spritePressA->SetPosition(buttonPos);
+		spritePressA->SetSize({ sizeButtonA ,sizeButtonA });
+	}
+	else {
+		isDrawPressA = false;
+	}
 
 	ImGui::Text("pos %f,%f", position.x, position.y);
 	ImGui::Text("health %d", health);
@@ -167,7 +193,8 @@ void Player::MatUpdate()
 	spriteHpBar->MatUpdate(true);
 	spriteHpFrame->MatUpdate(true);
 	spriteHpText->MatUpdate(true);
-	spriteRotUI->MatUpdate(true);
+	spriteRotUI->MatUpdate();
+	spritePressA->MatUpdate();
 }
 
 void Player::Draw()
@@ -269,6 +296,9 @@ void Player::DrawUI()
 	spriteHpText->Draw(texHpText);
 	if (timerDrawRotUI > 0) {
 		spriteRotUI->Draw(texRotUI);
+	}
+	if (isDrawPressA) {
+		spritePressA->Draw(texPressA);
 	}
 }
 
