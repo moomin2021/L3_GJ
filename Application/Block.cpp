@@ -4,6 +4,7 @@
 #include<imgui_impl_dx12.h>
 #include"Player.h"
 #include"Piece.h"
+#include"PipelineManager.h"
 
 //静的メンバ変数の実態
 uint16_t Block::cannonTexture = 0;
@@ -14,6 +15,7 @@ std::vector<std::unique_ptr<Block>> Block::pAllBlock;
 Player* Block::player = nullptr;
 std::vector <std::unique_ptr<Piece>>* Block::pieces;
 uint16_t Block::allBlockCount = 0;
+std::unique_ptr<ParticleEmitter2D> Block::particle = nullptr;
 
 void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, uint16_t playerTex, const Vector2& blockSize)
 {
@@ -23,6 +25,8 @@ void Block::StaticInitialize(uint16_t cannonTex, uint16_t blockTex, uint16_t pla
 	Block::blockSize = blockSize;
 
 	pAllBlock.clear();
+
+	particle = std::make_unique<ParticleEmitter2D>(512);
 }
 
 Block* Block::CreateBlock(const BlockData& blockData, ParentData* parent)
@@ -53,6 +57,14 @@ void Block::AllBlockDeleteCheck()
 			pAllBlock.erase(pAllBlock.begin() + i);
 		}
 	}
+}
+
+void Block::DrawParticle()
+{
+	//パーティクル
+	PipelineManager::PreDraw("Particle2D", D3D10_PRIMITIVE_TOPOLOGY_POINTLIST);
+
+	particle->Draw(LoadTexture("Resources/particle_circle_enemy.png"));
 }
 
 void Block::Initialize(const BlockData& blockData, ParentData* parent)
@@ -306,6 +318,17 @@ void Block::OnCollison()
 					//自機が回転中ならコライダーを破壊設定に
 					if (player->IsRotate()) {
 						pAllBlock[i]->collider->SetAttribute(COL_BREAK);
+
+						particle->SetPosition(pAllBlock[i]->GetPosition());
+						//ブロックの座標を参照して壊れるエフェクト作成
+						for (size_t i = 0; i < 8; i++) {
+							Vector2 vel, acc;
+							vel = { Util::GetRandomFloat(-1.0f,1.0f),Util::GetRandomFloat(-1.0f,1.0f) };
+							acc = { Util::GetRandomFloat(-1.0f,1.0f),Util::GetRandomFloat(-1.0f,1.0f) };
+							particle->Add(15, { 0,0 }, vel, acc, Util::GetRandomFloat(12.0f, 48.0f), 0.0f);
+
+						}
+
 					}
 					else {
 

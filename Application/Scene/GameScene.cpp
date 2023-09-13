@@ -159,6 +159,9 @@ void GameScene::Draw()
 	// ボス
 	boss_->Draw();
 
+	//ブロックのパーティクル描画
+	Block::DrawParticle();
+
 	PipelineManager::PreDraw("Sprite");
 
 	// UIマネージャー
