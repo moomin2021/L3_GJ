@@ -6,8 +6,8 @@
 #include "Fade.h"
 #include "Key.h"
 #include "Sound.h"
-
 #include <memory>
+#include"PieceManager.h"
 
 class TitleScene : public BaseScene
 {
@@ -57,6 +57,11 @@ private:
 	// LスティックX座標保存
 	float oldLStickX= 0.0f;
 
+	//ピースを流す用のマネージャ
+	std::unique_ptr<PieceManager> psManager = nullptr;
+	int pieceFlowTimeMax = 60;
+	int pieceFlowTime = pieceFlowTimeMax;
+
 #pragma endregion
 
 #pragma region メンバ関数
@@ -83,7 +88,7 @@ private:
 	// 行列更新処理
 	void MatUpdate();
 
-	//
+	//ピースが流れる処理
 	void FlowPieces();
 
 #pragma endregion

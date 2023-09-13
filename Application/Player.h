@@ -7,6 +7,7 @@
 #include"CollisionManager2D.h"
 #include"PlayerBullet.h"
 #include"Sound.h"
+#include"ParticleEmitter2D.h"
 
 class Player
 {
@@ -43,7 +44,7 @@ public:
 
 	bool IsRotate()const { return isRotate; }
 
-	bool IsAlive()const { return IsAlive; };
+	bool IsAlive()const { return isAlive; };
 
 private:
 
@@ -162,6 +163,9 @@ private:
 	uint16_t soundEXP = 0;
 
 	int addSoundCount = 0;
+
+	//2Dエミッター
+	std::unique_ptr<ParticleEmitter2D> particle = nullptr;
 
 	//色
 	float4 myColor;

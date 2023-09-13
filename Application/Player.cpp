@@ -5,6 +5,7 @@
 #include"CollisionAttribute.h"
 #include"WinAPI.h"
 #include"Sound.h"
+#include"PipelineManager.h"
 
 void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 {
@@ -91,7 +92,7 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	sound = Sound::GetInstance();
 
 	//音読み込み
-	soundRot = sound->LoadWave("Resources/Sound/rotate.wav",0.10f);
+	soundRot = sound->LoadWave("Resources/Sound/rotate.wav", 0.10f);
 	soundAtk = sound->LoadWave("Resources/Sound/bullet.wav", 0.01f);
 	soundDmg = sound->LoadWave("Resources/Sound/damage.wav", 0.1f);
 	soundStick = sound->LoadWave("Resources/Sound/stick.wav", 0.05f);
@@ -106,6 +107,8 @@ void Player::Initialize(uint16_t playerTexture, const Vector2& pos)
 	myColor.w = 1.0f;
 
 	isAlive = true;
+
+	particle = std::make_unique<ParticleEmitter2D>(1024);
 
 }
 
@@ -151,7 +154,7 @@ void Player::Update()
 
 	//チュートリアルUIの描画タイマー
 	if (timerDrawRotUI > 0) {
-	//	timerDrawRotUI--;
+		//	timerDrawRotUI--;
 		spriteRotUI->SetPosition({ playerBlock->GetPosition() });
 	}
 
@@ -218,6 +221,11 @@ void Player::Draw()
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets) {
 		bullet->Draw();
 	}
+
+	//パーティクル
+	PipelineManager::PreDraw("Particle2D", D3D10_PRIMITIVE_TOPOLOGY_POINTLIST);
+
+	particle->Draw(LoadTexture("Resources/particle_circle_player.png"));
 
 }
 
@@ -306,6 +314,8 @@ void Player::DrawUI()
 	if (isDrawPressA) {
 		spritePressA->Draw(texPressA);
 	}
+
+	particle->Update();
 }
 
 void Player::Move()
@@ -395,6 +405,7 @@ void Player::Move()
 
 void Player::Rotate()
 {
+
 
 
 
@@ -572,7 +583,20 @@ void Player::BlockReset()
 {
 	//Aボタントリガーでリセット
 	if (pad->GetTriggerButton(BUTTON::PAD_A) || key->TriggerKey(DIK_SPACE)) {
+		
+		particle->SetPosition(playerBlock->GetPosition());
+		
+		size_t particleCount = blocks.size() * 8;
 
+		for (size_t i = 0; i < particleCount; i++) {
+
+			Vector2 posOffset{ Util::GetRandomFloat(-32.0f,32.0f), Util::GetRandomFloat(-32.0f,32.0f) };
+
+			Vector2 spd, acc;
+			spd = { Util::GetRandomFloat(-2.0f,2.0f), Util::GetRandomFloat(-2.0f,2.0f) };
+			acc = { Util::GetRandomFloat(-2.0f,2.0f), Util::GetRandomFloat(-2.0f,2.0f) };
+			particle->Add(15, posOffset, spd, acc, 64.0f, 0.0f);
+		}
 
 
 		//配列にあるブロックの数を保存

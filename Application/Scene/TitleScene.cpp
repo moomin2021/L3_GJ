@@ -60,7 +60,7 @@ void TitleScene::Initialize()
 #pragma endregion
 
 #pragma region サウンドハンドル
-	sTitleBGM_ = sound_->LoadWave("Resources/Sound/title_bgm.wav");
+	sTitleBGM_ = sound_->LoadWave("Resources/Sound/title_bgm.wav",0.05f);
 	sound_->Play(sTitleBGM_);
 #pragma endregion
 
@@ -146,4 +146,8 @@ void TitleScene::MatUpdate()
 	sExitText_->MatUpdate();
 	sTitleSelectFrame_->MatUpdate();
 	fade_->MatUpdate();
+}
+
+void TitleScene::FlowPieces()
+{
 }

@@ -112,6 +112,7 @@ void Piece::Update()
 
 void Piece::Draw()
 {
+
 	for (size_t i = 0; i < childBlocks.size(); i++) {
 		childBlocks[i]->Draw();
 	}
