@@ -28,6 +28,8 @@ public:
 
 	void OnCollision();
 
+	size_t GetChildCount()const { return childBlocks.size(); }
+
 public:
 
 	//êiçsë¨ìx
