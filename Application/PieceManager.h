@@ -48,7 +48,7 @@ public:
 	uint16_t allPieceCount = 0;
 
 	//ピースのスポーン関係
-	int pieceSpawnCoolTimeMax = 180;
+	int pieceSpawnCoolTimeMax = 150;
 	int pieceSpawnCoolTime = pieceSpawnCoolTimeMax;
 
 

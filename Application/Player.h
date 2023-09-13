@@ -135,7 +135,7 @@ private:
 	int needEXP = 40;
 	int currentEXP = 0;
 	int countBoostEXP = 20;
-	int boostRateEXP = 2;
+	int boostRateEXP = 3;
 
 	int level = 1;
 	int bulletDamage = 1;
