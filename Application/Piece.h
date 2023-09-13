@@ -7,6 +7,7 @@ struct PieceData {
 	std::vector<BlockData> blockData;
 	uint16_t previewTexture = 0;
 	Vector2 textureSize{ 0,0 };
+	float rotation = 0.0f;
 };
 
 class Player;

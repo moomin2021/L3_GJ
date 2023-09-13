@@ -27,15 +27,16 @@ void Piece::Initialize(const PieceData& data)
 
 	//縦軸のタイルの数
 	int tileVertical = WinAPI::GetInstance()->GetHeight() / (int)Block::GetBlockSize().y;
+	int tileHorizontal = WinAPI::GetInstance()->GetWidth() / (int)Block::GetBlockSize().x;
 	//上下のUI分減らす
-	tileVertical -= 6;
+	tileVertical -= 10;
 
-	Vector2 parentOffset = { 64.0f,(float)Util::GetRandomInt(3,tileVertical) };
+	Vector2 parentOffset = { (float)tileHorizontal + 2.0f,(float)Util::GetRandomInt(5,tileVertical) };
 
 	parentPos.x = parentOffset.x * Block::GetBlockSize().x + (Block::GetBlockSize().x / 2.0f);
 	parentPos.y = parentOffset.y * Block::GetBlockSize().y + (Block::GetBlockSize().y / 2.0f);
 
-	rotation = 0.0f;
+	rotation = data.rotation;
 
 	//貰ったデータでピース生成
 	for (size_t i = 0; i < data.offset.size(); i++) {
